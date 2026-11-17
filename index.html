@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Briefix | Stakeholder-to-Designer Campaign & Asset Generator</title>
+    <title>Briefix | Stakeholder-to-Designer Campaign Studio</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -57,53 +57,49 @@
         .neon-glow-pink {
             box-shadow: 0 0 20px rgba(255, 0, 127, 0.35);
         }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #0b0f19; }
         ::-webkit-scrollbar-thumb { background: #2a344d; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #00f2fe; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-neon-cyan selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-neon-cyan selection:text-slate-950 overflow-x-hidden">
 
     <!-- Top Navigation -->
-    <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md flex-shrink-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
             
             <!-- Logo & Title -->
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="goToStep(1)">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-neon-cyan to-neon-pink flex items-center justify-center neon-glow-cyan">
-                    <i class="fa-solid fa-dice text-slate-950 text-xl font-bold"></i>
+            <div class="flex items-center space-x-2.5 cursor-pointer" onclick="goToStep(1)">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-neon-cyan to-neon-pink flex items-center justify-center neon-glow-cyan">
+                    <i class="fa-solid fa-dice text-slate-950 text-base font-bold"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-neon-cyan bg-clip-text text-transparent">Briefix</h1>
-                    <p class="text-xs text-slate-400">Bridge Between Stakeholders & Designers</p>
+                    <h1 class="font-bold text-base tracking-tight bg-gradient-to-r from-white via-slate-200 to-neon-cyan bg-clip-text text-transparent">Briefix</h1>
                 </div>
             </div>
 
             <!-- Stepper Progress in Header -->
-            <div class="hidden md:flex items-center space-x-2 bg-slate-850 p-1.5 rounded-xl border border-slate-800">
-                <button onclick="goToStep(1)" id="stepTab-1" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-2 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all">
+            <div class="flex items-center space-x-1 sm:space-x-2 bg-slate-850 p-1 rounded-xl border border-slate-800 text-xs">
+                <button onclick="goToStep(1)" id="stepTab-1" class="px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all">
                     <span class="w-4 h-4 rounded-full bg-neon-cyan text-slate-950 flex items-center justify-center text-[10px] font-bold">1</span>
-                    <span>Choose Brand</span>
+                    <span class="hidden sm:inline">Choose Brand</span>
                 </button>
-                <i class="fa-solid fa-chevron-right text-[10px] text-slate-600"></i>
-                <button onclick="goToStep(2)" id="stepTab-2" class="px-3.5 py-1.5 rounded-lg text-xs font-medium flex items-center space-x-2 text-slate-400 hover:text-slate-200 transition-all">
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-600"></i>
+                <button onclick="goToStep(2)" id="stepTab-2" class="px-2.5 py-1 rounded-lg font-medium flex items-center space-x-1.5 text-slate-400 hover:text-slate-200 transition-all">
                     <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">2</span>
-                    <span>Brief-to-Asset Studio</span>
+                    <span class="hidden sm:inline">Brief & Formats</span>
+                </button>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-600"></i>
+                <button onclick="goToStep(3)" id="stepTab-3" class="px-2.5 py-1 rounded-lg font-medium flex items-center space-x-1.5 text-slate-400 hover:text-slate-200 transition-all">
+                    <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">3</span>
+                    <span class="hidden sm:inline">Preview & Export</span>
                 </button>
             </div>
 
-            <!-- Navigation Actions -->
-            <div class="flex items-center space-x-3">
-                <!-- Brand Editor Link -->
-                <a href="editor.html" class="px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-850 hover:bg-slate-800 rounded-lg border border-slate-700/80 transition-all flex items-center space-x-1.5" title="Add or Edit Brands & Individual Dimensions">
-                    <i class="fa-solid fa-sliders text-neon-cyan"></i>
-                    <span class="hidden sm:inline">Brand & Dimension Editor</span>
-                    <span class="sm:hidden">Editor</span>
-                </a>
-
-                <!-- Campaign History Modal -->
-                <button onclick="openHistoryModal()" class="relative p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700" title="Campaign History">
+            <!-- Navigation Actions (Only History, NO Brand Editor outside editor.html) -->
+            <div class="flex items-center space-x-2">
+                <button onclick="openHistoryModal()" class="relative p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700 text-xs" title="Campaign History">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span id="historyBadge" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-neon-pink text-[10px] flex items-center justify-center text-white font-bold hidden">0</span>
                 </button>
@@ -111,8 +107,8 @@
         </div>
     </header>
 
-    <!-- STEP 1 CONTAINER: Choose Your Brand (Brand names & Search ONLY) -->
-    <section id="step1Section" class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
+    <!-- STEP 1 CONTAINER: Choose Your Brand (Brand names & Search ONLY, no extra info) -->
+    <section id="step1Section" class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center space-y-6">
         
         <!-- Search Bar Only -->
         <div class="relative w-full max-w-lg mx-auto">
@@ -127,344 +123,216 @@
 
     </section>
 
-    <!-- STEP 2 CONTAINER: Brief Studio + Languages with Headline & Sub-heading -->
-    <section id="step2Section" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 hidden">
+    <!-- STEP 2 CONTAINER: Brief & Formats Input (Compact Single-Screen UX) -->
+    <section id="step2Section" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4 hidden flex-col justify-between">
         
         <!-- Active Brand Context Bar -->
-        <div class="glass-panel rounded-2xl px-6 py-4 border border-slate-800 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="glass-panel rounded-xl px-4 py-2.5 border border-slate-800 shadow-md flex items-center justify-between flex-shrink-0">
             <div class="flex items-center space-x-3">
-                <button onclick="goToStep(1)" class="p-2 text-xs font-semibold text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-800 transition-all flex items-center space-x-1.5" title="Back to Step 1">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span>Change Brand</span>
+                <button onclick="goToStep(1)" class="px-2.5 py-1 text-xs font-semibold text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-800 transition-all flex items-center space-x-1" title="Back to Step 1">
+                    <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                    <span>Brand</span>
                 </button>
-                <div class="h-6 w-px bg-slate-800"></div>
-                <div class="flex items-center space-x-2.5">
-                    <div id="activeBrandAvatar" class="w-8 h-8 rounded-lg bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan flex items-center justify-center font-bold text-sm">
-                        U
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs text-slate-400">Current Brand:</span>
-                            <span id="activeBrandNameDisplay" class="text-sm font-bold text-white">Upgaming</span>
-                            <span id="activeBrandMarketDisplay" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-850 text-neon-pink border border-slate-800 font-semibold">Curacao</span>
-                        </div>
-                        <p id="activeBrandToneDisplay" class="text-[11px] text-slate-400 italic truncate max-w-md">Modern dynamic cyberpunk casino</p>
-                    </div>
+                <div class="h-4 w-px bg-slate-800"></div>
+                <div class="flex items-center space-x-2">
+                    <span id="activeBrandNameDisplay" class="text-sm font-bold text-white">Upgaming</span>
+                    <span id="activeBrandMarketDisplay" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-850 text-neon-pink border border-slate-800 font-semibold">Curacao</span>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3">
-                <!-- Color dots -->
-                <div id="activeBrandColorChips" class="flex items-center space-x-1.5 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
-                    <!-- Populated dynamically -->
-                </div>
-                <!-- Editor shortcut -->
-                <a href="editor.html" class="text-xs text-neon-cyan hover:underline flex items-center space-x-1 font-medium" title="Edit this brand's file dimensions in editor.html">
-                    <i class="fa-solid fa-ruler-combined text-[11px]"></i>
-                    <span class="hidden sm:inline">Edit Dimensions</span>
-                </a>
+            <!-- Brand Color Dots -->
+            <div id="activeBrandColorChips" class="flex items-center space-x-1.5 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800">
+                <!-- Populated dynamically -->
             </div>
         </div>
 
-        <!-- Main Studio Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Compact 2-Column Studio Grid (Fits on screen without vertical scrolling) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1">
             
-            <!-- LEFT COLUMN: Input & Brief Controls (5 Cols) -->
-            <div class="lg:col-span-5 space-y-6">
+            <!-- LEFT COLUMN: Campaign Details & Languages (7 Cols) -->
+            <div class="lg:col-span-7 glass-panel rounded-2xl p-4 border border-slate-800 shadow-xl flex flex-col justify-between space-y-3">
                 
-                <!-- Brief Input Panel -->
-                <div class="glass-panel rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-6">
-                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink"></div>
-                    
-                    <div class="flex items-center justify-between">
-                        <h2 class="font-semibold text-white flex items-center space-x-2">
-                            <i class="fa-solid fa-pen-to-square text-neon-cyan"></i>
-                            <span>Campaign Brief & Messaging</span>
-                        </h2>
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Studio</span>
-                    </div>
+                <!-- Campaign Title -->
+                <div>
+                    <label class="block text-xs font-semibold text-white mb-1">Campaign Title *</label>
+                    <input type="text" id="campaignTitleInput" class="w-full rounded-xl glass-input px-3 py-2 text-xs text-white focus:outline-none" placeholder="e.g. Weekend Reload 50% up to €200">
+                </div>
 
-                    <!-- Presets Bar -->
+                <!-- CTA & Subcopy (Inline 2-col) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-2">Quick Sample Briefs:</label>
-                        <div class="flex flex-wrap gap-2">
-                            <button onclick="loadPreset(0)" class="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-lg transition-all flex items-center space-x-1.5">
-                                <i class="fa-solid fa-bolt text-[10px]"></i>
-                                <span>Weekend Reload</span>
-                            </button>
-                            <button onclick="loadPreset(1)" class="text-xs bg-slate-800 hover:bg-slate-700 text-pink-300 border border-pink-500/30 px-3 py-1.5 rounded-lg transition-all flex items-center space-x-1.5">
-                                <i class="fa-solid fa-gift text-[10px]"></i>
-                                <span>Free Spins Drop</span>
-                            </button>
-                            <button onclick="loadPreset(2)" class="text-xs bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 px-3 py-1.5 rounded-lg transition-all flex items-center space-x-1.5">
-                                <i class="fa-solid fa-trophy text-[10px]"></i>
-                                <span>VIP Cash Tournament</span>
-                            </button>
-                        </div>
+                        <label class="block text-[11px] font-medium text-slate-300 mb-1">Call to Action (CTA)</label>
+                        <input type="text" id="campaignCTAInput" class="w-full rounded-xl glass-input px-2.5 py-1.5 text-xs text-neon-pink font-semibold focus:outline-none" placeholder="e.g. CLAIM BONUS NOW">
                     </div>
-
-                    <!-- Core Campaign Fields -->
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Campaign Title *</label>
-                            <input type="text" id="campaignTitleInput" class="w-full rounded-xl glass-input p-3 text-sm text-white focus:outline-none" placeholder="e.g. Weekend Reload 50% up to €200">
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-medium text-slate-300 mb-1">Call to Action (CTA)</label>
-                                <input type="text" id="campaignCTAInput" class="w-full rounded-xl glass-input p-2.5 text-xs text-neon-pink font-semibold focus:outline-none" placeholder="e.g. CLAIM BONUS NOW">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-slate-300 mb-1">Visual Theme / Mood</label>
-                                <input type="text" id="campaignMoodInput" class="w-full rounded-xl glass-input p-2.5 text-xs text-slate-200 focus:outline-none" placeholder="e.g. Cyberpunk neon, dark high contrast">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Subcopy & Bonus Terms (T&C)</label>
-                            <textarea id="campaignTermsInput" rows="2" class="w-full rounded-xl glass-input p-2.5 text-xs text-slate-200 focus:outline-none resize-y" placeholder="18+ only. Min deposit €20. Wagering 35x. Gamble responsibly."></textarea>
-                        </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-300 mb-1">Subcopy & Bonus Terms</label>
+                        <input type="text" id="campaignTermsInput" class="w-full rounded-xl glass-input px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none" placeholder="18+ only. Wagering 35x. Terms apply.">
                     </div>
+                </div>
 
-                    <!-- LANGUAGES SECTION (HEADLINE & SUB-HEADING FIELDS + ADD LANGUAGE) -->
-                    <div class="space-y-3 pt-2 border-t border-slate-800">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <label class="block text-xs font-semibold text-white flex items-center space-x-1.5">
-                                    <i class="fa-solid fa-language text-neon-cyan"></i>
-                                    <span>Languages & Regional Copy</span>
-                                </label>
-                                <p class="text-[11px] text-slate-400">Headlines and sub-headings are optional and can stay empty.</p>
-                            </div>
-                            <button type="button" onclick="openAddLanguageModal()" class="px-2.5 py-1 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all">
-                                <i class="fa-solid fa-plus text-[10px]"></i>
-                                <span>Add Language</span>
-                            </button>
-                        </div>
-
-                        <!-- Language Cards Container -->
-                        <div id="languageRowsContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1">
-                            <!-- Populated dynamically -->
-                        </div>
+                <!-- Languages Section Header -->
+                <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                    <div>
+                        <span class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <i class="fa-solid fa-language text-neon-cyan"></i>
+                            <span>Languages & Regional Copy</span>
+                        </span>
+                        <span class="text-[10px] text-slate-400 block">Both headline and sub-heading are optional.</span>
                     </div>
-
-                    <!-- Banner Size Presets (INDIVIDUAL FILE DIMENSIONS FOR THIS BRAND) -->
-                    <div class="space-y-2 pt-2 border-t border-slate-800">
-                        <div class="flex items-center justify-between">
-                            <label class="block text-xs font-semibold text-white flex items-center space-x-1.5">
-                                <i class="fa-solid fa-ruler-combined text-neon-pink"></i>
-                                <span>Required Dimensions (<span id="activeBrandFormatsCount">0</span> formats):</span>
-                            </label>
-                            <div class="space-x-2 text-[11px]">
-                                <button type="button" onclick="toggleAllFormats(true)" class="text-neon-cyan hover:underline">Select All</button>
-                                <span class="text-slate-600">|</span>
-                                <button type="button" onclick="toggleAllFormats(false)" class="text-slate-400 hover:underline">Clear</button>
-                            </div>
-                        </div>
-                        
-                        <div id="brandDimensionsContainer" class="grid grid-cols-1 gap-2 max-h-56 overflow-y-auto pr-1">
-                            <!-- Populated dynamically from Brand's own dimensions -->
-                        </div>
-                    </div>
-
-                    <!-- Compile Button (Instant packaging, NO external API needed) -->
-                    <button onclick="compileCampaignAssets()" id="generateBtn" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 transition-all shadow-lg neon-glow-cyan flex items-center justify-center space-x-2 cursor-pointer">
-                        <i class="fa-solid fa-layer-group text-base"></i>
-                        <span>Compile & Package Campaign Assets</span>
+                    <button type="button" onclick="openAddLanguageModal()" class="px-2.5 py-1 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all">
+                        <i class="fa-solid fa-plus text-[10px]"></i>
+                        <span>Add Language</span>
                     </button>
+                </div>
+
+                <!-- Scrollable Language Cards Box (Tightly constrained for single-screen height) -->
+                <div id="languageRowsContainer" class="space-y-2 overflow-y-auto max-h-[36vh] sm:max-h-[300px] pr-1">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Required Asset Formats & Next CTA (5 Cols) -->
+            <div class="lg:col-span-5 glass-panel rounded-2xl p-4 border border-slate-800 shadow-xl flex flex-col justify-between space-y-3">
+                
+                <div>
+                    <!-- Formats Header -->
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                        <span class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                            <i class="fa-solid fa-ruler-combined text-neon-pink"></i>
+                            <span>Required Formats (<span id="activeBrandFormatsCount">0</span>)</span>
+                        </span>
+                        <div class="space-x-2 text-[11px]">
+                            <button type="button" onclick="toggleAllFormats(true)" class="text-neon-cyan hover:underline">Select All</button>
+                            <span class="text-slate-600">|</span>
+                            <button type="button" onclick="toggleAllFormats(false)" class="text-slate-400 hover:underline">Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Dimensions Checklist -->
+                    <div id="brandDimensionsContainer" class="space-y-1.5 overflow-y-auto max-h-[46vh] sm:max-h-[360px] pr-1 pt-2">
+                        <!-- Populated dynamically from Brand dimensions -->
+                    </div>
+                </div>
+
+                <!-- NEXT BUTTON (To Campaign Preview & Export) -->
+                <button type="button" onclick="proceedToPreview()" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 transition-all shadow-lg neon-glow-cyan flex items-center justify-center space-x-2 cursor-pointer mt-2">
+                    <span>Next: Campaign Preview & Export</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STEP 3 CONTAINER: Dedicated Campaign Preview & Task Generation Page -->
+    <section id="step3Section" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5 hidden">
+        
+        <!-- Header & Action Bar -->
+        <div class="glass-panel rounded-2xl px-5 py-4 border border-slate-800 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <button onclick="goToStep(2)" class="px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-800 transition-all flex items-center space-x-1.5">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to Brief</span>
+                </button>
+                <div class="h-6 w-px bg-slate-800"></div>
+                <div>
+                    <span class="text-[10px] uppercase tracking-wider text-neon-cyan font-bold block">Step 3 of 3 • Review & Automation</span>
+                    <h2 id="previewCampaignTitle" class="text-lg font-bold text-white">Campaign Preview</h2>
+                </div>
+            </div>
+
+            <!-- GENERATE TASK BUTTON -->
+            <button onclick="generateTaskScripts()" class="px-5 py-2.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 text-xs shadow-lg neon-glow-cyan flex items-center space-x-2">
+                <i class="fa-solid fa-bolt text-sm"></i>
+                <span>Generate Task (Photoshop & Figma)</span>
+            </button>
+        </div>
+
+        <!-- Preview Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            
+            <!-- LEFT COLUMN: Copywriting & Language Variations (6 Cols) -->
+            <div class="lg:col-span-6 space-y-4">
+                
+                <!-- Campaign Summary Card -->
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h3 class="text-xs uppercase tracking-wider text-neon-cyan font-bold">Campaign Specification</h3>
+                        <span id="previewBrandMarketBadge" class="text-[10px] px-2 py-0.5 rounded bg-slate-850 text-neon-pink font-semibold border border-slate-800"></span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">CTA Button:</span>
+                            <span id="previewCTA" class="text-neon-pink font-bold"></span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">Brand Palette:</span>
+                            <div id="previewColorDots" class="flex items-center space-x-1 mt-1"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-[10px] text-slate-400 block font-medium mb-0.5">Subcopy / Terms:</span>
+                        <p id="previewTerms" class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded-lg border border-slate-800"></p>
+                    </div>
+                </div>
+
+                <!-- Languages Headlines & Sub-headings Card -->
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h3 class="text-xs uppercase tracking-wider text-neon-cyan font-bold">Language Copies</h3>
+                        <span id="previewLangCount" class="text-[10px] text-slate-400"></span>
+                    </div>
+                    <div id="previewLanguageCards" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                        <!-- Populated dynamically -->
+                    </div>
                 </div>
 
             </div>
 
-            <!-- RIGHT COLUMN: Interactive Results Dashboard (7 Cols) -->
-            <div class="lg:col-span-7 space-y-6">
+            <!-- RIGHT COLUMN: Selected Dimensions & Script Task Generator (6 Cols) -->
+            <div class="lg:col-span-6 space-y-4">
                 
-                <!-- Dashboard Header / Status -->
-                <div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <span id="outputStatusBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
-                            <span class="w-2 h-2 rounded-full bg-slate-500 mr-1.5 animate-pulse"></span>
-                            Ready to Compile Brief
-                        </span>
-                        <h3 id="campaignTitleDisplay" class="text-xl font-bold text-white mt-1">Structured Campaign Package</h3>
+                <!-- Script Tasks Explanation Card -->
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-850">
+                    <div class="flex items-center space-x-2 text-neon-cyan">
+                        <i class="fa-solid fa-code text-base"></i>
+                        <h3 class="text-xs uppercase tracking-wider font-bold">Automated Designer Task Scripts</h3>
                     </div>
-                    <div id="exportActions" class="flex items-center space-x-2 hidden">
-                        <button onclick="copyAllMarkdown()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5" title="Copy for Slack handover">
-                            <i class="fa-regular fa-copy text-neon-cyan"></i>
-                            <span>Slack Markdown</span>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Clicking <strong>Generate Task</strong> produces two ready-to-run automation scripts for your checked dimensions:
+                    </p>
+                    <ul class="text-xs text-slate-400 space-y-1.5 pl-4 list-disc">
+                        <li><strong>Photoshop Script (.jsx):</strong> Prompts to create either Artboards or separate <code class="text-neon-cyan">.psb</code> files and asks to select the project folder.</li>
+                        <li><strong>Figma Script (.js):</strong> Instantly creates all checked dimensions as framed layouts in Figma.</li>
+                    </ul>
+
+                    <div class="pt-2 flex flex-wrap gap-2">
+                        <button onclick="downloadPhotoshopScript()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5">
+                            <i class="fa-solid fa-file-code text-neon-cyan"></i>
+                            <span>Download Photoshop (.jsx)</span>
                         </button>
-                        <button onclick="downloadJSON()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5" title="Export JSON for Figma / PS automation">
-                            <i class="fa-solid fa-download text-neon-pink"></i>
-                            <span>Export JSON</span>
+                        <button onclick="downloadFigmaScript()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5">
+                            <i class="fa-solid fa-file-code text-neon-pink"></i>
+                            <span>Download Figma (.js)</span>
+                        </button>
+                        <button onclick="copyFigmaScriptCode()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg border border-slate-700 transition-all flex items-center space-x-1">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Copy Figma Code</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Empty State / Results Container -->
-                <div id="dashboardContent" class="space-y-6">
-                    <!-- Initial State Placeholder -->
-                    <div id="placeholderState" class="glass-panel rounded-2xl p-12 text-center flex flex-col items-center justify-center space-y-4 min-h-[450px]">
-                        <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 text-2xl">
-                            <i class="fa-solid fa-cubes"></i>
-                        </div>
-                        <div class="max-w-md">
-                            <h4 class="text-base font-semibold text-slate-300">No Assets Packaged Yet</h4>
-                            <p class="text-xs text-slate-500 mt-1">Fill in the campaign title, add your target language headlines, check the required dimensions on the left, and click <strong>Compile & Package Campaign Assets</strong>.</p>
-                        </div>
+                <!-- Checked Dimensions Summary Card -->
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h3 class="text-xs uppercase tracking-wider text-neon-pink font-bold">Checked Deliverables (<span id="previewFormatsCount">0</span>)</h3>
                     </div>
-
-                    <!-- Actual Results Tabs & Cards -->
-                    <div id="resultsContainer" class="space-y-6 hidden">
-                        
-                        <!-- Navigation Tabs -->
-                        <div class="flex border-b border-slate-800 space-x-6 text-sm font-medium overflow-x-auto">
-                            <button onclick="switchTab('copywriting')" id="tabBtn-copywriting" class="pb-3 text-neon-cyan border-b-2 border-neon-cyan flex items-center space-x-2 transition-all whitespace-nowrap">
-                                <i class="fa-solid fa-pen-nib"></i>
-                                <span>Copywriting & Languages</span>
-                            </button>
-                            <button onclick="switchTab('visuals')" id="tabBtn-visuals" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2 transition-all whitespace-nowrap">
-                                <i class="fa-solid fa-palette"></i>
-                                <span>Colors & Visual Notes</span>
-                            </button>
-                            <button onclick="switchTab('specs')" id="tabBtn-specs" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2 transition-all whitespace-nowrap">
-                                <i class="fa-solid fa-ruler-combined"></i>
-                                <span>Asset Specs & Deliverables</span>
-                            </button>
-                            <button onclick="switchTab('cards')" id="tabBtn-cards" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2 transition-all whitespace-nowrap">
-                                <i class="fa-solid fa-bridge-water"></i>
-                                <span>Designer Spec Sheet</span>
-                            </button>
-                        </div>
-
-                        <!-- TAB 1: Copywriting & Languages -->
-                        <div id="tabContent-copywriting" class="space-y-4">
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs uppercase tracking-wider text-neon-cyan font-semibold">Campaign Title</span>
-                                    <button onclick="copyText('displayCampaignTitle')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                                </div>
-                                <p id="displayCampaignTitle" class="text-base font-bold text-white"></p>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold">Call to Action (CTA)</span>
-                                        <button onclick="copyText('displayCTA')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                                    </div>
-                                    <p id="displayCTA" class="text-sm font-bold text-slate-100"></p>
-                                </div>
-
-                                <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-xs uppercase tracking-wider text-neon-pink font-semibold">Brand / Market Jurisdiction</span>
-                                        <span id="displayBrandJurisdiction" class="text-xs text-slate-300 font-mono"></span>
-                                    </div>
-                                    <p id="displayTone" class="text-xs text-slate-300 italic"></p>
-                                </div>
-                            </div>
-
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Sub-copy & Terms (T&C)</span>
-                                    <button onclick="copyText('displaySubcopy')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                                </div>
-                                <p id="displaySubcopy" class="text-xs text-slate-300 leading-relaxed"></p>
-                            </div>
-
-                            <!-- Configured Languages List with Headline & Sub-heading -->
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800 space-y-3">
-                                <div class="flex items-center justify-between">
-                                    <h4 class="text-xs uppercase tracking-wider text-neon-cyan font-semibold">Language Variations (Headlines & Sub-headings)</h4>
-                                    <span id="displayLangCount" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400">0 languages</span>
-                                </div>
-                                <div id="displayLanguageCards" class="space-y-3">
-                                    <!-- Populated dynamically -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- TAB 2: Colors & Visual Notes -->
-                        <div id="tabContent-visuals" class="space-y-4 hidden">
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                <h4 class="text-xs uppercase tracking-wider text-neon-cyan font-semibold mb-3">Brand Color Tokens & Palette</h4>
-                                <div id="colorPaletteContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                    <!-- Populated dynamically -->
-                                </div>
-                            </div>
-
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs uppercase tracking-wider text-neon-pink font-semibold">Visual Art & Image Prompt Direction</span>
-                                    <button onclick="copyText('displayImagePrompt')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy Prompt</span></button>
-                                </div>
-                                <p id="displayImagePrompt" class="text-xs text-slate-300 font-mono bg-slate-900/80 p-3.5 rounded-lg border border-slate-800 leading-relaxed"></p>
-                            </div>
-
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                <h4 class="text-xs uppercase tracking-wider text-purple-400 font-semibold mb-2">Design Direction & Mood Notes</h4>
-                                <p id="displayDesignNotes" class="text-xs text-slate-300 leading-relaxed"></p>
-                            </div>
-                        </div>
-
-                        <!-- TAB 3: Asset Specs & Deliverables -->
-                        <div id="tabContent-specs" class="space-y-4 hidden">
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                <div class="flex justify-between items-center mb-3">
-                                    <h4 class="text-xs uppercase tracking-wider text-neon-cyan font-semibold">Required Asset Dimensions & Deliverables</h4>
-                                    <a href="editor.html" class="text-xs text-neon-cyan hover:underline flex items-center space-x-1">
-                                        <i class="fa-solid fa-sliders text-[10px]"></i>
-                                        <span>Manage Dimensions in Editor</span>
-                                    </a>
-                                </div>
-                                <div id="specsList" class="space-y-2.5">
-                                    <!-- Populated dynamically -->
-                                </div>
-                            </div>
-
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-850">
-                                <h4 class="text-xs uppercase tracking-wider text-neon-pink font-semibold mb-2">Figma & Photoshop Script Export Ready</h4>
-                                <p class="text-xs text-slate-400 mb-4">Export the structured campaign data package as JSON or copy the Slack handover markdown.</p>
-                                <div class="flex flex-wrap gap-3">
-                                    <button onclick="downloadJSON()" class="px-4 py-2 bg-neon-cyan text-slate-950 font-bold text-xs rounded-lg hover:opacity-90 transition-all flex items-center space-x-2">
-                                        <i class="fa-solid fa-file-code"></i>
-                                        <span>Download .JSON Asset Package</span>
-                                    </button>
-                                    <button onclick="copyAllMarkdown()" class="px-4 py-2 bg-slate-800 text-white font-semibold text-xs rounded-lg border border-slate-700 hover:bg-slate-700 transition-all flex items-center space-x-2">
-                                        <i class="fa-solid fa-copy"></i>
-                                        <span>Copy Slack Handover Markdown</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- TAB 4: Stakeholder-to-Designer Bridge Spec Sheet -->
-                        <div id="tabContent-cards" class="space-y-4 hidden">
-                            <div class="glass-panel rounded-xl p-6 border border-slate-800 space-y-4">
-                                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                                    <div>
-                                        <h4 class="text-sm font-bold text-white flex items-center space-x-2">
-                                            <i class="fa-solid fa-bridge-water text-neon-cyan"></i>
-                                            <span>Stakeholder Handover Spec Sheet</span>
-                                        </h4>
-                                        <p class="text-xs text-slate-400">Clean visual contract between stakeholder brief and design execution.</p>
-                                    </div>
-                                    <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5">
-                                        <i class="fa-solid fa-print"></i>
-                                        <span>Print / PDF</span>
-                                    </button>
-                                </div>
-
-                                <!-- Spec Grid Summary -->
-                                <div id="designerSpecCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <!-- Populated dynamically -->
-                                </div>
-                            </div>
-                        </div>
-
+                    <div id="previewFormatsList" class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                        <!-- Populated dynamically -->
                     </div>
-
                 </div>
 
             </div>
@@ -475,19 +343,19 @@
 
     <!-- Modal: Add Custom Language -->
     <div id="addLanguageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-800 shadow-2xl space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 class="font-bold text-white text-base flex items-center space-x-2">
+        <div class="glass-panel rounded-2xl max-w-md w-full p-5 border border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+                <h3 class="font-bold text-white text-sm flex items-center space-x-2">
                     <i class="fa-solid fa-plus text-neon-cyan"></i>
                     <span>Add Target Language</span>
                 </h3>
-                <button onclick="closeAddLanguageModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closeAddLanguageModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             
             <div class="space-y-3">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Language Name or Code *</label>
-                    <input type="text" id="newLanguageNameInput" class="w-full glass-input p-2.5 rounded-lg text-xs text-white focus:outline-none" placeholder="e.g. Italian (IT), Swedish (SV), Turkish (TR)">
+                    <input type="text" id="newLanguageNameInput" class="w-full glass-input p-2.5 rounded-lg text-xs text-white focus:outline-none" placeholder="e.g. Italian (IT), Turkish (TR)">
                 </div>
 
                 <div>
@@ -499,12 +367,11 @@
                         <button type="button" onclick="setNewLangSuggestion('Portuguese (PT)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Portuguese (PT)</button>
                         <button type="button" onclick="setNewLangSuggestion('Spanish (ES)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Spanish (ES)</button>
                         <button type="button" onclick="setNewLangSuggestion('French (FR)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ French (FR)</button>
-                        <button type="button" onclick="setNewLangSuggestion('Norwegian (NO)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Norwegian (NO)</button>
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
+            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-800">
                 <button type="button" onclick="closeAddLanguageModal()" class="px-3 py-1.5 bg-slate-850 text-slate-300 rounded-lg text-xs hover:bg-slate-800">Cancel</button>
                 <button type="button" onclick="confirmAddLanguage()" class="px-4 py-1.5 bg-neon-cyan text-slate-950 font-bold rounded-lg text-xs hover:opacity-90">Add to List</button>
             </div>
@@ -517,7 +384,7 @@
             <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                 <h3 class="font-bold text-white text-base flex items-center space-x-2">
                     <i class="fa-solid fa-clock-rotate-left text-neon-cyan"></i>
-                    <span>Campaign History & Saved Packages</span>
+                    <span>Campaign History & Saved Tasks</span>
                 </h3>
                 <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -530,113 +397,77 @@
     <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 border border-neon-cyan text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
         <i class="fa-solid fa-circle-check text-neon-cyan text-lg"></i>
-        <span id="toastMessage" class="text-xs font-medium">Copied to clipboard!</span>
+        <span id="toastMessage" class="text-xs font-medium">Task generated!</span>
     </div>
 
     <!-- Scripts -->
     <script src="brands-data.js"></script>
     <script>
-        // Preset sample briefs with custom language headlines and sub-headings
-        const sampleBriefsData = [
-            {
-                title: "Weekend Reload: 50% up to €200 + 100 Spins",
-                cta: "ACTIVATE RELOAD",
-                mood: "Neon cyberpunk, high contrast electric cyan and magenta, floating gold coins",
-                terms: "18+ only. Min deposit €20. Wagering requirement 35x bonus. Valid for Pragmatic Play slots (Gates of Olympus, Sweet Bonanza). Gamble responsibly begambleaware.org.",
-                languages: [
-                    { name: "English (EN)", headline: "UNLEASH 50% UP TO €200 + 100 SPINS", subheading: "Power your weekend play with Gates of Olympus reload boosts" },
-                    { name: "German (DE)", headline: "STARTE DEIN WOCHENENDE: 50% BIS ZU €200", subheading: "Inklusive 100 Freispiele auf Sweet Bonanza" },
-                    { name: "Finnish (FI)", headline: "VIIKONLOPUN RELOAD 50% JOPA €200 ASTI", subheading: "Plus 100 ilmaiskierrosta huippupeleihin" }
-                ]
-            },
-            {
-                title: "Free Spins Mega Drop: 150 Zero-Wager Spins",
-                cta: "CLAIM 150 SPINS",
-                mood: "Vibrant cosmic space theme with neon pink stars and gold token explosions",
-                terms: "18+ only. Valid on Starburst XXXtreme. Zero wagering requirement on winnings. Max cashout €500. New and existing active players.",
-                languages: [
-                    { name: "English (EN)", headline: "150 ZERO-WAGER SPINS: KEEP WHAT YOU WIN", subheading: "Instant drop on Starburst XXXtreme — No rollover lock" },
-                    { name: "German (DE)", headline: "150 UMSATZFREIE FREISPIELE SICHERN", subheading: "Gewinne direkt behalten ohne Umsatzbedingungen" },
-                    { name: "Portuguese (PT)", headline: "150 RODADAS GRÁTIS SEM REQUISITOS", subheading: "Jogue Starburst XXXtreme e saque seus lucros na hora" }
-                ]
-            },
-            {
-                title: "VIP Cash Tournament €50,000 Leaderboard",
-                cta: "ENTER VIP TOURNAMENT",
-                mood: "Exclusive VIP dark lounge aesthetics, luxury dark gold and rich navy palette",
-                terms: "VIP Club members only. Opt-in required. Top 100 leaderboard positions receive cash prizes. Minimum qualifying bet €1.00.",
-                languages: [
-                    { name: "English (EN)", headline: "€50,000 VIP CASH DROP: CLAIM YOUR CROWN", subheading: "Exclusive tournament for high-tier loyalty members" },
-                    { name: "German (DE)", headline: "€50.000 VIP CASH TURNIER: HOL DIR DEN SIEG", subheading: "Exklusive Rangliste für High Roller mit Sofortauszahlung" },
-                    { name: "Spanish (ES)", headline: "TORNEO VIP €50.000 EN EFECTIVO", subheading: "Compite por los primeros puestos y gana premios en efectivo" }
-                ]
-            }
-        ];
-
         // Global State
         let currentStep = 1;
         let selectedBrand = null;
-        let currentCampaignData = null;
-        let campaignHistory = JSON.parse(localStorage.getItem('igaming_campaign_history') || '[]');
         let activeLanguages = [];
+        let compiledCampaign = null;
+        let campaignHistory = JSON.parse(localStorage.getItem('igaming_campaign_history') || '[]');
 
-        // Initialize
+        // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
             updateHistoryBadge();
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const brandParam = urlParams.get('brand');
-            const stepParam = urlParams.get('step');
-
             const allBrands = BrandStorage.getAll();
-            if (brandParam) {
-                selectedBrand = BrandStorage.getById(brandParam);
-            } else {
-                const savedId = BrandStorage.getSelectedBrandId();
-                selectedBrand = BrandStorage.getById(savedId) || allBrands[0];
-            }
+            const savedId = BrandStorage.getSelectedBrandId();
+            selectedBrand = BrandStorage.getById(savedId) || allBrands[0];
 
             renderStep1Brands();
-
-            if (stepParam === '2' && selectedBrand) {
-                goToStep(2);
-            } else {
-                goToStep(1);
-            }
+            goToStep(1);
         });
 
-        // Step Navigation
+        // 3-Step Navigation
         function goToStep(step) {
             currentStep = step;
 
             const step1Sec = document.getElementById('step1Section');
             const step2Sec = document.getElementById('step2Section');
+            const step3Sec = document.getElementById('step3Section');
             const tab1 = document.getElementById('stepTab-1');
             const tab2 = document.getElementById('stepTab-2');
+            const tab3 = document.getElementById('stepTab-3');
+
+            // Reset tab styles
+            [tab1, tab2, tab3].forEach(t => {
+                t.className = "px-2.5 py-1 rounded-lg font-medium flex items-center space-x-1.5 text-slate-400 hover:text-slate-200 transition-all";
+            });
 
             if (step === 1) {
                 step1Sec.classList.remove('hidden');
                 step2Sec.classList.add('hidden');
-
-                tab1.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-2 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
-                tab2.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium flex items-center space-x-2 text-slate-400 hover:text-slate-200 transition-all";
+                step3Sec.classList.add('hidden');
+                tab1.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 renderStep1Brands();
-            } else {
+            } else if (step === 2) {
                 if (!selectedBrand) {
-                    const allBrands = BrandStorage.getAll();
-                    selectedBrand = allBrands[0];
+                    selectedBrand = BrandStorage.getAll()[0];
                 }
                 step1Sec.classList.add('hidden');
                 step2Sec.classList.remove('hidden');
-
-                tab1.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium flex items-center space-x-2 text-slate-400 hover:text-slate-200 transition-all";
-                tab2.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-2 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
-
+                step3Sec.classList.add('hidden');
+                tab2.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 setupStep2WithBrand(selectedBrand);
+            } else if (step === 3) {
+                if (!compiledCampaign) {
+                    if (!compileCampaignData()) {
+                        return; // Validation failed
+                    }
+                }
+                step1Sec.classList.add('hidden');
+                step2Sec.classList.add('hidden');
+                step3Sec.classList.remove('hidden');
+                tab3.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
+                renderStep3Preview();
             }
         }
 
-        // Render Brands in Step 1 (Brand names ONLY)
+        // STEP 1: Render Brand Names ONLY (and Search)
         function renderStep1Brands(filteredList = null) {
             const brands = filteredList || BrandStorage.getAll();
             const grid = document.getElementById('step1BrandsGrid');
@@ -655,7 +486,7 @@
                 const isCurrent = selectedBrand && selectedBrand.id === brand.id;
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = `glass-panel py-6 px-6 rounded-2xl border text-center transition-all cursor-pointer font-bold text-lg tracking-wide hover:scale-[1.02] hover:border-neon-cyan hover:text-neon-cyan shadow-lg ${isCurrent ? 'border-neon-cyan text-neon-cyan ring-1 ring-neon-cyan/40 bg-slate-900/90' : 'border-slate-800 text-white hover:bg-slate-900/80'}`;
+                btn.className = `glass-panel py-5 px-6 rounded-2xl border text-center transition-all cursor-pointer font-bold text-base tracking-wide hover:scale-[1.02] hover:border-neon-cyan hover:text-neon-cyan shadow-lg ${isCurrent ? 'border-neon-cyan text-neon-cyan ring-1 ring-neon-cyan/40 bg-slate-900/90' : 'border-slate-800 text-white hover:bg-slate-900/80'}`;
                 btn.onclick = () => selectBrandAndAdvance(brand.id);
                 btn.innerText = brand.name;
                 grid.appendChild(btn);
@@ -679,12 +510,10 @@
             goToStep(2);
         }
 
-        // Setup Step 2 with Selected Brand Data
+        // STEP 2: Setup Studio with Selected Brand
         function setupStep2WithBrand(brand) {
             document.getElementById('activeBrandNameDisplay').innerText = brand.name;
             document.getElementById('activeBrandMarketDisplay').innerText = brand.market || 'Global';
-            document.getElementById('activeBrandToneDisplay').innerText = brand.tone || 'High-converting casino aesthetic';
-            document.getElementById('activeBrandAvatar').innerText = brand.name.charAt(0).toUpperCase();
 
             // Render top bar colors
             const colorChipsContainer = document.getElementById('activeBrandColorChips');
@@ -692,7 +521,7 @@
             if (brand.colors && brand.colors.length > 0) {
                 brand.colors.forEach(c => {
                     colorChipsContainer.innerHTML += `
-                        <span class="w-3.5 h-3.5 rounded-full inline-block border border-white/20 shadow-sm" style="background-color: ${c.hex}" title="${c.name} (${c.hex})"></span>
+                        <span class="w-3 h-3 rounded-full inline-block border border-white/20 shadow-sm" style="background-color: ${c.hex}" title="${c.name} (${c.hex})"></span>
                     `;
                 });
             }
@@ -731,35 +560,29 @@
                 dimContainer.innerHTML = `
                     <div class="p-3 text-center text-xs text-slate-500 bg-slate-900/40 rounded-lg border border-slate-800">
                         <span>No custom dimensions configured for this brand yet.</span>
-                        <a href="editor.html" class="text-neon-cyan ml-1 underline">Add some in editor</a>
                     </div>
                 `;
             } else {
                 dimensions.forEach(dim => {
                     dimContainer.innerHTML += `
-                        <label class="flex items-center justify-between text-xs text-slate-300 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700 transition-colors">
-                            <div class="flex items-center space-x-2.5">
-                                <input type="checkbox" name="format" value="${escapeHtml(dim.name)} (${dim.width}x${dim.height})" data-width="${dim.width}" data-height="${dim.height}" data-safezone="${escapeHtml(dim.safeZone || '')}" ${dim.defaultSelected !== false ? 'checked' : ''} class="rounded border-slate-700 text-neon-pink focus:ring-0">
-                                <div>
-                                    <span class="font-medium text-slate-200">${escapeHtml(dim.name)}</span>
-                                    ${dim.safeZone ? `<span class="block text-[10px] text-slate-400">${escapeHtml(dim.safeZone)}</span>` : ''}
+                        <label class="flex items-center justify-between text-xs text-slate-300 bg-slate-900/60 p-2 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700 transition-colors">
+                            <div class="flex items-center space-x-2.5 overflow-hidden">
+                                <input type="checkbox" name="format" value="${escapeHtml(dim.name)} (${dim.width}x${dim.height})" data-name="${escapeHtml(dim.name)}" data-width="${dim.width}" data-height="${dim.height}" data-safezone="${escapeHtml(dim.safeZone || '')}" ${dim.defaultSelected !== false ? 'checked' : ''} class="rounded border-slate-700 text-neon-pink focus:ring-0">
+                                <div class="truncate">
+                                    <span class="font-medium text-slate-200 block text-xs truncate">${escapeHtml(dim.name)}</span>
+                                    ${dim.safeZone ? `<span class="text-[10px] text-slate-400 block truncate">${escapeHtml(dim.safeZone)}</span>` : ''}
                                 </div>
                             </div>
-                            <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-850 text-neon-pink border border-slate-800">
+                            <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-850 text-neon-pink border border-slate-800 ml-2 flex-shrink-0">
                                 ${dim.width}×${dim.height}
                             </span>
                         </label>
                     `;
                 });
             }
-
-            // Pre-fill initial form fields if empty
-            if (!document.getElementById('campaignTitleInput').value) {
-                loadPreset(0);
-            }
         }
 
-        // Render Languages List in Input Panel (Headline + Sub-heading per language)
+        // Render Languages List in Step 2 (Headline + Sub-heading per language)
         function renderLanguageRows() {
             const container = document.getElementById('languageRowsContainer');
             container.innerHTML = '';
@@ -775,26 +598,24 @@
 
             activeLanguages.forEach((lang, index) => {
                 const card = document.createElement('div');
-                card.className = "bg-slate-900/70 p-3 rounded-xl border border-slate-800/80 space-y-2 relative group hover:border-slate-700 transition-all";
+                card.className = "bg-slate-900/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1.5 relative group hover:border-slate-700 transition-all";
                 card.innerHTML = `
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-neon-cyan flex items-center space-x-1.5">
                             <i class="fa-solid fa-earth-americas text-[10px]"></i>
                             <span>${escapeHtml(lang.name)}</span>
                         </span>
-                        <button type="button" onclick="removeLanguageRow(${index})" class="text-slate-500 hover:text-rose-400 text-xs transition-colors p-1" title="Remove language">
+                        <button type="button" onclick="removeLanguageRow(${index})" class="text-slate-500 hover:text-rose-400 text-xs transition-colors p-0.5" title="Remove language">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
 
-                    <div class="space-y-1.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-[10px] text-slate-400 font-medium mb-0.5">Headline (optional)</label>
-                            <input type="text" value="${escapeHtml(lang.headline || '')}" oninput="updateLanguageField(${index}, 'headline', this.value)" class="w-full glass-input px-2.5 py-1.5 rounded-lg text-xs text-white focus:outline-none placeholder:text-slate-600" placeholder="e.g. UNLEASH 50% UP TO €200">
+                            <input type="text" value="${escapeHtml(lang.headline || '')}" oninput="updateLanguageField(${index}, 'headline', this.value)" class="w-full glass-input px-2.5 py-1 rounded-lg text-xs text-white focus:outline-none placeholder:text-slate-600" placeholder="Headline (optional)">
                         </div>
                         <div>
-                            <label class="block text-[10px] text-slate-400 font-medium mb-0.5">Sub-heading (optional)</label>
-                            <input type="text" value="${escapeHtml(lang.subheading || '')}" oninput="updateLanguageField(${index}, 'subheading', this.value)" class="w-full glass-input px-2.5 py-1.5 rounded-lg text-xs text-slate-300 focus:outline-none placeholder:text-slate-600" placeholder="e.g. 100 free spins on Gates of Olympus">
+                            <input type="text" value="${escapeHtml(lang.subheading || '')}" oninput="updateLanguageField(${index}, 'subheading', this.value)" class="w-full glass-input px-2.5 py-1 rounded-lg text-xs text-slate-300 focus:outline-none placeholder:text-slate-600" placeholder="Sub-heading (optional)">
                         </div>
                     </div>
                 `;
@@ -846,318 +667,373 @@
             showToast(`Added ${name}!`);
         }
 
-        function loadPreset(index) {
-            const data = sampleBriefsData[index];
-            if (!data) return;
-
-            document.getElementById('campaignTitleInput').value = data.title;
-            document.getElementById('campaignCTAInput').value = data.cta;
-            document.getElementById('campaignMoodInput').value = data.mood;
-            document.getElementById('campaignTermsInput').value = data.terms;
-
-            activeLanguages = JSON.parse(JSON.stringify(data.languages));
-            renderLanguageRows();
-            showToast(`Loaded ${data.title} preset!`);
-        }
-
         function toggleAllFormats(checked) {
             const formatCheckboxes = document.querySelectorAll('input[name="format"]');
             formatCheckboxes.forEach(cb => cb.checked = checked);
         }
 
-        // Switch Tabs in Results Dashboard
-        function switchTab(tabName) {
-            ['copywriting', 'visuals', 'specs', 'cards'].forEach(t => {
-                const el = document.getElementById(`tabContent-${t}`);
-                if (el) el.classList.add('hidden');
-                const btn = document.getElementById(`tabBtn-${t}`);
-                if (btn) btn.className = "pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2 transition-all whitespace-nowrap";
-            });
-            const activeEl = document.getElementById(`tabContent-${tabName}`);
-            if (activeEl) activeEl.classList.remove('hidden');
-            const activeBtn = document.getElementById(`tabBtn-${tabName}`);
-            if (activeBtn) activeBtn.className = "pb-3 text-neon-cyan border-b-2 border-neon-cyan flex items-center space-x-2 transition-all whitespace-nowrap";
+        // Compile and proceed to Step 3
+        function proceedToPreview() {
+            if (compileCampaignData()) {
+                goToStep(3);
+            }
         }
 
-        // Compile Campaign Assets (Instant, Pure Client-Side, Zero Latency)
-        function compileCampaignAssets() {
+        function compileCampaignData() {
             const brand = selectedBrand || BrandStorage.getById(BrandStorage.getSelectedBrandId());
-            const title = document.getElementById('campaignTitleInput').value.trim() || `${brand.name} Promotional Campaign`;
+            const title = document.getElementById('campaignTitleInput').value.trim() || `${brand.name} Campaign`;
             const cta = document.getElementById('campaignCTAInput').value.trim() || "CLAIM NOW";
-            const mood = document.getElementById('campaignMoodInput').value.trim() || brand.tone;
             const terms = document.getElementById('campaignTermsInput').value.trim() || "18+ only. Gamble responsibly. Terms and conditions apply.";
 
             // Gather checked formats
             const formatCheckboxes = document.querySelectorAll('input[name="format"]:checked');
             const selectedFormats = Array.from(formatCheckboxes).map(cb => ({
-                formatName: cb.value,
-                width: cb.dataset.width,
-                height: cb.dataset.height,
-                safeZoneNotes: cb.dataset.safezone || 'Keep core CTA and messaging within central safe area.'
+                formatName: cb.dataset.name || cb.value,
+                width: parseInt(cb.dataset.width) || 1920,
+                height: parseInt(cb.dataset.height) || 1080,
+                safeZoneNotes: cb.dataset.safezone || 'Keep core CTA within central safe zone.'
             }));
 
             if (selectedFormats.length === 0) {
-                showToast("Please select at least one asset format dimension!", true);
-                return;
+                showToast("Please check at least one file dimension!", true);
+                return false;
             }
 
-            // Colors from brand
             const palette = brand.colors && brand.colors.length > 0 ? brand.colors : [
-                { name: "Primary Cyan", hex: "#00F2FE", rgb: "0, 242, 254" },
-                { name: "Accent Magenta", hex: "#FF007F", rgb: "255, 0, 127" },
+                { name: "Electric Cyan", hex: "#00F2FE", rgb: "0, 242, 254" },
+                { name: "Neon Magenta", hex: "#FF007F", rgb: "255, 0, 127" },
                 { name: "Dark Studio BG", hex: "#0B0F19", rgb: "11, 15, 25" }
             ];
 
-            const assetSpecs = selectedFormats.map(f => ({
-                formatName: f.formatName,
-                dimensions: `${f.width} x ${f.height} px`,
-                safeZoneNotes: f.safeZoneNotes
-            }));
-
-            const imagePrompt = `High-end 3D promotional render for ${brand.name}, ${mood}, cinematic rim lighting with ${palette[0]?.hex || '#00f2fe'} and ${palette[1]?.hex || '#ff007f'}, floating gold gaming coins, ultra-sharp detail, dark premium studio background --ar 16:9`;
-
-            currentCampaignData = {
+            compiledCampaign = {
                 campaignTitle: title,
                 cta: cta,
                 subcopy: terms,
-                mood: mood,
                 brandName: brand.name,
                 market: brand.market || 'Global',
                 languages: JSON.parse(JSON.stringify(activeLanguages)),
                 colorPalette: palette,
-                imagePrompt: imagePrompt,
-                designNotes: `Brand Guidelines: Follow ${brand.name} aesthetics ("${brand.tone}"). Ensure regulatory 18+ and BeGambleAware logos remain 100% visible across all sizes. Place CTA button at natural thumb/mouse focal priority.`,
-                assetSpecs: assetSpecs
+                formats: selectedFormats
             };
 
             // Save to History
-            saveToHistory(currentCampaignData, brand.name, brand.market || 'Global');
-
-            // Render Results
-            renderResults(currentCampaignData, brand);
-
-            // Update UI state
-            document.getElementById('placeholderState').classList.add('hidden');
-            document.getElementById('resultsContainer').classList.remove('hidden');
-            document.getElementById('exportActions').classList.remove('hidden');
-
-            showToast("Campaign packaged and ready for handover!");
+            saveToHistory(compiledCampaign, brand.name, brand.market || 'Global');
+            return true;
         }
 
-        // Render Results into UI
-        function renderResults(data, brand) {
-            document.getElementById('outputStatusBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-neon-cyan mr-1.5"></span> Compiled for ${brand.name} (${brand.market || 'Global'})`;
-            document.getElementById('campaignTitleDisplay').innerText = data.campaignTitle;
+        // STEP 3: Render Preview & Task Generator
+        function renderStep3Preview() {
+            if (!compiledCampaign) return;
 
-            document.getElementById('displayCampaignTitle').innerText = data.campaignTitle;
-            document.getElementById('displayCTA').innerText = data.cta;
-            document.getElementById('displaySubcopy').innerText = data.subcopy;
-            document.getElementById('displayBrandJurisdiction').innerText = `${brand.name} • ${brand.market || 'Global'}`;
-            document.getElementById('displayTone').innerText = `"${brand.tone || 'Modern casino tone'}"`;
+            document.getElementById('previewCampaignTitle').innerText = compiledCampaign.campaignTitle;
+            document.getElementById('previewBrandMarketBadge').innerText = `${compiledCampaign.brandName} • ${compiledCampaign.market}`;
+            document.getElementById('previewCTA').innerText = compiledCampaign.cta;
+            document.getElementById('previewTerms').innerText = compiledCampaign.subcopy;
 
-            // Language Variations Display (with Headline & Sub-heading)
-            const langContainer = document.getElementById('displayLanguageCards');
+            // Color dots
+            const colorContainer = document.getElementById('previewColorDots');
+            colorContainer.innerHTML = '';
+            compiledCampaign.colorPalette.forEach(c => {
+                colorContainer.innerHTML += `
+                    <span class="w-3.5 h-3.5 rounded-full inline-block border border-white/20 shadow-sm" style="background-color: ${c.hex}" title="${c.name} (${c.hex})"></span>
+                `;
+            });
+
+            // Languages
+            const langContainer = document.getElementById('previewLanguageCards');
             langContainer.innerHTML = '';
-            document.getElementById('displayLangCount').innerText = `${data.languages.length} language${data.languages.length === 1 ? '' : 's'}`;
+            document.getElementById('previewLangCount').innerText = `${compiledCampaign.languages.length} languages`;
 
-            if (data.languages && data.languages.length > 0) {
-                data.languages.forEach(lang => {
-                    const headlineText = lang.headline ? lang.headline : '<span class="text-slate-500 italic">(Headline empty)</span>';
-                    const subheadingText = lang.subheading ? lang.subheading : '<span class="text-slate-500 italic">(Sub-heading empty)</span>';
-                    
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-900/70 p-4 rounded-xl border border-slate-800 space-y-2";
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                            <span class="text-xs font-bold text-neon-cyan flex items-center space-x-1.5">
-                                <i class="fa-solid fa-globe text-[11px]"></i>
-                                <span>${escapeHtml(lang.name)}</span>
-                            </span>
-                            <button onclick="copyToClipboard('${escapeHtml(lang.headline || '')} | ${escapeHtml(lang.subheading || '')}')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1" title="Copy copy">
-                                <i class="fa-regular fa-copy"></i>
-                                <span>Copy</span>
-                            </button>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                            <div>
-                                <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-semibold mb-0.5">Headline:</span>
-                                <div class="text-white font-medium">${headlineText}</div>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-semibold mb-0.5">Sub-heading:</span>
-                                <div class="text-slate-300">${subheadingText}</div>
-                            </div>
-                        </div>
-                    `;
-                    langContainer.appendChild(card);
-                });
+            if (compiledCampaign.languages.length === 0) {
+                langContainer.innerHTML = `<p class="text-xs text-slate-500 italic">No language headlines entered.</p>`;
             } else {
-                langContainer.innerHTML = `<p class="text-xs text-slate-500 italic">No language headlines configured.</p>`;
-            }
-
-            // Color palette
-            const paletteContainer = document.getElementById('colorPaletteContainer');
-            paletteContainer.innerHTML = '';
-            if (data.colorPalette) {
-                data.colorPalette.forEach(color => {
-                    paletteContainer.innerHTML += `
-                        <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-800 flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-lg shadow-md border border-white/10 flex-shrink-0" style="background-color: ${color.hex}"></div>
-                            <div class="overflow-hidden">
-                                <h5 class="text-xs font-semibold text-white truncate">${color.name}</h5>
-                                <p class="text-[11px] font-mono text-neon-cyan cursor-pointer hover:underline" onclick="copyToClipboard('${color.hex}')" title="Click to copy HEX">${color.hex}</p>
-                                <p class="text-[10px] text-slate-400">RGB(${color.rgb})</p>
+                compiledCampaign.languages.forEach(l => {
+                    const hText = l.headline ? escapeHtml(l.headline) : '<span class="text-slate-500 italic">(Headline empty)</span>';
+                    const sText = l.subheading ? escapeHtml(l.subheading) : '<span class="text-slate-500 italic">(Sub-heading empty)</span>';
+                    langContainer.innerHTML += `
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-1 text-xs">
+                            <div class="flex items-center justify-between text-neon-cyan font-bold text-[11px]">
+                                <span>${escapeHtml(l.name)}</span>
                             </div>
+                            <div class="text-white font-medium">${hText}</div>
+                            <div class="text-slate-300 text-[11px]">${sText}</div>
                         </div>
                     `;
                 });
             }
 
-            document.getElementById('displayImagePrompt').innerText = data.imagePrompt;
-            document.getElementById('displayDesignNotes').innerText = data.designNotes;
+            // Formats list
+            const formatsContainer = document.getElementById('previewFormatsList');
+            formatsContainer.innerHTML = '';
+            document.getElementById('previewFormatsCount').innerText = compiledCampaign.formats.length;
 
-            // Specs list
-            const specsContainer = document.getElementById('specsList');
-            specsContainer.innerHTML = '';
-            if (data.assetSpecs) {
-                data.assetSpecs.forEach(spec => {
-                    specsContainer.innerHTML += `
-                        <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <div>
-                                <h5 class="text-xs font-bold text-white flex items-center space-x-2">
-                                    <i class="fa-solid fa-expand text-neon-cyan"></i>
-                                    <span>${spec.formatName}</span>
-                                </h5>
-                                <p class="text-[11px] text-slate-400 mt-0.5">${spec.safeZoneNotes}</p>
-                            </div>
-                            <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-neon-pink border border-slate-700 w-fit">${spec.dimensions}</span>
+            compiledCampaign.formats.forEach(f => {
+                formatsContainer.innerHTML += `
+                    <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-white block">${escapeHtml(f.formatName)}</span>
+                            <span class="text-[10px] text-slate-400 block">${escapeHtml(f.safeZoneNotes)}</span>
                         </div>
-                    `;
-                });
-            }
-
-            // Render Tab 4: Designer Spec Sheet Wireframe Cards
-            const specCardsGrid = document.getElementById('designerSpecCardsGrid');
-            specCardsGrid.innerHTML = '';
-            if (data.assetSpecs) {
-                const primaryHeadlineText = (data.languages && data.languages[0]?.headline) ? data.languages[0].headline : data.campaignTitle;
-                data.assetSpecs.forEach(spec => {
-                    specCardsGrid.innerHTML += `
-                        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <h5 class="text-xs font-bold text-white">${spec.formatName}</h5>
-                                <span class="text-[10px] font-mono bg-slate-800 text-neon-cyan px-2 py-0.5 rounded border border-slate-700">${spec.dimensions}</span>
-                            </div>
-                            <!-- Mini wireframe simulation -->
-                            <div class="h-24 bg-slate-950 rounded-lg border border-dashed border-slate-700 p-2 flex flex-col justify-between relative overflow-hidden">
-                                <div class="flex justify-between items-center text-[9px] text-slate-500">
-                                    <span>SAFE ZONE 80%</span>
-                                    <span>${brand.name}</span>
-                                </div>
-                                <div class="text-center my-auto">
-                                    <span class="text-[10px] font-bold text-slate-200 line-clamp-1">${primaryHeadlineText}</span>
-                                    <span class="inline-block mt-1 text-[8px] bg-neon-pink text-white font-bold px-1.5 py-0.5 rounded">${data.cta}</span>
-                                </div>
-                                <div class="text-[8px] text-slate-600 truncate">18+ | T&C Apply</div>
-                            </div>
-                            <p class="text-[11px] text-slate-400"><strong class="text-slate-300">Spec Note:</strong> ${spec.safeZoneNotes}</p>
-                        </div>
-                    `;
-                });
-            }
+                        <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-slate-850 text-neon-pink border border-slate-800">
+                            ${f.width}×${f.height}
+                        </span>
+                    </div>
+                `;
+            });
         }
 
-        // Clipboard Helpers
-        function copyText(elementId) {
-            const text = document.getElementById(elementId).innerText;
-            copyToClipboard(text);
-        }
+        // ==========================================
+        // SCRIPT GENERATORS (Photoshop & Figma)
+        // ==========================================
 
-        function copyToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast("Copied to clipboard!");
-                }).catch(() => {
-                    fallbackCopyText(text);
-                });
-            } else {
-                fallbackCopyText(text);
-            }
-        }
-
-        function fallbackCopyText(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast("Copied to clipboard!");
-            } catch (err) {
-                showToast("Failed to copy", true);
-            }
-            document.body.removeChild(textArea);
-        }
-
-        // Toast Notification
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toast');
-            const msgEl = document.getElementById('toastMessage');
-            msgEl.innerText = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            if (isError) {
-                toast.classList.add('border-rose-500');
-            } else {
-                toast.classList.remove('border-rose-500');
-            }
+        function generateTaskScripts() {
+            if (!compiledCampaign) return;
+            downloadPhotoshopScript();
             setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+                downloadFigmaScript();
+                showToast("Generated and downloaded Photoshop & Figma scripts!");
+            }, 300);
         }
 
-        // Export JSON
-        function downloadJSON() {
-            if (!currentCampaignData) return;
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentCampaignData, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `${currentCampaignData.campaignTitle.replace(/\s+/g, '_')}_briefix_assets.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            showToast("JSON Asset Package downloaded!");
+        // Photoshop ExtendScript (.jsx) Generator
+        function getPhotoshopScriptContent() {
+            if (!compiledCampaign) return "";
+            const fmts = JSON.stringify(compiledCampaign.formats);
+            const title = compiledCampaign.campaignTitle.replace(/"/g, '\\"');
+            const brand = compiledCampaign.brandName.replace(/"/g, '\\"');
+
+            return `/**
+ * Briefix Photoshop Automation Script
+ * Campaign: ${title}
+ * Brand: ${brand}
+ * Generated for Adobe Photoshop ExtendScript
+ */
+
+#target photoshop
+app.bringToFront();
+
+(function() {
+    var formats = ${fmts};
+    var campaignName = "${title}";
+    var brandName = "${brand}";
+
+    if (formats.length === 0) {
+        alert("No dimensions found.");
+        return;
+    }
+
+    // 1. Prompt dialog to choose Artboards or Separate PSB files
+    var dlg = new Window("dialog", "Briefix - Setup Photoshop Campaign");
+    dlg.orientation = "column";
+    dlg.alignChildren = "fill";
+    dlg.spacing = 15;
+    dlg.margins = 20;
+
+    var header = dlg.add("statictext", undefined, "Campaign: " + campaignName);
+    header.graphics.font = ScriptUI.newFont("dialog", "BOLD", 13);
+
+    var modePanel = dlg.add("panel", undefined, "Choose Document Layout Mode");
+    modePanel.orientation = "column";
+    modePanel.alignChildren = "left";
+    modePanel.margins = 15;
+    modePanel.spacing = 10;
+
+    var rbArtboards = modePanel.add("radiobutton", undefined, "Option 1: Single Master Document with Artboards");
+    var rbSeparate = modePanel.add("radiobutton", undefined, "Option 2: Separate .PSB Files for each dimension");
+    rbArtboards.value = true;
+
+    var countText = dlg.add("statictext", undefined, "Total dimensions to create: " + formats.length);
+
+    var btnGroup = dlg.add("group");
+    btnGroup.alignment = "right";
+    var btnCancel = btnGroup.add("button", undefined, "Cancel", {name: "cancel"});
+    var btnOk = btnGroup.add("button", undefined, "Next: Choose Folder", {name: "ok"});
+
+    if (dlg.show() !== 1) {
+        return; // Cancelled
+    }
+
+    var useArtboards = rbArtboards.value;
+
+    // 2. Prompt user to choose destination project folder
+    var projectFolder = Folder.selectDialog("Select project destination folder for " + campaignName + ":");
+    if (projectFolder === null) {
+        alert("Folder selection cancelled. Process aborted.");
+        return;
+    }
+
+    // Execute generation
+    if (useArtboards) {
+        createMasterArtboardDoc(campaignName, formats, projectFolder);
+    } else {
+        createSeparatePsbDocs(campaignName, formats, projectFolder);
+    }
+
+    function createMasterArtboardDoc(name, fmts, folder) {
+        var base = fmts[0];
+        var doc = app.documents.add(
+            UnitValue(base.width, "px"),
+            UnitValue(base.height, "px"),
+            72,
+            name + " - Master",
+            NewDocumentMode.RGB,
+            DocumentFill.TRANSPARENT
+        );
+
+        for (var i = 0; i < fmts.length; i++) {
+            var f = fmts[i];
+            var group = doc.layerSets.add();
+            group.name = f.formatName + " (" + f.width + "x" + f.height + ")";
+
+            var note = group.artLayers.add();
+            note.name = "Safe Zone: " + (f.safeZoneNotes || "Standard");
         }
 
-        // Copy Markdown Summary for Slack Handover
-        function copyAllMarkdown() {
-            if (!currentCampaignData) return;
-            let md = `# 🎯 Briefix Handover: ${currentCampaignData.campaignTitle}\n\n`;
-            md += `**Brand:** ${selectedBrand?.name || 'iGaming'} (${selectedBrand?.market || 'Global'})\n`;
-            md += `**CTA:** ${currentCampaignData.cta}\n`;
-            md += `**Visual Mood:** ${currentCampaignData.mood}\n`;
-            md += `**Sub-copy / T&C:** ${currentCampaignData.subcopy}\n\n`;
-            
-            md += `### 🌍 Language Variations (Headlines & Sub-headings)\n`;
-            currentCampaignData.languages.forEach(l => {
-                md += `#### ${l.name}\n`;
-                md += `- **Headline:** ${l.headline || '_(empty)_'}\n`;
-                md += `- **Sub-heading:** ${l.subheading || '_(empty)_'}\n\n`;
-            });
+        var fileName = name.replace(/[^a-zA-Z0-9_-]/g, "_") + "_Master.psb";
+        var saveFile = new File(folder + "/" + fileName);
+        var psbOpts = new PhotoshopSaveOptions();
+        psbOpts.embedColorProfile = true;
+        psbOpts.layers = true;
+        doc.saveAs(saveFile, psbOpts, true, Extension.LOWERCASE);
 
-            md += `### 🎨 Brand Color Palette\n`;
-            currentCampaignData.colorPalette.forEach(c => {
-                md += `- **${c.name}**: \`${c.hex}\` (RGB: ${c.rgb})\n`;
-            });
+        alert("✅ Master document created with " + fmts.length + " format groups!\\nSaved: " + saveFile.fsName);
+    }
 
-            md += `\n### 📐 Required Asset Deliverables\n`;
-            currentCampaignData.assetSpecs.forEach(s => {
-                md += `- **${s.formatName}** (\`${s.dimensions}\`): ${s.safeZoneNotes}\n`;
-            });
+    function createSeparatePsbDocs(name, fmts, folder) {
+        var created = 0;
+        for (var i = 0; i < fmts.length; i++) {
+            var f = fmts[i];
+            var docName = f.formatName.replace(/[^a-zA-Z0-9_-]/g, "_") + "_" + f.width + "x" + f.height;
+            var doc = app.documents.add(
+                UnitValue(f.width, "px"),
+                UnitValue(f.height, "px"),
+                72,
+                docName,
+                NewDocumentMode.RGB,
+                DocumentFill.WHITE
+            );
 
-            md += `\n### 💡 Production Art Direction\n\`\`\`\n${currentCampaignData.imagePrompt}\n\`\`\`\n`;
-            copyToClipboard(md);
+            var bg = doc.layerSets.add();
+            bg.name = "Background";
+
+            var art = doc.layerSets.add();
+            art.name = "Key Art";
+
+            var copy = doc.layerSets.add();
+            copy.name = "Copy & CTA";
+
+            var file = new File(folder + "/" + docName + ".psb");
+            var psbOpts = new PhotoshopSaveOptions();
+            psbOpts.embedColorProfile = true;
+            psbOpts.layers = true;
+            doc.saveAs(file, psbOpts, true, Extension.LOWERCASE);
+            doc.close(SaveOptions.DONOTSAVECHANGES);
+            created++;
+        }
+
+        alert("✅ Generated " + created + " separate .PSB files in:\\n" + folder.fsName);
+    }
+})();
+`;
+        }
+
+        function downloadPhotoshopScript() {
+            if (!compiledCampaign) return;
+            const content = getPhotoshopScriptContent();
+            downloadFile(content, `${compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_')}_Photoshop_Setup.jsx`, 'text/plain');
+        }
+
+        // Figma Script (.js) Generator
+        function getFigmaScriptContent() {
+            if (!compiledCampaign) return "";
+            const fmts = JSON.stringify(compiledCampaign.formats);
+            const title = compiledCampaign.campaignTitle.replace(/"/g, '\\"');
+            const brand = compiledCampaign.brandName.replace(/"/g, '\\"');
+
+            return `// Briefix Figma Setup Script
+// Campaign: ${title}
+// Brand: ${brand}
+// Run in Figma: Plugins > Development > Open Console or paste in Developer Console
+
+(function() {
+    if (typeof figma === 'undefined') {
+        alert("Run this script inside Figma (Plugin or Developer Console).");
+        return;
+    }
+
+    const campaignName = "${title}";
+    const brand = "${brand}";
+    const formats = ${fmts};
+
+    figma.currentPage.name = brand + " - " + campaignName;
+
+    let xOffset = 0;
+    let yOffset = 0;
+    let maxHeightInRow = 0;
+    const spacing = 120;
+    const maxRowWidth = 8000;
+    const createdFrames = [];
+
+    formats.forEach(function(fmt) {
+        const w = parseInt(fmt.width) || 1080;
+        const h = parseInt(fmt.height) || 1080;
+
+        if (xOffset + w > maxRowWidth && xOffset > 0) {
+            xOffset = 0;
+            yOffset += maxHeightInRow + spacing + 60;
+            maxHeightInRow = 0;
+        }
+
+        const frame = figma.createFrame();
+        frame.name = fmt.formatName + " (" + w + "x" + h + ")";
+        frame.resize(w, h);
+        frame.x = xOffset;
+        frame.y = yOffset;
+        frame.fills = [{ type: 'SOLID', color: { r: 0.05, g: 0.07, b: 0.1 } }];
+        frame.clipsContent = true;
+
+        if (fmt.safeZoneNotes) {
+            frame.setPluginData("safeZone", fmt.safeZoneNotes);
+        }
+
+        figma.currentPage.appendChild(frame);
+        createdFrames.push(frame);
+
+        maxHeightInRow = Math.max(maxHeightInRow, h);
+        xOffset += w + spacing;
+    });
+
+    if (createdFrames.length > 0) {
+        figma.viewport.scrollAndZoomIntoView(createdFrames);
+        figma.notify("✅ Briefix: Created " + createdFrames.length + " frames for " + campaignName);
+    }
+})();
+`;
+        }
+
+        function downloadFigmaScript() {
+            if (!compiledCampaign) return;
+            const content = getFigmaScriptContent();
+            downloadFile(content, `${compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_')}_Figma_Setup.js`, 'application/javascript');
+        }
+
+        function copyFigmaScriptCode() {
+            const content = getFigmaScriptContent();
+            navigator.clipboard.writeText(content).then(() => {
+                showToast("Figma script copied! Paste into Figma console.");
+            });
+        }
+
+        function downloadFile(content, fileName, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 500);
         }
 
         // History Management
@@ -1217,27 +1093,37 @@
         function loadHistoryItem(id) {
             const found = campaignHistory.find(h => h.id === id);
             if (found) {
-                currentCampaignData = found.data;
+                compiledCampaign = found.data;
                 const brand = BrandStorage.getAll().find(b => b.name === found.brand) || selectedBrand;
                 selectedBrand = brand;
-                goToStep(2);
                 
-                document.getElementById('campaignTitleInput').value = currentCampaignData.campaignTitle || '';
-                document.getElementById('campaignCTAInput').value = currentCampaignData.cta || '';
-                document.getElementById('campaignMoodInput').value = currentCampaignData.mood || '';
-                document.getElementById('campaignTermsInput').value = currentCampaignData.subcopy || '';
-                if (currentCampaignData.languages) {
-                    activeLanguages = currentCampaignData.languages;
-                    renderLanguageRows();
+                document.getElementById('campaignTitleInput').value = compiledCampaign.campaignTitle || '';
+                document.getElementById('campaignCTAInput').value = compiledCampaign.cta || '';
+                document.getElementById('campaignTermsInput').value = compiledCampaign.subcopy || '';
+                if (compiledCampaign.languages) {
+                    activeLanguages = compiledCampaign.languages;
                 }
 
-                renderResults(currentCampaignData, selectedBrand);
-                document.getElementById('placeholderState').classList.add('hidden');
-                document.getElementById('resultsContainer').classList.remove('hidden');
-                document.getElementById('exportActions').classList.remove('hidden');
                 closeHistoryModal();
-                showToast("Loaded campaign from history!");
+                goToStep(3);
+                showToast("Loaded campaign task from history!");
             }
+        }
+
+        // Toast Helper
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toastMessage');
+            msgEl.innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            if (isError) {
+                toast.classList.add('border-rose-500');
+            } else {
+                toast.classList.remove('border-rose-500');
+            }
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
         }
 
         function escapeHtml(string) {
