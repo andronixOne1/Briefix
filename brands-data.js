@@ -11,12 +11,7 @@ const DEFAULT_BRANDS = [
         category: "iGaming Platform & Casino",
         market: "Curacao (Global)",
         tone: "Modern, dynamic, high-tech cyberpunk with high roller appeal",
-        colors: [
-            { name: "Electric Cyan", hex: "#00F2FE", rgb: "0, 242, 254" },
-            { name: "Neon Magenta", hex: "#FF007F", rgb: "255, 0, 127" },
-            { name: "Deep Charcoal", hex: "#0B0F19", rgb: "11, 15, 25" },
-            { name: "Gold Accent", hex: "#FFD700", rgb: "255, 215, 0" }
-        ],
+        logo: null,
         guidelines: "High-contrast dark mode designs. Prominent jackpot meters, vivid particle effects, and clear 18+ compliance badges in footer.",
         languages: ["EN", "DE", "FI", "PT", "ES"],
         dimensions: [
@@ -35,12 +30,7 @@ const DEFAULT_BRANDS = [
         category: "Sportsbook & Online Casino",
         market: "Tier-1 International",
         tone: "Bold, adrenaline-fueled, energetic red & gold sports casino vibe",
-        colors: [
-            { name: "Blaze Red", hex: "#FF2A2A", rgb: "255, 42, 42" },
-            { name: "Vegas Gold", hex: "#F5B041", rgb: "245, 176, 65" },
-            { name: "Dark Onyx", hex: "#11141C", rgb: "17, 20, 28" },
-            { name: "Pure White", hex: "#FFFFFF", rgb: "255, 255, 255" }
-        ],
+        logo: null,
         guidelines: "Action-oriented imagery, live odds ticker badges, high saturation visuals, bold condensed typography.",
         languages: ["EN", "DE", "FR", "ES", "IT"],
         dimensions: [
@@ -58,12 +48,7 @@ const DEFAULT_BRANDS = [
         category: "VIP & Live Dealer Casino",
         market: "MGA (Malta)",
         tone: "Premium, sophisticated, luxury emerald and champagne aesthetics",
-        colors: [
-            { name: "Emerald Luxe", hex: "#00E676", rgb: "0, 230, 118" },
-            { name: "Champagne Gold", hex: "#E5C07B", rgb: "229, 192, 123" },
-            { name: "Midnight Obsidian", hex: "#080C14", rgb: "8, 12, 20" },
-            { name: "Platinum Grey", hex: "#E0E6ED", rgb: "224, 230, 237" }
-        ],
+        logo: null,
         guidelines: "Minimalist elegance with VIP undertones. Restrained neon, golden bokeh light trails, and subtle textures.",
         languages: ["EN", "DE", "NO", "SV", "FI"],
         dimensions: [
@@ -81,12 +66,7 @@ const DEFAULT_BRANDS = [
         category: "Crypto Casino & Arcade",
         market: "Web3 / Global",
         tone: "Playful, cutting-edge crypto gaming with purple neon and electric amber",
-        colors: [
-            { name: "Crypto Purple", hex: "#9D4EDD", rgb: "157, 78, 221" },
-            { name: "Electric Amber", hex: "#FFAA00", rgb: "255, 170, 0" },
-            { name: "Deep Galaxy", hex: "#0C071E", rgb: "12, 7, 30" },
-            { name: "Holo Turquoise", hex: "#00F0FF", rgb: "0, 240, 255" }
-        ],
+        logo: null,
         guidelines: "Futuristic crypto gamification style with coin explosions, dice isometric visuals, and glowing typography.",
         languages: ["EN", "JA", "KO", "ES", "PT"],
         dimensions: [

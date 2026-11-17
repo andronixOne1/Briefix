@@ -78,7 +78,7 @@
                             <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-neon-cyan bg-clip-text text-transparent">Briefix</h1>
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-neon-purple/20 text-purple-300 border border-purple-500/30 font-semibold uppercase tracking-wider">Brand Editor</span>
                         </div>
-                        <p class="text-xs text-slate-400">Configure Brands, Dimensions & Design Specs</p>
+                        <p class="text-xs text-slate-400">Configure Brands, Logos & Dimensions</p>
                     </div>
                 </a>
             </div>
@@ -113,7 +113,7 @@
                         <span>Brand & Asset Dimension Hub</span>
                     </h2>
                     <p class="text-xs text-slate-400 mt-1 max-w-2xl">
-                        Define distinct brand profiles with custom color tokens, regulatory safe zones, and bespoke deliverable dimensions. Any changes made here are immediately reflected across the Brief-to-Asset generator.
+                        Define distinct brand profiles, upload brand logos, and set bespoke file dimensions. Any changes made here are saved in your browser and automatically reflected across the studio.
                     </p>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -123,7 +123,7 @@
                     </div>
                     <div class="bg-slate-900/80 border border-slate-800 px-4 py-2.5 rounded-xl text-center">
                         <span class="block text-xl font-bold text-neon-pink" id="statDimCount">0</span>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Total Dimensions</span>
+                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Total Formats</span>
                     </div>
                     <button onclick="resetBrandsToDefault()" class="text-xs text-slate-500 hover:text-rose-400 p-2 transition-colors flex flex-col items-center" title="Reset all to original defaults">
                         <i class="fa-solid fa-rotate-right text-sm mb-1"></i>
@@ -142,7 +142,7 @@
                     <span class="text-xs text-slate-400">Sort:</span>
                     <select id="brandSortSelect" onchange="renderBrandsList()" class="bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none">
                         <option value="name">Brand Name (A-Z)</option>
-                        <option value="dimensions">Most Dimensions</option>
+                        <option value="dimensions">Most Formats</option>
                         <option value="market">Market Jurisdiction</option>
                     </select>
                 </div>
@@ -167,35 +167,54 @@
                         <i class="fa-solid fa-sliders text-base"></i>
                     </div>
                     <div>
-                        <h3 id="modalTitle" class="font-bold text-white text-lg">Edit Brand Specifications</h3>
-                        <p class="text-xs text-slate-400">Configure visual tokens and individual file dimensions</p>
+                        <h3 id="modalTitle" class="font-bold text-white text-lg">Edit Brand Profile</h3>
+                        <p class="text-xs text-slate-400">Configure logo identity and individual file dimensions</p>
                     </div>
                 </div>
                 <button onclick="closeBrandModal()" class="text-slate-400 hover:text-white p-2 text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Form Tabs -->
+            <!-- Form Tabs (Only General/Logo & Dimensions) -->
             <div class="flex border-b border-slate-800 space-x-6 text-xs font-semibold flex-shrink-0">
                 <button type="button" onclick="switchEditorTab('general')" id="modalTabBtn-general" class="pb-2.5 text-neon-cyan border-b-2 border-neon-cyan flex items-center space-x-2">
                     <i class="fa-solid fa-circle-info"></i>
-                    <span>General & Tone</span>
+                    <span>Brand Info & Logo</span>
                 </button>
                 <button type="button" onclick="switchEditorTab('dimensions')" id="modalTabBtn-dimensions" class="pb-2.5 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2">
                     <i class="fa-solid fa-ruler-combined"></i>
                     <span>File Dimensions (<span id="modalDimensionsCount">0</span>)</span>
-                </button>
-                <button type="button" onclick="switchEditorTab('colors')" id="modalTabBtn-colors" class="pb-2.5 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2">
-                    <i class="fa-solid fa-palette"></i>
-                    <span>Color Tokens</span>
                 </button>
             </div>
 
             <!-- Modal Body (Scrollable) -->
             <div class="flex-1 overflow-y-auto space-y-6 pr-1">
                 
-                <!-- TAB 1: General & Tone -->
+                <!-- TAB 1: General Info & Brand Logo Upload -->
                 <div id="modalTabContent-general" class="space-y-4">
                     <input type="hidden" id="editBrandId">
+                    
+                    <!-- BRAND LOGO UPLOAD AREA -->
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                        <div id="logoPreviewContainer" class="w-16 h-16 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden flex-shrink-0 relative">
+                            <i class="fa-solid fa-image text-slate-500 text-xl" id="logoPlaceholderIcon"></i>
+                            <img id="logoPreviewImg" class="w-full h-full object-contain hidden" alt="Brand Logo">
+                        </div>
+                        <div class="space-y-1.5 flex-1">
+                            <label class="block text-xs font-bold text-white">Brand Logo</label>
+                            <p class="text-[11px] text-slate-400">Upload brand logo (PNG, SVG, JPG, WebP) to display across the studio.</p>
+                            <div class="flex items-center space-x-2 pt-1">
+                                <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="handleLogoUpload(this)">
+                                <button type="button" onclick="document.getElementById('logoFileInput').click()" class="px-3 py-1.5 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan text-xs font-semibold rounded-lg flex items-center space-x-1.5 transition-all">
+                                    <i class="fa-solid fa-upload text-[10px]"></i>
+                                    <span>Upload Logo</span>
+                                </button>
+                                <button type="button" id="removeLogoBtn" onclick="removeBrandLogo()" class="px-3 py-1.5 bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 border border-slate-700 text-xs font-medium rounded-lg transition-all hidden">
+                                    Remove Logo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Brand Name *</label>
@@ -213,19 +232,14 @@
                             <input type="text" id="inputBrandMarket" class="w-full rounded-xl glass-input p-3 text-sm text-white focus:outline-none" placeholder="e.g. Curacao (Global), MGA, UKGC">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Default Languages (comma-separated)</label>
-                            <input type="text" id="inputBrandLanguages" class="w-full rounded-xl glass-input p-3 text-sm text-white focus:outline-none" placeholder="EN, DE, FI, PT, ES">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Brand Tone / Aesthetic</label>
+                            <input type="text" id="inputBrandTone" class="w-full rounded-xl glass-input p-3 text-sm text-white focus:outline-none" placeholder="e.g. Cyberpunk neon, high roller appeal">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Brand Tone of Voice</label>
-                        <input type="text" id="inputBrandTone" class="w-full rounded-xl glass-input p-3 text-sm text-white focus:outline-none" placeholder="e.g. Cyberpunk neon, urgent high roller appeal">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Design Direction & Compliance Guidelines</label>
-                        <textarea id="inputBrandGuidelines" rows="3" class="w-full rounded-xl glass-input p-3 text-xs text-slate-200 focus:outline-none resize-y" placeholder="Describe safe zone rules, font styling, 18+ footer rules, jackpot counter requirements..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Design Guidelines & Compliance Notes</label>
+                        <textarea id="inputBrandGuidelines" rows="3" class="w-full rounded-xl glass-input p-3 text-xs text-slate-200 focus:outline-none resize-y" placeholder="Describe safe zone rules, font styling, 18+ footer rules, license requirements..."></textarea>
                     </div>
                 </div>
 
@@ -234,10 +248,9 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
                         <div>
                             <h4 class="text-xs font-bold text-white">Custom Dimensions for this Brand</h4>
-                            <p class="text-[11px] text-slate-400">Designers and marketers will see these exact presets when selecting this brand.</p>
+                            <p class="text-[11px] text-slate-400">Designers will see these exact presets when selecting this brand.</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <!-- Quick add preset dropdown -->
                             <button type="button" onclick="addNewDimensionRow()" class="px-3 py-1.5 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all">
                                 <i class="fa-solid fa-plus text-[10px]"></i>
                                 <span>Add Dimension</span>
@@ -253,30 +266,11 @@
                         <button type="button" onclick="insertDimensionPreset('Mobile Story (1080x1920)', 1080, 1920, 'Top 250px and bottom 300px clear for native app UI')" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-2.5 py-1 rounded-md transition-colors">+ 1080x1920 (9:16)</button>
                         <button type="button" onclick="insertDimensionPreset('Leaderboard (728x90)', 728, 90, 'Logo left, headline center, CTA right')" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-2.5 py-1 rounded-md transition-colors">+ 728x90 (8:1)</button>
                         <button type="button" onclick="insertDimensionPreset('Medium Rectangle (300x250)', 300, 250, 'High contrast compact square layout')" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-2.5 py-1 rounded-md transition-colors">+ 300x250</button>
-                        <button type="button" onclick="insertDimensionPreset('CRM Email Header (600x300)', 600, 300, 'Under 40 chars text, mobile email optimized')" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-2.5 py-1 rounded-md transition-colors">+ 600x300</button>
                     </div>
 
                     <!-- Dimension Rows Container -->
                     <div id="dimensionsListContainer" class="space-y-3">
                         <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- TAB 3: Color Tokens -->
-                <div id="modalTabContent-colors" class="space-y-4 hidden">
-                    <div class="flex items-center justify-between bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                        <div>
-                            <h4 class="text-xs font-bold text-white">Brand Palette Tokens</h4>
-                            <p class="text-[11px] text-slate-400">Colors will be used to guide image prompt generation and design spec sheets.</p>
-                        </div>
-                        <button type="button" onclick="addNewColorRow()" class="px-3 py-1.5 bg-neon-pink/10 hover:bg-neon-pink/20 border border-neon-pink/40 text-neon-pink rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all">
-                            <i class="fa-solid fa-plus text-[10px]"></i>
-                            <span>Add Color</span>
-                        </button>
-                    </div>
-
-                    <div id="colorsListContainer" class="space-y-3">
-                        <!-- Populated dynamically -->
                     </div>
                 </div>
 
@@ -390,13 +384,10 @@
                 const card = document.createElement('div');
                 card.className = "glass-panel rounded-2xl p-5 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between space-y-4 group relative";
                 
-                // Color dots
-                let colorDots = '';
-                if (brand.colors && brand.colors.length > 0) {
-                    colorDots = brand.colors.map(c => `
-                        <span class="w-3.5 h-3.5 rounded-full inline-block border border-white/20 shadow-sm" style="background-color: ${c.hex}" title="${c.name} (${c.hex})"></span>
-                    `).join('');
-                }
+                // Brand avatar or logo
+                const avatarMarkup = brand.logo
+                    ? `<img src="${brand.logo}" class="w-10 h-10 rounded-xl object-contain bg-slate-900 border border-slate-700 p-1 flex-shrink-0" alt="${escapeHtml(brand.name)}">`
+                    : `<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-800 to-slate-900 border border-slate-700 flex items-center justify-center font-bold text-base text-neon-cyan flex-shrink-0">${brand.name.charAt(0).toUpperCase()}</div>`;
 
                 // Dimension Badges Preview
                 let dimBadges = '';
@@ -417,37 +408,27 @@
                     <div>
                         <!-- Top header -->
                         <div class="flex items-start justify-between">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-800 to-slate-900 border border-slate-700 flex items-center justify-center font-bold text-base text-neon-cyan">
-                                    ${brand.name.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-white text-base group-hover:text-neon-cyan transition-colors flex items-center space-x-2">
-                                        <span>${brand.name}</span>
+                            <div class="flex items-center space-x-3 overflow-hidden">
+                                ${avatarMarkup}
+                                <div class="truncate">
+                                    <h3 class="font-bold text-white text-base group-hover:text-neon-cyan transition-colors truncate">
+                                        ${escapeHtml(brand.name)}
                                     </h3>
-                                    <p class="text-xs text-slate-400">${brand.category || 'iGaming Brand'}</p>
+                                    <p class="text-xs text-slate-400 truncate">${escapeHtml(brand.category || 'iGaming Brand')}</p>
                                 </div>
                             </div>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 text-neon-pink border border-slate-800 font-medium">
-                                ${brand.market || 'Global'}
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 text-neon-pink border border-slate-800 font-medium ml-2 flex-shrink-0">
+                                ${escapeHtml(brand.market || 'Global')}
                             </span>
                         </div>
 
                         <!-- Brand tone -->
                         <p class="text-xs text-slate-400 mt-3 line-clamp-2 leading-relaxed italic">
-                            "${brand.tone || 'No tone defined'}"
+                            "${escapeHtml(brand.tone || 'No tone defined')}"
                         </p>
 
-                        <!-- Colors row -->
-                        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                            <span class="text-[11px] text-slate-400">Palette Tokens:</span>
-                            <div class="flex items-center space-x-1.5">
-                                ${colorDots}
-                            </div>
-                        </div>
-
                         <!-- Dimensions summary -->
-                        <div class="mt-3">
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
                             <div class="flex items-center justify-between mb-1.5">
                                 <span class="text-[11px] font-medium text-slate-300 flex items-center space-x-1">
                                     <i class="fa-solid fa-ruler-combined text-[10px] text-neon-cyan"></i>
@@ -507,7 +488,7 @@
 
         // Switch Tabs in Modal
         function switchEditorTab(tabName) {
-            ['general', 'dimensions', 'colors'].forEach(t => {
+            ['general', 'dimensions'].forEach(t => {
                 document.getElementById(`modalTabContent-${t}`).classList.add('hidden');
                 const btn = document.getElementById(`modalTabBtn-${t}`);
                 btn.className = "pb-2.5 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2";
@@ -515,6 +496,50 @@
             document.getElementById(`modalTabContent-${tabName}`).classList.remove('hidden');
             const activeBtn = document.getElementById(`modalTabBtn-${tabName}`);
             activeBtn.className = "pb-2.5 text-neon-cyan border-b-2 border-neon-cyan flex items-center space-x-2";
+        }
+
+        // Brand Logo Upload Handlers
+        function handleLogoUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    if (editingBrand) {
+                        editingBrand.logo = dataUrl;
+                        updateLogoPreviewUI(dataUrl);
+                        showToast("Logo uploaded successfully!");
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeBrandLogo() {
+            if (editingBrand) {
+                editingBrand.logo = null;
+                updateLogoPreviewUI(null);
+                document.getElementById('logoFileInput').value = '';
+                showToast("Logo removed.");
+            }
+        }
+
+        function updateLogoPreviewUI(logoUrl) {
+            const img = document.getElementById('logoPreviewImg');
+            const icon = document.getElementById('logoPlaceholderIcon');
+            const removeBtn = document.getElementById('removeLogoBtn');
+
+            if (logoUrl) {
+                img.src = logoUrl;
+                img.classList.remove('hidden');
+                icon.classList.add('hidden');
+                removeBtn.classList.remove('hidden');
+            } else {
+                img.src = '';
+                img.classList.add('hidden');
+                icon.classList.remove('hidden');
+                removeBtn.classList.add('hidden');
+            }
         }
 
         // Open Modal for New Brand
@@ -525,14 +550,10 @@
                 slug: '',
                 category: 'iGaming Platform',
                 market: 'Curacao (Global)',
-                tone: 'Modern high-converting casino vibe',
-                colors: [
-                    { name: 'Primary Accent', hex: '#00F2FE', rgb: '0, 242, 254' },
-                    { name: 'Secondary Highlight', hex: '#FF007F', rgb: '255, 0, 127' },
-                    { name: 'Dark Studio BG', hex: '#0B0F19', rgb: '11, 15, 25' }
-                ],
+                tone: 'Modern high-converting casino aesthetic',
+                logo: null,
                 guidelines: 'Ensure safe zones are respected and regulatory terms remain legible.',
-                languages: ['EN', 'DE', 'FI'],
+                languages: ['EN'],
                 dimensions: [
                     { id: 'dim_1', name: 'Desktop Hero', width: 1920, height: 1080, ratio: '16:9', safeZone: 'Center 80% focus area', defaultSelected: true },
                     { id: 'dim_2', name: 'Square Feed', width: 1080, height: 1080, ratio: '1:1', safeZone: '10% border padding', defaultSelected: true },
@@ -561,12 +582,11 @@
             document.getElementById('inputBrandName').value = brand.name || '';
             document.getElementById('inputBrandCategory').value = brand.category || '';
             document.getElementById('inputBrandMarket').value = brand.market || '';
-            document.getElementById('inputBrandLanguages').value = (brand.languages || []).join(', ');
             document.getElementById('inputBrandTone').value = brand.tone || '';
             document.getElementById('inputBrandGuidelines').value = brand.guidelines || '';
 
+            updateLogoPreviewUI(brand.logo || null);
             renderDimensionsRows();
-            renderColorRows();
         }
 
         // Render Dimension Rows inside Modal
@@ -591,7 +611,6 @@
                 const row = document.createElement('div');
                 row.className = "bg-slate-900/70 p-4 rounded-xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3";
                 
-                // Calculate aspect ratio string
                 const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
                 const divisor = gcd(d.width || 1, d.height || 1);
                 const rW = (d.width || 1) / divisor;
@@ -672,78 +691,6 @@
             renderDimensionsRows();
         }
 
-        // Render Color Rows inside Modal
-        function renderColorRows() {
-            const container = document.getElementById('colorsListContainer');
-            container.innerHTML = '';
-
-            const colors = editingBrand.colors || [];
-
-            if (colors.length === 0) {
-                container.innerHTML = `
-                    <div class="p-6 text-center text-slate-500 bg-slate-900/40 rounded-xl border border-slate-800">
-                        <p class="text-xs">No color tokens defined. Click "+ Add Color" to add brand accents.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            colors.forEach((c, idx) => {
-                const row = document.createElement('div');
-                row.className = "bg-slate-900/70 p-3 rounded-xl border border-slate-800 flex items-center justify-between gap-3";
-                
-                row.innerHTML = `
-                    <div class="flex items-center space-x-3 flex-1">
-                        <input type="color" value="${c.hex || '#00F2FE'}" onchange="updateColorHex(${idx}, this.value)" class="w-8 h-8 rounded-lg cursor-pointer bg-transparent border border-white/20">
-                        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <input type="text" value="${escapeHtml(c.name)}" oninput="updateColorField(${idx}, 'name', this.value)" class="glass-input p-2 rounded-lg text-xs text-white focus:outline-none" placeholder="Token Name (e.g. Primary Glow)">
-                            <input type="text" value="${c.hex || ''}" oninput="updateColorHex(${idx}, this.value)" class="glass-input p-2 rounded-lg text-xs font-mono text-neon-cyan focus:outline-none" placeholder="#HEX">
-                        </div>
-                    </div>
-                    <button type="button" onclick="removeColorRow(${idx})" class="text-slate-500 hover:text-rose-400 p-2 transition-colors">
-                        <i class="fa-solid fa-trash-can text-xs"></i>
-                    </button>
-                `;
-                container.appendChild(row);
-            });
-        }
-
-        function updateColorField(index, field, value) {
-            if (editingBrand.colors[index]) {
-                editingBrand.colors[index][field] = value;
-            }
-        }
-
-        function updateColorHex(index, hexValue) {
-            if (editingBrand.colors[index]) {
-                editingBrand.colors[index].hex = hexValue;
-                // update RGB
-                const hex = hexValue.replace('#', '');
-                if (hex.length === 6) {
-                    const r = parseInt(hex.substring(0,2), 16);
-                    const g = parseInt(hex.substring(2,4), 16);
-                    const b = parseInt(hex.substring(4,6), 16);
-                    editingBrand.colors[index].rgb = `${r}, ${g}, ${b}`;
-                }
-                renderColorRows();
-            }
-        }
-
-        function addNewColorRow() {
-            if (!editingBrand.colors) editingBrand.colors = [];
-            editingBrand.colors.push({
-                name: 'Accent Color',
-                hex: '#00F2FE',
-                rgb: '0, 242, 254'
-            });
-            renderColorRows();
-        }
-
-        function removeColorRow(index) {
-            editingBrand.colors.splice(index, 1);
-            renderColorRows();
-        }
-
         // Save Brand from Modal
         function saveBrandFromModal() {
             const name = document.getElementById('inputBrandName').value.trim();
@@ -759,11 +706,7 @@
             editingBrand.market = document.getElementById('inputBrandMarket').value.trim();
             editingBrand.tone = document.getElementById('inputBrandTone').value.trim();
             editingBrand.guidelines = document.getElementById('inputBrandGuidelines').value.trim();
-            
-            const langStr = document.getElementById('inputBrandLanguages').value.trim();
-            editingBrand.languages = langStr ? langStr.split(',').map(s => s.trim().toUpperCase()).filter(Boolean) : ['EN'];
 
-            // Ensure dimensions is valid array
             if (!editingBrand.dimensions || editingBrand.dimensions.length === 0) {
                 editingBrand.dimensions = [
                     { id: 'dim_1', name: 'Desktop Hero', width: 1920, height: 1080, ratio: '16:9', safeZone: 'Center 80% safe zone', defaultSelected: true }
@@ -821,7 +764,7 @@
         // Select brand and open Studio
         function selectAndGoToStudio(id) {
             BrandStorage.setSelectedBrandId(id);
-            window.location.href = `index.html?brand=${encodeURIComponent(id)}&step=2`;
+            window.location.href = `index.html`;
         }
 
         // Import & Export Backup Modal

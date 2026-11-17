@@ -135,14 +135,16 @@
                 </button>
                 <div class="h-4 w-px bg-slate-800"></div>
                 <div class="flex items-center space-x-2">
+                    <div id="activeBrandLogoSlot" class="flex items-center"></div>
                     <span id="activeBrandNameDisplay" class="text-sm font-bold text-white">Upgaming</span>
                     <span id="activeBrandMarketDisplay" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-850 text-neon-pink border border-slate-800 font-semibold">Curacao</span>
                 </div>
             </div>
 
-            <!-- Brand Color Dots -->
-            <div id="activeBrandColorChips" class="flex items-center space-x-1.5 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800">
-                <!-- Populated dynamically -->
+            <!-- Active Status Indicator (No Color Dots) -->
+            <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-[11px] text-slate-300 font-medium">Studio Ready</span>
             </div>
         </div>
 
@@ -267,8 +269,8 @@
                     </div>
 
                     <div class="pt-2 flex items-center justify-between border-t border-slate-800/80">
-                        <span class="text-[11px] text-slate-400">Brand Color Swatches:</span>
-                        <div id="previewColorDots" class="flex items-center space-x-1.5"></div>
+                        <span class="text-[11px] text-slate-400">Brand Identity:</span>
+                        <div id="previewBrandLogoDisplay" class="flex items-center space-x-2"></div>
                     </div>
                 </div>
 
@@ -512,9 +514,13 @@
                 const isCurrent = selectedBrand && selectedBrand.id === brand.id;
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = `glass-panel py-5 px-6 rounded-2xl border text-center transition-all cursor-pointer font-bold text-base tracking-wide hover:scale-[1.02] hover:border-neon-cyan hover:text-neon-cyan shadow-lg ${isCurrent ? 'border-neon-cyan text-neon-cyan ring-1 ring-neon-cyan/40 bg-slate-900/90' : 'border-slate-800 text-white hover:bg-slate-900/80'}`;
+                btn.className = `glass-panel py-4 px-5 rounded-2xl border flex items-center justify-center space-x-3 transition-all cursor-pointer font-bold text-base tracking-wide hover:scale-[1.02] hover:border-neon-cyan hover:text-neon-cyan shadow-lg ${isCurrent ? 'border-neon-cyan text-neon-cyan ring-1 ring-neon-cyan/40 bg-slate-900/90' : 'border-slate-800 text-white hover:bg-slate-900/80'}`;
                 btn.onclick = () => selectBrandAndAdvance(brand.id);
-                btn.innerText = brand.name;
+                
+                const logoHtml = brand.logo 
+                    ? `<img src="${brand.logo}" class="w-8 h-8 rounded-lg object-contain bg-slate-900 border border-slate-700 p-0.5 flex-shrink-0" alt="${escapeHtml(brand.name)}">`
+                    : '';
+                btn.innerHTML = `${logoHtml}<span>${escapeHtml(brand.name)}</span>`;
                 grid.appendChild(btn);
             });
         }
@@ -541,15 +547,12 @@
             document.getElementById('activeBrandNameDisplay').innerText = brand.name;
             document.getElementById('activeBrandMarketDisplay').innerText = brand.market || 'Global';
 
-            // Render top bar colors
-            const colorChipsContainer = document.getElementById('activeBrandColorChips');
-            colorChipsContainer.innerHTML = '';
-            if (brand.colors && brand.colors.length > 0) {
-                brand.colors.forEach(c => {
-                    colorChipsContainer.innerHTML += `
-                        <span class="w-3 h-3 rounded-full inline-block border border-white/20 shadow-sm" style="background-color: ${c.hex}" title="${c.name} (${c.hex})"></span>
-                    `;
-                });
+            // Render top bar brand logo
+            const logoSlot = document.getElementById('activeBrandLogoSlot');
+            if (brand.logo) {
+                logoSlot.innerHTML = `<img src="${brand.logo}" class="w-6 h-6 rounded-md object-contain bg-slate-900 border border-slate-700 p-0.5 mr-1" alt="Logo">`;
+            } else {
+                logoSlot.innerHTML = '';
             }
 
             // Load remembered languages for THIS SPECIFIC BRAND (Defaults to English only)
@@ -797,19 +800,13 @@
                 return false;
             }
 
-            const palette = brand.colors && brand.colors.length > 0 ? brand.colors : [
-                { name: "Electric Cyan", hex: "#00F2FE", rgb: "0, 242, 254" },
-                { name: "Neon Magenta", hex: "#FF007F", rgb: "255, 0, 127" },
-                { name: "Dark Studio BG", hex: "#0B0F19", rgb: "11, 15, 25" }
-            ];
-
             compiledCampaign = {
                 campaignTitle: title,
                 description: description,
                 brandName: brand.name,
+                brandLogo: brand.logo || null,
                 market: brand.market || 'Global',
                 languages: JSON.parse(JSON.stringify(activeLanguages)),
-                colorPalette: palette,
                 formats: selectedFormats
             };
 
@@ -826,14 +823,18 @@
             document.getElementById('previewBrandMarketBadge').innerText = `${compiledCampaign.brandName} • ${compiledCampaign.market}`;
             document.getElementById('previewDescriptionText').innerText = compiledCampaign.description;
 
-            // Color dots
-            const colorContainer = document.getElementById('previewColorDots');
-            colorContainer.innerHTML = '';
-            compiledCampaign.colorPalette.forEach(c => {
-                colorContainer.innerHTML += `
-                    <span class="w-3.5 h-3.5 rounded-full inline-block border border-white/20 shadow-sm" style="background-color: ${c.hex}" title="${c.name} (${c.hex})"></span>
+            // Brand Logo in Preview
+            const logoContainer = document.getElementById('previewBrandLogoDisplay');
+            if (compiledCampaign.brandLogo) {
+                logoContainer.innerHTML = `
+                    <img src="${compiledCampaign.brandLogo}" class="h-6 w-auto max-w-[120px] rounded object-contain bg-slate-900 border border-slate-700 p-0.5" alt="Brand Logo">
+                    <span class="text-xs text-white font-semibold">${escapeHtml(compiledCampaign.brandName)}</span>
                 `;
-            });
+            } else {
+                logoContainer.innerHTML = `
+                    <span class="text-xs text-neon-cyan font-bold">${escapeHtml(compiledCampaign.brandName)}</span>
+                `;
+            }
 
             // Languages
             const langContainer = document.getElementById('previewLanguageCards');
@@ -976,111 +977,139 @@ app.bringToFront();
         var desc = new ActionDescriptor();
         var ref = new ActionReference();
         ref.putClass(stringIDToTypeID("artboardSection"));
-        desc.putReference(stringIDToTypeID("null"), ref);
+        desc.putReference(charIDToTypeID("null"), ref);
 
         var artboardDesc = new ActionDescriptor();
-        artboardDesc.putString(stringIDToTypeID("name"), name);
+        artboardDesc.putString(charIDToTypeID("Nm  "), name);
 
         var rectDesc = new ActionDescriptor();
-        rectDesc.putDouble(stringIDToTypeID("top"), top);
-        rectDesc.putDouble(stringIDToTypeID("left"), left);
-        rectDesc.putDouble(stringIDToTypeID("bottom"), top + height);
-        rectDesc.putDouble(stringIDToTypeID("right"), left + width);
+        rectDesc.putDouble(charIDToTypeID("Top "), Number(top));
+        rectDesc.putDouble(charIDToTypeID("Left"), Number(left));
+        rectDesc.putDouble(charIDToTypeID("Btom"), Number(top) + Number(height));
+        rectDesc.putDouble(charIDToTypeID("Rght"), Number(left) + Number(width));
         artboardDesc.putObject(stringIDToTypeID("artboardRect"), stringIDToTypeID("classFloatRect"), rectDesc);
 
-        desc.putObject(stringIDToTypeID("artboard"), stringIDToTypeID("artboardSection"), artboardDesc);
-        executeAction(stringIDToTypeID("make"), desc, DialogModes.NO);
+        desc.putObject(charIDToTypeID("Usng"), stringIDToTypeID("artboardSection"), artboardDesc);
+        executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO);
     }
 
     function createMasterArtboardDoc(name, fmts, folder) {
-        var base = fmts[0];
-        // Create base document
-        var doc = app.documents.add(
-            UnitValue(base.width, "px"),
-            UnitValue(base.height, "px"),
-            72,
-            name + " - Master",
-            NewDocumentMode.RGB,
-            DocumentFill.TRANSPARENT
-        );
+        var origRulerUnits = app.preferences.rulerUnits;
+        var origTypeUnits = app.preferences.typeUnits;
+        app.preferences.rulerUnits = Units.PIXELS;
+        app.preferences.typeUnits = TypeUnits.PIXELS;
 
-        var x = 0;
-        var y = 0;
-        var rowH = 0;
-        var spacing = 160;
-        var maxRowW = 10000;
-
-        for (var i = 0; i < fmts.length; i++) {
-            var f = fmts[i];
-            var w = Number(f.width) || 1080;
-            var h = Number(f.height) || 1080;
-
-            if (x + w > maxRowW && x > 0) {
-                x = 0;
-                y += rowH + spacing;
-                rowH = 0;
-            }
-
-            // Create genuine Photoshop artboard
-            makeArtboard(f.formatName + " (" + w + "x" + h + ")", x, y, w, h);
-
-            x += w + spacing;
-            if (h > rowH) rowH = h;
-        }
-
-        // Clean up initial default layer if still present
         try {
-            for (var k = doc.layers.length - 1; k >= 0; k--) {
-                if (doc.layers[k].typename === "ArtLayer" && (doc.layers[k].name === "Layer 1" || doc.layers[k].name === "Background")) {
-                    doc.layers[k].remove();
-                    break;
-                }
-            }
-        } catch(err) {}
-
-        var fileName = name.replace(/[^a-zA-Z0-9_-]/g, "_") + "_Master.psb";
-        var saveFile = new File(folder + "/" + fileName);
-        var psbOpts = new PhotoshopSaveOptions();
-        psbOpts.embedColorProfile = true;
-        psbOpts.layers = true;
-        doc.saveAs(saveFile, psbOpts, true, Extension.LOWERCASE);
-
-        alert("✅ Master document successfully created with " + fmts.length + " Artboards!\\nSaved: " + saveFile.fsName);
-    }
-
-    function createSeparatePsbDocs(name, fmts, folder) {
-        var created = 0;
-        for (var i = 0; i < fmts.length; i++) {
-            var f = fmts[i];
-            var docName = f.formatName.replace(/[^a-zA-Z0-9_-]/g, "_") + "_" + f.width + "x" + f.height;
+            var base = fmts[0];
+            // Create base document
             var doc = app.documents.add(
-                UnitValue(f.width, "px"),
-                UnitValue(f.height, "px"),
+                UnitValue(base.width, "px"),
+                UnitValue(base.height, "px"),
                 72,
-                docName,
+                name + " - Master",
                 NewDocumentMode.RGB,
-                DocumentFill.WHITE
+                DocumentFill.TRANSPARENT
             );
 
-            var bg = doc.layerSets.add();
-            bg.name = "Background";
+            var x = 0;
+            var y = 0;
+            var rowH = 0;
+            var spacing = 160;
+            var maxRowW = 10000;
 
-            var art = doc.layerSets.add();
-            art.name = "Key Art";
+            for (var i = 0; i < fmts.length; i++) {
+                var f = fmts[i];
+                var w = Number(f.width) || 1080;
+                var h = Number(f.height) || 1080;
 
-            var copy = doc.layerSets.add();
-            copy.name = "Copy & CTA";
+                if (x + w > maxRowW && x > 0) {
+                    x = 0;
+                    y += rowH + spacing;
+                    rowH = 0;
+                }
 
-            var file = new File(folder + "/" + docName + ".psb");
+                // Create genuine Photoshop artboard
+                makeArtboard(f.formatName + " (" + w + "x" + h + ")", x, y, w, h);
+
+                x += w + spacing;
+                if (h > rowH) rowH = h;
+            }
+
+            // Clean up initial default layer if still present
+            try {
+                for (var k = doc.layers.length - 1; k >= 0; k--) {
+                    if (doc.layers[k].typename === "ArtLayer" && (doc.layers[k].name === "Layer 1" || doc.layers[k].name === "Background")) {
+                        doc.layers[k].remove();
+                        break;
+                    }
+                }
+            } catch(err) {}
+
+            // Reveal all artboards on canvas
+            try {
+                var idRvlA = charIDToTypeID("RvlA");
+                executeAction(idRvlA, new ActionDescriptor(), DialogModes.NO);
+            } catch(err) {
+                try { doc.revealAll(); } catch(e) {}
+            }
+
+            var fileName = name.replace(/[^a-zA-Z0-9_-]/g, "_") + "_Master.psb";
+            var saveFile = new File(folder + "/" + fileName);
             var psbOpts = new PhotoshopSaveOptions();
             psbOpts.embedColorProfile = true;
             psbOpts.layers = true;
-            doc.saveAs(file, psbOpts, true, Extension.LOWERCASE);
-            doc.close(SaveOptions.DONOTSAVECHANGES);
-            created++;
-        }
+            doc.saveAs(saveFile, psbOpts, true, Extension.LOWERCASE);
 
-        alert("✅ Generated " + created + " separate .PSB files in:\\n" + folder.fsName);
+            alert("✅ Master document successfully created with " + fmts.length + " Artboards!\\nSaved: " + saveFile.fsName);
+        } finally {
+            app.preferences.rulerUnits = origRulerUnits;
+            app.preferences.typeUnits = origTypeUnits;
+        }
+    }
+
+    function createSeparatePsbDocs(name, fmts, folder) {
+        var origRulerUnits = app.preferences.rulerUnits;
+        var origTypeUnits = app.preferences.typeUnits;
+        app.preferences.rulerUnits = Units.PIXELS;
+        app.preferences.typeUnits = TypeUnits.PIXELS;
+
+        try {
+            var created = 0;
+            for (var i = 0; i < fmts.length; i++) {
+                var f = fmts[i];
+                var docName = f.formatName.replace(/[^a-zA-Z0-9_-]/g, "_") + "_" + f.width + "x" + f.height;
+                var doc = app.documents.add(
+                    UnitValue(f.width, "px"),
+                    UnitValue(f.height, "px"),
+                    72,
+                    docName,
+                    NewDocumentMode.RGB,
+                    DocumentFill.WHITE
+                );
+
+                var bg = doc.layerSets.add();
+                bg.name = "Background";
+
+                var art = doc.layerSets.add();
+                art.name = "Key Art";
+
+                var copy = doc.layerSets.add();
+                copy.name = "Copy & CTA";
+
+                var file = new File(folder + "/" + docName + ".psb");
+                var psbOpts = new PhotoshopSaveOptions();
+                psbOpts.embedColorProfile = true;
+                psbOpts.layers = true;
+                doc.saveAs(file, psbOpts, true, Extension.LOWERCASE);
+                doc.close(SaveOptions.DONOTSAVECHANGES);
+                created++;
+            }
+
+            alert("✅ Generated " + created + " separate .PSB files in:\\n" + folder.fsName);
+        } finally {
+            app.preferences.rulerUnits = origRulerUnits;
+            app.preferences.typeUnits = origTypeUnits;
+        }
     }
 })();
 `;
@@ -1146,10 +1175,6 @@ app.bringToFront();
         frame.y = y;
         frame.fills = [{ type: 'SOLID', color: { r: 0.07, g: 0.09, b: 0.14 } }];
         frame.clipsContent = true;
-
-        if (fmt.safeZoneNotes) {
-            frame.setPluginData("safeZone", fmt.safeZoneNotes);
-        }
 
         figma.currentPage.appendChild(frame);
         frames.push(frame);
