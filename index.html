@@ -111,44 +111,18 @@
         </div>
     </header>
 
-    <!-- STEP 1 CONTAINER: Choose Your Brand -->
-    <section id="step1Section" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- STEP 1 CONTAINER: Choose Your Brand (Brand names & Search ONLY) -->
+    <section id="step1Section" class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
         
-        <!-- Welcome Hero -->
-        <div class="glass-panel rounded-3xl p-8 relative overflow-hidden border border-slate-800 shadow-2xl">
-            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink"></div>
-            
-            <div class="max-w-3xl space-y-3">
-                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan text-xs font-semibold">
-                    <i class="fa-solid fa-handshake-simple"></i>
-                    <span>Stakeholder & Designer Alignment</span>
-                </div>
-                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                    Step 1: Choose Your Brand
-                </h2>
-                <p class="text-sm text-slate-400 leading-relaxed">
-                    Select a brand to inherit its exact pixel dimensions, color palette, regulatory safe zones, and design guidelines. Configure new brands or custom dimensions anytime in the editor.
-                </p>
-            </div>
-
-            <!-- Search & Actions -->
-            <div class="mt-8 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="relative w-full sm:w-96">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                    <input type="text" id="brandSearchStep1" oninput="filterBrandsStep1()" placeholder="Search brands by name, jurisdiction, format..." class="w-full pl-9 pr-4 py-2.5 rounded-xl glass-input text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none">
-                </div>
-                <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
-                    <a href="editor.html" class="px-4 py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-neon-cyan to-neon-green rounded-xl hover:opacity-90 transition-all shadow-lg neon-glow-cyan flex items-center space-x-2">
-                        <i class="fa-solid fa-plus text-sm"></i>
-                        <span>Add New Brand in Editor</span>
-                    </a>
-                </div>
-            </div>
+        <!-- Search Bar Only -->
+        <div class="relative w-full max-w-lg mx-auto">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+            <input type="text" id="brandSearchStep1" oninput="filterBrandsStep1()" placeholder="Search brand..." class="w-full pl-11 pr-4 py-3.5 rounded-2xl glass-input text-sm text-white placeholder:text-slate-500 focus:outline-none shadow-lg">
         </div>
 
-        <!-- Brand Cards Grid -->
-        <div id="step1BrandsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Dynamically populated from BrandStorage -->
+        <!-- Brand Names Only Grid -->
+        <div id="step1BrandsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2">
+            <!-- Dynamically populated with ONLY brand names -->
         </div>
 
     </section>
@@ -662,109 +636,30 @@
             }
         }
 
-        // Render Brands in Step 1
+        // Render Brands in Step 1 (Brand names ONLY)
         function renderStep1Brands(filteredList = null) {
             const brands = filteredList || BrandStorage.getAll();
             const grid = document.getElementById('step1BrandsGrid');
             grid.innerHTML = '';
 
-            brands.forEach(brand => {
-                const isCurrent = selectedBrand && selectedBrand.id === brand.id;
-                const dimCount = brand.dimensions ? brand.dimensions.length : 0;
-                
-                let colorChips = '';
-                if (brand.colors && brand.colors.length > 0) {
-                    colorChips = brand.colors.map(c => `
-                        <span class="w-3.5 h-3.5 rounded-full inline-block border border-white/20" style="background-color: ${c.hex}" title="${c.name}"></span>
-                    `).join('');
-                }
-
-                let dimensionsPreview = '';
-                if (brand.dimensions && brand.dimensions.length > 0) {
-                    dimensionsPreview = brand.dimensions.slice(0, 3).map(d => `
-                        <span class="text-[10px] bg-slate-900 border border-slate-800 px-2 py-0.5 rounded text-slate-300 font-mono">
-                            ${d.width}×${d.height}
-                        </span>
-                    `).join('');
-                    if (brand.dimensions.length > 3) {
-                        dimensionsPreview += `<span class="text-[10px] text-slate-500 font-mono">+${brand.dimensions.length - 3}</span>`;
-                    }
-                }
-
-                const card = document.createElement('div');
-                card.className = `glass-panel rounded-2xl p-6 border transition-all flex flex-col justify-between space-y-4 cursor-pointer hover:scale-[1.01] hover:border-neon-cyan/60 ${isCurrent ? 'border-neon-cyan ring-1 ring-neon-cyan/30' : 'border-slate-800'}`;
-                
-                card.onclick = () => selectBrandAndAdvance(brand.id);
-
-                card.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="flex items-start justify-between">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-slate-800 to-slate-900 border border-slate-700 flex items-center justify-center font-black text-lg text-neon-cyan">
-                                    ${brand.name.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <div class="flex items-center space-x-2">
-                                        <h3 class="font-bold text-white text-base">${brand.name}</h3>
-                                        ${isCurrent ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-neon-cyan/20 text-neon-cyan font-bold uppercase">Active</span>' : ''}
-                                    </div>
-                                    <p class="text-xs text-slate-400">${brand.category || 'iGaming Platform'}</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 text-neon-pink border border-slate-800 font-semibold">
-                                ${brand.market || 'Global'}
-                            </span>
-                        </div>
-
-                        <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed italic">
-                            "${brand.tone || 'Modern casino tone'}"
-                        </p>
-
-                        <!-- Color tokens -->
-                        <div class="pt-2 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800/80">
-                            <span>Palette:</span>
-                            <div class="flex items-center space-x-1.5">
-                                ${colorChips}
-                            </div>
-                        </div>
-
-                        <!-- Configured file dimensions -->
-                        <div>
-                            <span class="text-[11px] text-slate-300 block mb-1">Configured Dimensions (${dimCount}):</span>
-                            <div class="flex flex-wrap gap-1.5">
-                                ${dimensionsPreview}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                        <span class="text-xs text-neon-cyan font-semibold flex items-center space-x-1">
-                            <span>Select & Open Studio</span>
-                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </span>
-                        <a href="editor.html" onclick="event.stopPropagation();" class="text-xs text-slate-500 hover:text-slate-300" title="Edit this brand in editor">
-                            <i class="fa-solid fa-sliders"></i>
-                        </a>
+            if (brands.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-500 text-sm">
+                        No brands found
                     </div>
                 `;
+                return;
+            }
 
-                grid.appendChild(card);
+            brands.forEach(brand => {
+                const isCurrent = selectedBrand && selectedBrand.id === brand.id;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `glass-panel py-6 px-6 rounded-2xl border text-center transition-all cursor-pointer font-bold text-lg tracking-wide hover:scale-[1.02] hover:border-neon-cyan hover:text-neon-cyan shadow-lg ${isCurrent ? 'border-neon-cyan text-neon-cyan ring-1 ring-neon-cyan/40 bg-slate-900/90' : 'border-slate-800 text-white hover:bg-slate-900/80'}`;
+                btn.onclick = () => selectBrandAndAdvance(brand.id);
+                btn.innerText = brand.name;
+                grid.appendChild(btn);
             });
-
-            // Card to add new brand
-            const addCard = document.createElement('a');
-            addCard.href = "editor.html";
-            addCard.className = "glass-panel rounded-2xl p-6 border border-dashed border-slate-700 hover:border-neon-cyan transition-all flex flex-col items-center justify-center text-center space-y-3 group min-h-[220px]";
-            addCard.innerHTML = `
-                <div class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 group-hover:border-neon-cyan/50 flex items-center justify-center text-slate-400 group-hover:text-neon-cyan transition-colors text-xl">
-                    <i class="fa-solid fa-plus"></i>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white text-sm group-hover:text-neon-cyan transition-colors">Add New Brand</h4>
-                    <p class="text-xs text-slate-400 mt-1">Configure brand assets, custom file dimensions, and compliance rules.</p>
-                </div>
-            `;
-            grid.appendChild(addCard);
         }
 
         function filterBrandsStep1() {
@@ -774,12 +669,7 @@
                 renderStep1Brands(allBrands);
                 return;
             }
-            const filtered = allBrands.filter(b => 
-                b.name.toLowerCase().includes(query) ||
-                (b.category || '').toLowerCase().includes(query) ||
-                (b.market || '').toLowerCase().includes(query) ||
-                (b.tone || '').toLowerCase().includes(query)
-            );
+            const filtered = allBrands.filter(b => b.name.toLowerCase().includes(query));
             renderStep1Brands(filtered);
         }
 
