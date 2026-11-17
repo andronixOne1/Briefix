@@ -102,11 +102,6 @@
                     <span class="sm:hidden">Editor</span>
                 </a>
 
-                <!-- API Key Config -->
-                <button onclick="openApiKeyModal()" class="p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700" title="AI Generation Settings / API Key">
-                    <i class="fa-solid fa-key text-xs"></i>
-                </button>
-
                 <!-- Campaign History Modal -->
                 <button onclick="openHistoryModal()" class="relative p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700" title="Campaign History">
                     <i class="fa-solid fa-clock-rotate-left"></i>
@@ -126,13 +121,13 @@
             <div class="max-w-3xl space-y-3">
                 <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan text-xs font-semibold">
                     <i class="fa-solid fa-handshake-simple"></i>
-                    <span>Stakeholder & Designer Alignment Engine</span>
+                    <span>Stakeholder & Designer Alignment</span>
                 </div>
                 <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
                     Step 1: Choose Your Brand
                 </h2>
                 <p class="text-sm text-slate-400 leading-relaxed">
-                    Select the target brand profile to automatically inherit bespoke aspect ratios, file dimensions, brand color tokens, regulatory safe zones, and copywriting tone.
+                    Select a brand to inherit its exact pixel dimensions, color palette, regulatory safe zones, and design guidelines. Configure new brands or custom dimensions anytime in the editor.
                 </p>
             </div>
 
@@ -158,7 +153,7 @@
 
     </section>
 
-    <!-- STEP 2 CONTAINER: Everything from Attachment + Dynamic Brand Dimensions -->
+    <!-- STEP 2 CONTAINER: Brief Studio + Languages with Headline & Sub-heading -->
     <section id="step2Section" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 hidden">
         
         <!-- Active Brand Context Bar -->
@@ -190,33 +185,33 @@
                     <!-- Populated dynamically -->
                 </div>
                 <!-- Editor shortcut -->
-                <button onclick="editCurrentBrandDimensions()" class="text-xs text-neon-cyan hover:underline flex items-center space-x-1 font-medium" title="Edit this brand's file dimensions in editor.html">
+                <a href="editor.html" class="text-xs text-neon-cyan hover:underline flex items-center space-x-1 font-medium" title="Edit this brand's file dimensions in editor.html">
                     <i class="fa-solid fa-ruler-combined text-[11px]"></i>
                     <span class="hidden sm:inline">Edit Dimensions</span>
-                </button>
+                </a>
             </div>
         </div>
 
-        <!-- Main Studio Grid (Attachment Layout) -->
+        <!-- Main Studio Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             <!-- LEFT COLUMN: Input & Brief Controls (5 Cols) -->
             <div class="lg:col-span-5 space-y-6">
                 
                 <!-- Brief Input Panel -->
-                <div class="glass-panel rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+                <div class="glass-panel rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-6">
                     <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink"></div>
                     
-                    <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center justify-between">
                         <h2 class="font-semibold text-white flex items-center space-x-2">
-                            <i class="fa-solid fa-wand-magic-sparkles text-neon-cyan"></i>
-                            <span>Campaign Brief Input</span>
+                            <i class="fa-solid fa-pen-to-square text-neon-cyan"></i>
+                            <span>Campaign Brief & Messaging</span>
                         </h2>
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Gemini 3 Flash</span>
+                        <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Studio</span>
                     </div>
 
                     <!-- Presets Bar -->
-                    <div class="mb-4">
+                    <div>
                         <label class="block text-xs font-medium text-slate-400 mb-2">Quick Sample Briefs:</label>
                         <div class="flex flex-wrap gap-2">
                             <button onclick="loadPreset(0)" class="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-lg transition-all flex items-center space-x-1.5">
@@ -234,28 +229,58 @@
                         </div>
                     </div>
 
-                    <!-- Textarea -->
-                    <div class="space-y-2 mb-6">
-                        <div class="flex justify-between items-center">
-                            <label for="briefText" class="text-xs font-medium text-slate-300">Paste or type messy brief:</label>
-                            <button onclick="document.getElementById('briefText').value=''" class="text-xs text-slate-500 hover:text-slate-300">Clear</button>
+                    <!-- Core Campaign Fields -->
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Campaign Title *</label>
+                            <input type="text" id="campaignTitleInput" class="w-full rounded-xl glass-input p-3 text-sm text-white focus:outline-none" placeholder="e.g. Weekend Reload 50% up to €200">
                         </div>
-                        <textarea id="briefText" rows="6" class="w-full rounded-xl glass-input p-3.5 text-sm text-slate-200 focus:outline-none transition-all placeholder:text-slate-600 resize-y" placeholder="e.g. Weekend Reload 50% up to €200, Pragmatic games, neon cyberpunk vibe, 24h countdown, high roller banner needed..."></textarea>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1">Call to Action (CTA)</label>
+                                <input type="text" id="campaignCTAInput" class="w-full rounded-xl glass-input p-2.5 text-xs text-neon-pink font-semibold focus:outline-none" placeholder="e.g. CLAIM BONUS NOW">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1">Visual Theme / Mood</label>
+                                <input type="text" id="campaignMoodInput" class="w-full rounded-xl glass-input p-2.5 text-xs text-slate-200 focus:outline-none" placeholder="e.g. Cyberpunk neon, dark high contrast">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Subcopy & Bonus Terms (T&C)</label>
+                            <textarea id="campaignTermsInput" rows="2" class="w-full rounded-xl glass-input p-2.5 text-xs text-slate-200 focus:outline-none resize-y" placeholder="18+ only. Min deposit €20. Wagering 35x. Gamble responsibly."></textarea>
+                        </div>
                     </div>
 
-                    <!-- Localization & Target Languages -->
-                    <div class="mb-6 space-y-2">
-                        <label class="block text-xs font-medium text-slate-300">Target Languages / Regions:</label>
-                        <div id="languageCheckboxesContainer" class="grid grid-cols-3 gap-2">
-                            <!-- Populated dynamically based on brand defaults -->
+                    <!-- LANGUAGES SECTION (HEADLINE & SUB-HEADING FIELDS + ADD LANGUAGE) -->
+                    <div class="space-y-3 pt-2 border-t border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <label class="block text-xs font-semibold text-white flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-language text-neon-cyan"></i>
+                                    <span>Languages & Regional Copy</span>
+                                </label>
+                                <p class="text-[11px] text-slate-400">Headlines and sub-headings are optional and can stay empty.</p>
+                            </div>
+                            <button type="button" onclick="openAddLanguageModal()" class="px-2.5 py-1 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all">
+                                <i class="fa-solid fa-plus text-[10px]"></i>
+                                <span>Add Language</span>
+                            </button>
+                        </div>
+
+                        <!-- Language Cards Container -->
+                        <div id="languageRowsContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1">
+                            <!-- Populated dynamically -->
                         </div>
                     </div>
 
                     <!-- Banner Size Presets (INDIVIDUAL FILE DIMENSIONS FOR THIS BRAND) -->
-                    <div class="mb-6 space-y-2">
+                    <div class="space-y-2 pt-2 border-t border-slate-800">
                         <div class="flex items-center justify-between">
-                            <label class="block text-xs font-medium text-slate-300">
-                                Required Asset Formats (<span id="activeBrandFormatsCount">0</span> brand formats):
+                            <label class="block text-xs font-semibold text-white flex items-center space-x-1.5">
+                                <i class="fa-solid fa-ruler-combined text-neon-pink"></i>
+                                <span>Required Dimensions (<span id="activeBrandFormatsCount">0</span> formats):</span>
                             </label>
                             <div class="space-x-2 text-[11px]">
                                 <button type="button" onclick="toggleAllFormats(true)" class="text-neon-cyan hover:underline">Select All</button>
@@ -264,15 +289,15 @@
                             </div>
                         </div>
                         
-                        <div id="brandDimensionsContainer" class="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto pr-1">
+                        <div id="brandDimensionsContainer" class="grid grid-cols-1 gap-2 max-h-56 overflow-y-auto pr-1">
                             <!-- Populated dynamically from Brand's own dimensions -->
                         </div>
                     </div>
 
-                    <!-- Generate Button -->
-                    <button onclick="generateCampaignAssets()" id="generateBtn" class="w-full py-4 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 transition-all shadow-lg neon-glow-cyan flex items-center justify-center space-x-2 cursor-pointer">
-                        <i class="fa-solid fa-microchip text-lg"></i>
-                        <span>Generate Structured Assets</span>
+                    <!-- Compile Button (Instant packaging, NO external API needed) -->
+                    <button onclick="compileCampaignAssets()" id="generateBtn" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 transition-all shadow-lg neon-glow-cyan flex items-center justify-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-layer-group text-base"></i>
+                        <span>Compile & Package Campaign Assets</span>
                     </button>
                 </div>
 
@@ -286,9 +311,9 @@
                     <div>
                         <span id="outputStatusBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
                             <span class="w-2 h-2 rounded-full bg-slate-500 mr-1.5 animate-pulse"></span>
-                            Waiting for Brief Input
+                            Ready to Compile Brief
                         </span>
-                        <h3 id="campaignTitleDisplay" class="text-xl font-bold text-white mt-1">Ready to Parse Campaign</h3>
+                        <h3 id="campaignTitleDisplay" class="text-xl font-bold text-white mt-1">Structured Campaign Package</h3>
                     </div>
                     <div id="exportActions" class="flex items-center space-x-2 hidden">
                         <button onclick="copyAllMarkdown()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5" title="Copy for Slack handover">
@@ -302,29 +327,16 @@
                     </div>
                 </div>
 
-                <!-- Empty State / Loading State / Results Container -->
+                <!-- Empty State / Results Container -->
                 <div id="dashboardContent" class="space-y-6">
                     <!-- Initial State Placeholder -->
                     <div id="placeholderState" class="glass-panel rounded-2xl p-12 text-center flex flex-col items-center justify-center space-y-4 min-h-[450px]">
                         <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 text-2xl">
-                            <i class="fa-solid fa-layer-group"></i>
+                            <i class="fa-solid fa-cubes"></i>
                         </div>
                         <div class="max-w-md">
-                            <h4 class="text-base font-semibold text-slate-300">No Campaign Assets Generated Yet</h4>
-                            <p class="text-xs text-slate-500 mt-1">Paste your marketing brief on the left, verify brand dimensions, and click generate to produce structured copywriting, color tokens, and asset specs.</p>
-                        </div>
-                    </div>
-
-                    <!-- Loading State -->
-                    <div id="loadingState" class="glass-panel rounded-2xl p-16 text-center flex flex-col items-center justify-center space-y-6 min-h-[450px] hidden">
-                        <div class="relative w-20 h-20">
-                            <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
-                            <div class="absolute inset-0 rounded-full border-4 border-neon-cyan border-t-transparent animate-spin"></div>
-                            <div class="absolute inset-3 rounded-full border-4 border-neon-pink border-b-transparent animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
-                        </div>
-                        <div class="space-y-2">
-                            <h4 id="loadingStepText" class="text-base font-semibold text-white">Analyzing casino promotional brief...</h4>
-                            <p class="text-xs text-slate-400">Harmonizing brand dimensions, localizing T&Cs, and tailoring visual specs.</p>
+                            <h4 class="text-base font-semibold text-slate-300">No Assets Packaged Yet</h4>
+                            <p class="text-xs text-slate-500 mt-1">Fill in the campaign title, add your target language headlines, check the required dimensions on the left, and click <strong>Compile & Package Campaign Assets</strong>.</p>
                         </div>
                     </div>
 
@@ -335,23 +347,23 @@
                         <div class="flex border-b border-slate-800 space-x-6 text-sm font-medium overflow-x-auto">
                             <button onclick="switchTab('copywriting')" id="tabBtn-copywriting" class="pb-3 text-neon-cyan border-b-2 border-neon-cyan flex items-center space-x-2 transition-all whitespace-nowrap">
                                 <i class="fa-solid fa-pen-nib"></i>
-                                <span>Copywriting & Localization</span>
+                                <span>Copywriting & Languages</span>
                             </button>
                             <button onclick="switchTab('visuals')" id="tabBtn-visuals" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2 transition-all whitespace-nowrap">
                                 <i class="fa-solid fa-palette"></i>
-                                <span>Color Palette & Prompts</span>
+                                <span>Colors & Visual Notes</span>
                             </button>
                             <button onclick="switchTab('specs')" id="tabBtn-specs" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2 transition-all whitespace-nowrap">
                                 <i class="fa-solid fa-ruler-combined"></i>
-                                <span>Asset Specs & Export</span>
+                                <span>Asset Specs & Deliverables</span>
                             </button>
                             <button onclick="switchTab('cards')" id="tabBtn-cards" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center space-x-2 transition-all whitespace-nowrap">
-                                <i class="fa-solid fa-cubes"></i>
+                                <i class="fa-solid fa-bridge-water"></i>
                                 <span>Designer Spec Sheet</span>
                             </button>
                         </div>
 
-                        <!-- TAB 1: Copywriting & Localization -->
+                        <!-- TAB 1: Copywriting & Languages -->
                         <div id="tabContent-copywriting" class="space-y-4">
                             <div class="glass-panel rounded-xl p-5 border border-slate-800">
                                 <div class="flex justify-between items-center mb-2">
@@ -364,39 +376,42 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="glass-panel rounded-xl p-5 border border-slate-800">
                                     <div class="flex justify-between items-center mb-2">
-                                        <span class="text-xs uppercase tracking-wider text-neon-pink font-semibold">Primary Headline</span>
-                                        <button onclick="copyText('displayPrimaryHeadline')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                                    </div>
-                                    <p id="displayPrimaryHeadline" class="text-sm font-semibold text-slate-100"></p>
-                                </div>
-
-                                <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                    <div class="flex justify-between items-center mb-2">
                                         <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold">Call to Action (CTA)</span>
                                         <button onclick="copyText('displayCTA')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
                                     </div>
                                     <p id="displayCTA" class="text-sm font-bold text-slate-100"></p>
                                 </div>
+
+                                <div class="glass-panel rounded-xl p-5 border border-slate-800">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs uppercase tracking-wider text-neon-pink font-semibold">Brand / Market Jurisdiction</span>
+                                        <span id="displayBrandJurisdiction" class="text-xs text-slate-300 font-mono"></span>
+                                    </div>
+                                    <p id="displayTone" class="text-xs text-slate-300 italic"></p>
+                                </div>
                             </div>
 
                             <div class="glass-panel rounded-xl p-5 border border-slate-800">
                                 <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Sub-copy & Bonus Terms (T&C)</span>
+                                    <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Sub-copy & Terms (T&C)</span>
                                     <button onclick="copyText('displaySubcopy')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
                                 </div>
                                 <p id="displaySubcopy" class="text-xs text-slate-300 leading-relaxed"></p>
                             </div>
 
-                            <!-- Localized Variations Card -->
-                            <div class="glass-panel rounded-xl p-5 border border-slate-800">
-                                <h4 class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3">Localized Headline Translations</h4>
-                                <div id="localizedList" class="space-y-3">
+                            <!-- Configured Languages List with Headline & Sub-heading -->
+                            <div class="glass-panel rounded-xl p-5 border border-slate-800 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs uppercase tracking-wider text-neon-cyan font-semibold">Language Variations (Headlines & Sub-headings)</h4>
+                                    <span id="displayLangCount" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400">0 languages</span>
+                                </div>
+                                <div id="displayLanguageCards" class="space-y-3">
                                     <!-- Populated dynamically -->
                                 </div>
                             </div>
                         </div>
 
-                        <!-- TAB 2: Color Palette & Prompts -->
+                        <!-- TAB 2: Colors & Visual Notes -->
                         <div id="tabContent-visuals" class="space-y-4 hidden">
                             <div class="glass-panel rounded-xl p-5 border border-slate-800">
                                 <h4 class="text-xs uppercase tracking-wider text-neon-cyan font-semibold mb-3">Brand Color Tokens & Palette</h4>
@@ -407,7 +422,7 @@
 
                             <div class="glass-panel rounded-xl p-5 border border-slate-800">
                                 <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs uppercase tracking-wider text-neon-pink font-semibold">AI Image Generation Prompt (Midjourney / Magnific / Gemini)</span>
+                                    <span class="text-xs uppercase tracking-wider text-neon-pink font-semibold">Visual Art & Image Prompt Direction</span>
                                     <button onclick="copyText('displayImagePrompt')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1"><i class="fa-regular fa-copy"></i><span>Copy Prompt</span></button>
                                 </div>
                                 <p id="displayImagePrompt" class="text-xs text-slate-300 font-mono bg-slate-900/80 p-3.5 rounded-lg border border-slate-800 leading-relaxed"></p>
@@ -419,14 +434,14 @@
                             </div>
                         </div>
 
-                        <!-- TAB 3: Asset Specs & Export -->
+                        <!-- TAB 3: Asset Specs & Deliverables -->
                         <div id="tabContent-specs" class="space-y-4 hidden">
                             <div class="glass-panel rounded-xl p-5 border border-slate-800">
                                 <div class="flex justify-between items-center mb-3">
                                     <h4 class="text-xs uppercase tracking-wider text-neon-cyan font-semibold">Required Asset Dimensions & Deliverables</h4>
                                     <a href="editor.html" class="text-xs text-neon-cyan hover:underline flex items-center space-x-1">
                                         <i class="fa-solid fa-sliders text-[10px]"></i>
-                                        <span>Manage Dimensions</span>
+                                        <span>Manage Dimensions in Editor</span>
                                     </a>
                                 </div>
                                 <div id="specsList" class="space-y-2.5">
@@ -435,8 +450,8 @@
                             </div>
 
                             <div class="glass-panel rounded-xl p-5 border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-850">
-                                <h4 class="text-xs uppercase tracking-wider text-neon-pink font-semibold mb-2">Ready for Figma / Photoshop Script Export</h4>
-                                <p class="text-xs text-slate-400 mb-4">You can download the full JSON structure to plug directly into your automated Adobe / Figma scripting pipeline, or copy markdown for Slack handover.</p>
+                                <h4 class="text-xs uppercase tracking-wider text-neon-pink font-semibold mb-2">Figma & Photoshop Script Export Ready</h4>
+                                <p class="text-xs text-slate-400 mb-4">Export the structured campaign data package as JSON or copy the Slack handover markdown.</p>
                                 <div class="flex flex-wrap gap-3">
                                     <button onclick="downloadJSON()" class="px-4 py-2 bg-neon-cyan text-slate-950 font-bold text-xs rounded-lg hover:opacity-90 transition-all flex items-center space-x-2">
                                         <i class="fa-solid fa-file-code"></i>
@@ -459,7 +474,7 @@
                                             <i class="fa-solid fa-bridge-water text-neon-cyan"></i>
                                             <span>Stakeholder Handover Spec Sheet</span>
                                         </h4>
-                                        <p class="text-xs text-slate-400">Clean visual contract between marketing brief and design execution.</p>
+                                        <p class="text-xs text-slate-400">Clean visual contract between stakeholder brief and design execution.</p>
                                     </div>
                                     <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5">
                                         <i class="fa-solid fa-print"></i>
@@ -484,42 +499,56 @@
 
     </section>
 
+    <!-- Modal: Add Custom Language -->
+    <div id="addLanguageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <h3 class="font-bold text-white text-base flex items-center space-x-2">
+                    <i class="fa-solid fa-plus text-neon-cyan"></i>
+                    <span>Add Target Language</span>
+                </h3>
+                <button onclick="closeAddLanguageModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Language Name or Code *</label>
+                    <input type="text" id="newLanguageNameInput" class="w-full glass-input p-2.5 rounded-lg text-xs text-white focus:outline-none" placeholder="e.g. Italian (IT), Swedish (SV), Turkish (TR)">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] text-slate-400 mb-1.5">Quick Suggestions:</label>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button type="button" onclick="setNewLangSuggestion('English (EN)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ English (EN)</button>
+                        <button type="button" onclick="setNewLangSuggestion('German (DE)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ German (DE)</button>
+                        <button type="button" onclick="setNewLangSuggestion('Finnish (FI)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Finnish (FI)</button>
+                        <button type="button" onclick="setNewLangSuggestion('Portuguese (PT)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Portuguese (PT)</button>
+                        <button type="button" onclick="setNewLangSuggestion('Spanish (ES)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Spanish (ES)</button>
+                        <button type="button" onclick="setNewLangSuggestion('French (FR)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ French (FR)</button>
+                        <button type="button" onclick="setNewLangSuggestion('Norwegian (NO)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Norwegian (NO)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
+                <button type="button" onclick="closeAddLanguageModal()" class="px-3 py-1.5 bg-slate-850 text-slate-300 rounded-lg text-xs hover:bg-slate-800">Cancel</button>
+                <button type="button" onclick="confirmAddLanguage()" class="px-4 py-1.5 bg-neon-cyan text-slate-950 font-bold rounded-lg text-xs hover:opacity-90">Add to List</button>
+            </div>
+        </div>
+    </div>
+
     <!-- History Modal -->
     <div id="historyModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-panel rounded-2xl max-w-2xl w-full p-6 border border-slate-800 shadow-2xl space-y-4 max-h-[80vh] flex flex-col">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                 <h3 class="font-bold text-white text-base flex items-center space-x-2">
                     <i class="fa-solid fa-clock-rotate-left text-neon-cyan"></i>
-                    <span>Campaign History & Saved Briefs</span>
+                    <span>Campaign History & Saved Packages</span>
                 </h3>
                 <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div id="historyListContainer" class="flex-1 overflow-y-auto space-y-3 pr-2">
                 <!-- History items loaded dynamically -->
-            </div>
-        </div>
-    </div>
-
-    <!-- API Key / Settings Modal -->
-    <div id="apiKeyModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-800 shadow-2xl space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 class="font-bold text-white text-base flex items-center space-x-2">
-                    <i class="fa-solid fa-key text-neon-cyan"></i>
-                    <span>Gemini AI Configuration</span>
-                </h3>
-                <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="space-y-3 text-xs text-slate-300">
-                <p>Optionally enter a Google Gemini API Key to use live Gemini 3 Flash generation. If left empty, Briefix automatically uses its built-in context-aware smart generation engine!</p>
-                <div>
-                    <label class="block text-slate-400 mb-1 font-medium">Gemini API Key (optional):</label>
-                    <input type="password" id="geminiApiKeyInput" class="w-full glass-input p-2.5 rounded-lg text-xs text-white focus:outline-none" placeholder="AIzaSy...">
-                </div>
-            </div>
-            <div class="flex items-center justify-end space-x-2 pt-2">
-                <button onclick="closeApiKeyModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs hover:bg-slate-700">Cancel</button>
-                <button onclick="saveApiKey()" class="px-4 py-1.5 bg-neon-cyan text-slate-950 font-bold rounded-lg text-xs hover:opacity-90">Save Key</button>
             </div>
         </div>
     </div>
@@ -533,28 +562,54 @@
     <!-- Scripts -->
     <script src="brands-data.js"></script>
     <script>
-        // Preset sample briefs
-        const sampleBriefs = [
-            "Weekend Reload 50% up to EUR 200, Pragmatic games focus (Gates of Olympus, Sweet Bonanza), neon cyberpunk vibe with electric cyan and magenta highlights, 24h timer countdown, urgent high roller appeal.",
-            "Free Spins Mega Drop: 150 Free Spins on Starburst XXXtreme with zero wagering requirements. Vibrant space theme with neon pink stars and gold coin explosions.",
-            "VIP Cash Tournament 50,000 EUR prize pool. Exclusive VIP lounge aesthetics, luxury dark gold and rich navy palette, high-end casino typography, priority payout emphasis."
+        // Preset sample briefs with custom language headlines and sub-headings
+        const sampleBriefsData = [
+            {
+                title: "Weekend Reload: 50% up to €200 + 100 Spins",
+                cta: "ACTIVATE RELOAD",
+                mood: "Neon cyberpunk, high contrast electric cyan and magenta, floating gold coins",
+                terms: "18+ only. Min deposit €20. Wagering requirement 35x bonus. Valid for Pragmatic Play slots (Gates of Olympus, Sweet Bonanza). Gamble responsibly begambleaware.org.",
+                languages: [
+                    { name: "English (EN)", headline: "UNLEASH 50% UP TO €200 + 100 SPINS", subheading: "Power your weekend play with Gates of Olympus reload boosts" },
+                    { name: "German (DE)", headline: "STARTE DEIN WOCHENENDE: 50% BIS ZU €200", subheading: "Inklusive 100 Freispiele auf Sweet Bonanza" },
+                    { name: "Finnish (FI)", headline: "VIIKONLOPUN RELOAD 50% JOPA €200 ASTI", subheading: "Plus 100 ilmaiskierrosta huippupeleihin" }
+                ]
+            },
+            {
+                title: "Free Spins Mega Drop: 150 Zero-Wager Spins",
+                cta: "CLAIM 150 SPINS",
+                mood: "Vibrant cosmic space theme with neon pink stars and gold token explosions",
+                terms: "18+ only. Valid on Starburst XXXtreme. Zero wagering requirement on winnings. Max cashout €500. New and existing active players.",
+                languages: [
+                    { name: "English (EN)", headline: "150 ZERO-WAGER SPINS: KEEP WHAT YOU WIN", subheading: "Instant drop on Starburst XXXtreme — No rollover lock" },
+                    { name: "German (DE)", headline: "150 UMSATZFREIE FREISPIELE SICHERN", subheading: "Gewinne direkt behalten ohne Umsatzbedingungen" },
+                    { name: "Portuguese (PT)", headline: "150 RODADAS GRÁTIS SEM REQUISITOS", subheading: "Jogue Starburst XXXtreme e saque seus lucros na hora" }
+                ]
+            },
+            {
+                title: "VIP Cash Tournament €50,000 Leaderboard",
+                cta: "ENTER VIP TOURNAMENT",
+                mood: "Exclusive VIP dark lounge aesthetics, luxury dark gold and rich navy palette",
+                terms: "VIP Club members only. Opt-in required. Top 100 leaderboard positions receive cash prizes. Minimum qualifying bet €1.00.",
+                languages: [
+                    { name: "English (EN)", headline: "€50,000 VIP CASH DROP: CLAIM YOUR CROWN", subheading: "Exclusive tournament for high-tier loyalty members" },
+                    { name: "German (DE)", headline: "€50.000 VIP CASH TURNIER: HOL DIR DEN SIEG", subheading: "Exklusive Rangliste für High Roller mit Sofortauszahlung" },
+                    { name: "Spanish (ES)", headline: "TORNEO VIP €50.000 EN EFECTIVO", subheading: "Compite por los primeros puestos y gana premios en efectivo" }
+                ]
+            }
         ];
-
-        function loadPreset(index) {
-            document.getElementById('briefText').value = sampleBriefs[index];
-        }
 
         // Global State
         let currentStep = 1;
         let selectedBrand = null;
         let currentCampaignData = null;
         let campaignHistory = JSON.parse(localStorage.getItem('igaming_campaign_history') || '[]');
+        let activeLanguages = [];
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             updateHistoryBadge();
 
-            // Check URL parameters (e.g., ?brand=upgaming&step=2)
             const urlParams = new URLSearchParams(window.location.search);
             const brandParam = urlParams.get('brand');
             const stepParam = urlParams.get('step');
@@ -734,12 +789,6 @@
             goToStep(2);
         }
 
-        function editCurrentBrandDimensions() {
-            if (selectedBrand) {
-                window.location.href = `editor.html`;
-            }
-        }
-
         // Setup Step 2 with Selected Brand Data
         function setupStep2WithBrand(brand) {
             document.getElementById('activeBrandNameDisplay').innerText = brand.name;
@@ -758,21 +807,28 @@
                 });
             }
 
-            // Render Target Languages
-            const langContainer = document.getElementById('languageCheckboxesContainer');
-            langContainer.innerHTML = '';
-            const allPossibleLangs = ["EN", "DE", "FI", "PT", "NO", "ES", "IT", "FR", "SV"];
-            const brandLangs = brand.languages || ["EN", "DE", "FI"];
-            
-            allPossibleLangs.forEach(lang => {
-                const isChecked = brandLangs.includes(lang);
-                langContainer.innerHTML += `
-                    <label class="flex items-center space-x-2 text-xs text-slate-300 bg-slate-900/60 p-2 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700">
-                        <input type="checkbox" name="lang" value="${lang}" ${isChecked ? 'checked' : ''} class="rounded border-slate-700 text-neon-cyan focus:ring-0">
-                        <span>${lang}</span>
-                    </label>
-                `;
-            });
+            // Initialize default active languages if empty
+            if (!activeLanguages || activeLanguages.length === 0) {
+                const brandLangs = brand.languages || ["EN", "DE", "FI"];
+                const langLabels = {
+                    EN: "English (EN)",
+                    DE: "German (DE)",
+                    FI: "Finnish (FI)",
+                    PT: "Portuguese (PT)",
+                    ES: "Spanish (ES)",
+                    NO: "Norwegian (NO)",
+                    FR: "French (FR)",
+                    IT: "Italian (IT)",
+                    SV: "Swedish (SV)"
+                };
+                activeLanguages = brandLangs.map(code => ({
+                    id: 'lang_' + Math.random().toString(36).substr(2, 9),
+                    name: langLabels[code] || code,
+                    headline: "",
+                    subheading: ""
+                }));
+            }
+            renderLanguageRows();
 
             // Render DYNAMIC INDIVIDUAL FILE DIMENSIONS FOR THIS BRAND
             const dimContainer = document.getElementById('brandDimensionsContainer');
@@ -785,7 +841,7 @@
                 dimContainer.innerHTML = `
                     <div class="p-3 text-center text-xs text-slate-500 bg-slate-900/40 rounded-lg border border-slate-800">
                         <span>No custom dimensions configured for this brand yet.</span>
-                        <a href="editor.html" class="text-neon-cyan ml-1 underline">Add some now</a>
+                        <a href="editor.html" class="text-neon-cyan ml-1 underline">Add some in editor</a>
                     </div>
                 `;
             } else {
@@ -806,6 +862,112 @@
                     `;
                 });
             }
+
+            // Pre-fill initial form fields if empty
+            if (!document.getElementById('campaignTitleInput').value) {
+                loadPreset(0);
+            }
+        }
+
+        // Render Languages List in Input Panel (Headline + Sub-heading per language)
+        function renderLanguageRows() {
+            const container = document.getElementById('languageRowsContainer');
+            container.innerHTML = '';
+
+            if (activeLanguages.length === 0) {
+                container.innerHTML = `
+                    <div class="p-3 text-center text-xs text-slate-500 bg-slate-900/40 rounded-lg border border-slate-800">
+                        <span>No languages added yet. Click "+ Add Language" above.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            activeLanguages.forEach((lang, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900/70 p-3 rounded-xl border border-slate-800/80 space-y-2 relative group hover:border-slate-700 transition-all";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-neon-cyan flex items-center space-x-1.5">
+                            <i class="fa-solid fa-earth-americas text-[10px]"></i>
+                            <span>${escapeHtml(lang.name)}</span>
+                        </span>
+                        <button type="button" onclick="removeLanguageRow(${index})" class="text-slate-500 hover:text-rose-400 text-xs transition-colors p-1" title="Remove language">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div>
+                            <label class="block text-[10px] text-slate-400 font-medium mb-0.5">Headline (optional)</label>
+                            <input type="text" value="${escapeHtml(lang.headline || '')}" oninput="updateLanguageField(${index}, 'headline', this.value)" class="w-full glass-input px-2.5 py-1.5 rounded-lg text-xs text-white focus:outline-none placeholder:text-slate-600" placeholder="e.g. UNLEASH 50% UP TO €200">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-400 font-medium mb-0.5">Sub-heading (optional)</label>
+                            <input type="text" value="${escapeHtml(lang.subheading || '')}" oninput="updateLanguageField(${index}, 'subheading', this.value)" class="w-full glass-input px-2.5 py-1.5 rounded-lg text-xs text-slate-300 focus:outline-none placeholder:text-slate-600" placeholder="e.g. 100 free spins on Gates of Olympus">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateLanguageField(index, field, value) {
+            if (activeLanguages[index]) {
+                activeLanguages[index][field] = value;
+            }
+        }
+
+        function removeLanguageRow(index) {
+            activeLanguages.splice(index, 1);
+            renderLanguageRows();
+        }
+
+        // Add Language Modal Handlers
+        function openAddLanguageModal() {
+            document.getElementById('newLanguageNameInput').value = '';
+            document.getElementById('addLanguageModal').classList.remove('hidden');
+        }
+
+        function closeAddLanguageModal() {
+            document.getElementById('addLanguageModal').classList.add('hidden');
+        }
+
+        function setNewLangSuggestion(name) {
+            document.getElementById('newLanguageNameInput').value = name;
+        }
+
+        function confirmAddLanguage() {
+            const name = document.getElementById('newLanguageNameInput').value.trim();
+            if (!name) {
+                showToast("Please enter a language name or code", true);
+                return;
+            }
+
+            activeLanguages.push({
+                id: 'lang_' + Math.random().toString(36).substr(2, 9),
+                name: name,
+                headline: "",
+                subheading: ""
+            });
+
+            closeAddLanguageModal();
+            renderLanguageRows();
+            showToast(`Added ${name}!`);
+        }
+
+        function loadPreset(index) {
+            const data = sampleBriefsData[index];
+            if (!data) return;
+
+            document.getElementById('campaignTitleInput').value = data.title;
+            document.getElementById('campaignCTAInput').value = data.cta;
+            document.getElementById('campaignMoodInput').value = data.mood;
+            document.getElementById('campaignTermsInput').value = data.terms;
+
+            activeLanguages = JSON.parse(JSON.stringify(data.languages));
+            renderLanguageRows();
+            showToast(`Loaded ${data.title} preset!`);
         }
 
         function toggleAllFormats(checked) {
@@ -827,21 +989,13 @@
             if (activeBtn) activeBtn.className = "pb-3 text-neon-cyan border-b-2 border-neon-cyan flex items-center space-x-2 transition-all whitespace-nowrap";
         }
 
-        // Generate Campaign Assets (Main Engine)
-        async function generateCampaignAssets() {
-            const briefInput = document.getElementById('briefText').value.trim();
-            if (!briefInput) {
-                showToast("Please enter or select a campaign brief first!", true);
-                return;
-            }
-
+        // Compile Campaign Assets (Instant, Pure Client-Side, Zero Latency)
+        function compileCampaignAssets() {
             const brand = selectedBrand || BrandStorage.getById(BrandStorage.getSelectedBrandId());
-            const brandName = brand.name;
-            const market = brand.market || 'Curacao (Global)';
-
-            // Gather checked languages
-            const langCheckboxes = document.querySelectorAll('input[name="lang"]:checked');
-            const selectedLanguages = Array.from(langCheckboxes).map(cb => cb.value);
+            const title = document.getElementById('campaignTitleInput').value.trim() || `${brand.name} Promotional Campaign`;
+            const cta = document.getElementById('campaignCTAInput').value.trim() || "CLAIM NOW";
+            const mood = document.getElementById('campaignMoodInput').value.trim() || brand.tone;
+            const terms = document.getElementById('campaignTermsInput').value.trim() || "18+ only. Gamble responsibly. Terms and conditions apply.";
 
             // Gather checked formats
             const formatCheckboxes = document.querySelectorAll('input[name="format"]:checked');
@@ -857,247 +1011,98 @@
                 return;
             }
 
-            // UI state: show loading
-            document.getElementById('placeholderState').classList.add('hidden');
-            document.getElementById('resultsContainer').classList.add('hidden');
-            document.getElementById('loadingState').classList.remove('hidden');
-            document.getElementById('generateBtn').disabled = true;
-
-            const loadingSteps = [
-                `Aligning ${brandName} brand guidelines & ${market} market rules...`,
-                "Parsing promotional terms, reload mechanics and jackpot triggers...",
-                "Synthesizing high-converting headlines & localized CTA translations...",
-                "Calculating safe zones for custom brand dimensions...",
-                "Generating Midjourney & Gemini visual art prompts..."
-            ];
-
-            let stepIdx = 0;
-            const stepInterval = setInterval(() => {
-                stepIdx = (stepIdx + 1) % loadingSteps.length;
-                document.getElementById('loadingStepText').innerText = loadingSteps[stepIdx];
-            }, 600);
-
-            // Check if user has provided a custom Gemini API Key
-            const customApiKey = localStorage.getItem('briefix_gemini_api_key') || "";
-
-            try {
-                if (customApiKey) {
-                    // Try real Gemini API call
-                    const systemPrompt = `You are Briefix: an expert iGaming marketing & design alignment engine. Brand: "${brandName}", Market: "${market}", Brand Tone: "${brand.tone}". Return JSON matching the required schema.`;
-                    const userQuery = `Campaign Brief: "${briefInput}"\nSelected Languages: ${selectedLanguages.join(', ')}\nSelected Dimensions: ${selectedFormats.map(f=>f.formatName).join('; ')}`;
-
-                    const payload = {
-                        contents: [{ role: 'user', parts: [{ text: userQuery }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
-                        generationConfig: {
-                            responseMimeType: "application/json",
-                            responseSchema: {
-                                type: "OBJECT",
-                                properties: {
-                                    campaignTitle: { type: "STRING" },
-                                    primaryHeadline: { type: "STRING" },
-                                    subcopy: { type: "STRING" },
-                                    cta: { type: "STRING" },
-                                    localizedHeadlines: {
-                                        type: "ARRAY",
-                                        items: {
-                                            type: "OBJECT",
-                                            properties: {
-                                                language: { type: "STRING" },
-                                                headline: { type: "STRING" },
-                                                cta: { type: "STRING" }
-                                            }
-                                        }
-                                    },
-                                    colorPalette: {
-                                        type: "ARRAY",
-                                        items: {
-                                            type: "OBJECT",
-                                            properties: {
-                                                name: { type: "STRING" },
-                                                hex: { type: "STRING" },
-                                                rgb: { type: "STRING" }
-                                            }
-                                        }
-                                    },
-                                    imagePrompt: { type: "STRING" },
-                                    designNotes: { type: "STRING" },
-                                    assetSpecs: {
-                                        type: "ARRAY",
-                                        items: {
-                                            type: "OBJECT",
-                                            properties: {
-                                                formatName: { type: "STRING" },
-                                                dimensions: { type: "STRING" },
-                                                safeZoneNotes: { type: "STRING" }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    };
-
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${customApiKey}`;
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.ok) {
-                        const resultJson = await response.json();
-                        const candidateText = resultJson.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (candidateText) {
-                            currentCampaignData = JSON.parse(candidateText);
-                        }
-                    }
-                }
-
-                // If no API key or if API failed, use high-fidelity contextual generator
-                if (!currentCampaignData) {
-                    await new Promise(resolve => setTimeout(resolve, 1400)); // natural feel
-                    currentCampaignData = generateContextualData(briefInput, brand, selectedLanguages, selectedFormats);
-                }
-
-                // Save to History
-                saveToHistory(currentCampaignData, brandName, market);
-
-                // Render Results
-                renderResults(currentCampaignData, brand, market);
-
-            } catch (error) {
-                console.error("Generation error:", error);
-                currentCampaignData = generateContextualData(briefInput, brand, selectedLanguages, selectedFormats);
-                saveToHistory(currentCampaignData, brandName, market);
-                renderResults(currentCampaignData, brand, market);
-            } finally {
-                clearInterval(stepInterval);
-                document.getElementById('loadingState').classList.add('hidden');
-                document.getElementById('resultsContainer').classList.remove('hidden');
-                document.getElementById('generateBtn').disabled = false;
-                document.getElementById('exportActions').classList.remove('hidden');
-            }
-        }
-
-        // Context-aware smart generation fallback engine
-        function generateContextualData(brief, brand, langs, formats) {
-            const cleanBrief = brief.toLowerCase();
-            let promoType = "Deposit Match & Free Spins";
-            let headline = "UNLEASH 100% UP TO €500 + 200 SPINS";
-            let cta = "CLAIM BONUS NOW";
-
-            if (cleanBrief.includes("reload")) {
-                promoType = "Weekend Reload Power";
-                headline = "IGNITE YOUR WEEKEND: 50% UP TO €200";
-                cta = "ACTIVATE RELOAD";
-            } else if (cleanBrief.includes("free spin") || cleanBrief.includes("spins")) {
-                promoType = "Zero Wagering Spins Drop";
-                headline = "150 ZERO-WAGER SPINS: KEEP WHAT YOU WIN";
-                cta = "GET FREE SPINS";
-            } else if (cleanBrief.includes("vip") || cleanBrief.includes("tournament")) {
-                promoType = "Exclusive High Roller Tournament";
-                headline = "€50,000 CASH DROP: CLAIM YOUR VIP SHARE";
-                cta = "ENTER TOURNAMENT";
-            }
-
-            const translations = {
-                DE: {
-                    headline: headline.replace("IGNITE YOUR WEEKEND", "STARTE DEIN WOCHENENDE").replace("CLAIM BONUS NOW", "JETZT BONUS HOLEN"),
-                    cta: "JETZT BEANSPRUCHEN"
-                },
-                FI: {
-                    headline: "NAPPAA 100% BONUS JOPA €500 ASTI + KIERROKSET",
-                    cta: "LUNASTA NYT"
-                },
-                PT: {
-                    headline: "RECEBA 100% ATÉ €500 + RODADAS GRÁTIS",
-                    cta: "RESGATAR BÔNUS"
-                },
-                ES: {
-                    headline: "DISFRUTA 100% HASTA €500 + GIROS GRATIS",
-                    cta: "RECLAMAR AHORA"
-                },
-                NO: {
-                    headline: "FÅ 100% OPP TIL €500 + EKSTRA SPINN",
-                    cta: "HENT BONUS NÅ"
-                },
-                FR: {
-                    headline: "OBTENEZ 100% JUSQU'À 500€ + TOURS GRATUITS",
-                    cta: "RÉCLAMER MAINTENANT"
-                },
-                IT: {
-                    headline: "RICEVI IL 100% FINO A 500€ + GIRI GRATIS",
-                    cta: "RICHIEDI ORA"
-                },
-                SV: {
-                    headline: "FÅ 100% UPP TILL 500€ + SNURR",
-                    cta: "HÄMTA BONUS"
-                }
-            };
-
-            const localizedHeadlines = langs.map(l => {
-                const tr = translations[l] || { headline: headline, cta: cta };
-                return {
-                    language: l,
-                    headline: tr.headline,
-                    cta: tr.cta
-                };
-            });
-
-            // Use the brand's configured color tokens
+            // Colors from brand
             const palette = brand.colors && brand.colors.length > 0 ? brand.colors : [
-                { name: "Electric Cyan", hex: "#00F2FE", rgb: "0, 242, 254" },
-                { name: "Neon Magenta", hex: "#FF007F", rgb: "255, 0, 127" },
-                { name: "Deep Charcoal", hex: "#0B0F19", rgb: "11, 15, 25" },
-                { name: "Gold Accent", hex: "#FFD700", rgb: "255, 215, 0" }
+                { name: "Primary Cyan", hex: "#00F2FE", rgb: "0, 242, 254" },
+                { name: "Accent Magenta", hex: "#FF007F", rgb: "255, 0, 127" },
+                { name: "Dark Studio BG", hex: "#0B0F19", rgb: "11, 15, 25" }
             ];
 
-            const assetSpecs = formats.map(f => ({
+            const assetSpecs = selectedFormats.map(f => ({
                 formatName: f.formatName,
                 dimensions: `${f.width} x ${f.height} px`,
-                safeZoneNotes: f.safeZoneNotes || `Keep CTA in central 80%; leave regulatory margin for ${brand.market || 'license'}.`
+                safeZoneNotes: f.safeZoneNotes
             }));
 
-            return {
-                campaignTitle: `${brand.name} - ${promoType}`,
-                primaryHeadline: headline,
-                subcopy: `18+ only. Min deposit €20. Wagering requirement 35x bonus. Valid for Pragmatic Play & Play'n GO slots under ${brand.market || 'standard'} jurisdiction. Terms & conditions apply. Gamble responsibly begambleaware.org.`,
+            const imagePrompt = `High-end 3D promotional render for ${brand.name}, ${mood}, cinematic rim lighting with ${palette[0]?.hex || '#00f2fe'} and ${palette[1]?.hex || '#ff007f'}, floating gold gaming coins, ultra-sharp detail, dark premium studio background --ar 16:9`;
+
+            currentCampaignData = {
+                campaignTitle: title,
                 cta: cta,
-                localizedHeadlines: localizedHeadlines,
+                subcopy: terms,
+                mood: mood,
+                brandName: brand.name,
+                market: brand.market || 'Global',
+                languages: JSON.parse(JSON.stringify(activeLanguages)),
                 colorPalette: palette,
-                imagePrompt: `Cinematic 3D render for ${brand.name} casino campaign, ${brand.tone}, glowing gold gaming coins and slot symbols floating in zero-gravity space, rim lighting with ${palette[0]?.hex || '#00f2fe'} and ${palette[1]?.hex || '#ff007f'}, ultra high fidelity, octane render, 8k resolution --ar 16:9`,
-                designNotes: `Stakeholder Alignment: Comply strictly with ${brand.name} tone of voice ("${brand.tone}"). Ensure regulatory 18+ and BeGambleAware logos remain 100% visible across all sizes. Place CTA button at natural thumb/mouse eye scan priority.`,
+                imagePrompt: imagePrompt,
+                designNotes: `Brand Guidelines: Follow ${brand.name} aesthetics ("${brand.tone}"). Ensure regulatory 18+ and BeGambleAware logos remain 100% visible across all sizes. Place CTA button at natural thumb/mouse focal priority.`,
                 assetSpecs: assetSpecs
             };
+
+            // Save to History
+            saveToHistory(currentCampaignData, brand.name, brand.market || 'Global');
+
+            // Render Results
+            renderResults(currentCampaignData, brand);
+
+            // Update UI state
+            document.getElementById('placeholderState').classList.add('hidden');
+            document.getElementById('resultsContainer').classList.remove('hidden');
+            document.getElementById('exportActions').classList.remove('hidden');
+
+            showToast("Campaign packaged and ready for handover!");
         }
 
         // Render Results into UI
-        function renderResults(data, brand, market) {
-            document.getElementById('outputStatusBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-neon-cyan mr-1.5"></span> Generated for ${brand.name} (${market})`;
+        function renderResults(data, brand) {
+            document.getElementById('outputStatusBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-neon-cyan mr-1.5"></span> Compiled for ${brand.name} (${brand.market || 'Global'})`;
             document.getElementById('campaignTitleDisplay').innerText = data.campaignTitle;
 
             document.getElementById('displayCampaignTitle').innerText = data.campaignTitle;
-            document.getElementById('displayPrimaryHeadline').innerText = data.primaryHeadline;
             document.getElementById('displayCTA').innerText = data.cta;
             document.getElementById('displaySubcopy').innerText = data.subcopy;
+            document.getElementById('displayBrandJurisdiction').innerText = `${brand.name} • ${brand.market || 'Global'}`;
+            document.getElementById('displayTone').innerText = `"${brand.tone || 'Modern casino tone'}"`;
 
-            // Localized list
-            const locContainer = document.getElementById('localizedList');
-            locContainer.innerHTML = '';
-            if (data.localizedHeadlines) {
-                data.localizedHeadlines.forEach(item => {
-                    locContainer.innerHTML += `
-                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800 flex items-center justify-between">
+            // Language Variations Display (with Headline & Sub-heading)
+            const langContainer = document.getElementById('displayLanguageCards');
+            langContainer.innerHTML = '';
+            document.getElementById('displayLangCount').innerText = `${data.languages.length} language${data.languages.length === 1 ? '' : 's'}`;
+
+            if (data.languages && data.languages.length > 0) {
+                data.languages.forEach(lang => {
+                    const headlineText = lang.headline ? lang.headline : '<span class="text-slate-500 italic">(Headline empty)</span>';
+                    const subheadingText = lang.subheading ? lang.subheading : '<span class="text-slate-500 italic">(Sub-heading empty)</span>';
+                    
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-900/70 p-4 rounded-xl border border-slate-800 space-y-2";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                            <span class="text-xs font-bold text-neon-cyan flex items-center space-x-1.5">
+                                <i class="fa-solid fa-globe text-[11px]"></i>
+                                <span>${escapeHtml(lang.name)}</span>
+                            </span>
+                            <button onclick="copyToClipboard('${escapeHtml(lang.headline || '')} | ${escapeHtml(lang.subheading || '')}')" class="text-xs text-slate-400 hover:text-white flex items-center space-x-1" title="Copy copy">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                             <div>
-                                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-neon-cyan font-bold mr-2">${item.language}</span>
-                                <span class="text-xs font-semibold text-white">${item.headline}</span>
-                                <span class="text-[11px] text-slate-400 block mt-1">CTA: ${item.cta}</span>
+                                <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-semibold mb-0.5">Headline:</span>
+                                <div class="text-white font-medium">${headlineText}</div>
                             </div>
-                            <button onclick="copyToClipboard('${item.headline} | ${item.cta}')" class="text-xs text-slate-400 hover:text-white px-2 py-1"><i class="fa-regular fa-copy"></i></button>
+                            <div>
+                                <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-semibold mb-0.5">Sub-heading:</span>
+                                <div class="text-slate-300">${subheadingText}</div>
+                            </div>
                         </div>
                     `;
+                    langContainer.appendChild(card);
                 });
+            } else {
+                langContainer.innerHTML = `<p class="text-xs text-slate-500 italic">No language headlines configured.</p>`;
             }
 
             // Color palette
@@ -1145,6 +1150,7 @@
             const specCardsGrid = document.getElementById('designerSpecCardsGrid');
             specCardsGrid.innerHTML = '';
             if (data.assetSpecs) {
+                const primaryHeadlineText = (data.languages && data.languages[0]?.headline) ? data.languages[0].headline : data.campaignTitle;
                 data.assetSpecs.forEach(spec => {
                     specCardsGrid.innerHTML += `
                         <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-3">
@@ -1159,7 +1165,7 @@
                                     <span>${brand.name}</span>
                                 </div>
                                 <div class="text-center my-auto">
-                                    <span class="text-[10px] font-bold text-slate-200 line-clamp-1">${data.primaryHeadline}</span>
+                                    <span class="text-[10px] font-bold text-slate-200 line-clamp-1">${primaryHeadlineText}</span>
                                     <span class="inline-block mt-1 text-[8px] bg-neon-pink text-white font-bold px-1.5 py-0.5 rounded">${data.cta}</span>
                                 </div>
                                 <div class="text-[8px] text-slate-600 truncate">18+ | T&C Apply</div>
@@ -1239,10 +1245,17 @@
             if (!currentCampaignData) return;
             let md = `# 🎯 Briefix Handover: ${currentCampaignData.campaignTitle}\n\n`;
             md += `**Brand:** ${selectedBrand?.name || 'iGaming'} (${selectedBrand?.market || 'Global'})\n`;
-            md += `**Primary Headline:** ${currentCampaignData.primaryHeadline}\n`;
             md += `**CTA:** ${currentCampaignData.cta}\n`;
+            md += `**Visual Mood:** ${currentCampaignData.mood}\n`;
             md += `**Sub-copy / T&C:** ${currentCampaignData.subcopy}\n\n`;
             
+            md += `### 🌍 Language Variations (Headlines & Sub-headings)\n`;
+            currentCampaignData.languages.forEach(l => {
+                md += `#### ${l.name}\n`;
+                md += `- **Headline:** ${l.headline || '_(empty)_'}\n`;
+                md += `- **Sub-heading:** ${l.subheading || '_(empty)_'}\n\n`;
+            });
+
             md += `### 🎨 Brand Color Palette\n`;
             currentCampaignData.colorPalette.forEach(c => {
                 md += `- **${c.name}**: \`${c.hex}\` (RGB: ${c.rgb})\n`;
@@ -1253,12 +1266,7 @@
                 md += `- **${s.formatName}** (\`${s.dimensions}\`): ${s.safeZoneNotes}\n`;
             });
 
-            md += `\n### 🌍 Localized Headlines\n`;
-            currentCampaignData.localizedHeadlines.forEach(l => {
-                md += `- **[${l.language}]** ${l.headline} (CTA: ${l.cta})\n`;
-            });
-
-            md += `\n### 🤖 AI Visual Generation Prompt\n\`\`\`\n${currentCampaignData.imagePrompt}\n\`\`\`\n`;
+            md += `\n### 💡 Production Art Direction\n\`\`\`\n${currentCampaignData.imagePrompt}\n\`\`\`\n`;
             copyToClipboard(md);
         }
 
@@ -1323,35 +1331,23 @@
                 const brand = BrandStorage.getAll().find(b => b.name === found.brand) || selectedBrand;
                 selectedBrand = brand;
                 goToStep(2);
-                renderResults(currentCampaignData, selectedBrand, found.market);
+                
+                document.getElementById('campaignTitleInput').value = currentCampaignData.campaignTitle || '';
+                document.getElementById('campaignCTAInput').value = currentCampaignData.cta || '';
+                document.getElementById('campaignMoodInput').value = currentCampaignData.mood || '';
+                document.getElementById('campaignTermsInput').value = currentCampaignData.subcopy || '';
+                if (currentCampaignData.languages) {
+                    activeLanguages = currentCampaignData.languages;
+                    renderLanguageRows();
+                }
+
+                renderResults(currentCampaignData, selectedBrand);
                 document.getElementById('placeholderState').classList.add('hidden');
                 document.getElementById('resultsContainer').classList.remove('hidden');
                 document.getElementById('exportActions').classList.remove('hidden');
                 closeHistoryModal();
                 showToast("Loaded campaign from history!");
             }
-        }
-
-        // Gemini API Key Modal
-        function openApiKeyModal() {
-            document.getElementById('geminiApiKeyInput').value = localStorage.getItem('briefix_gemini_api_key') || "";
-            document.getElementById('apiKeyModal').classList.remove('hidden');
-        }
-
-        function closeApiKeyModal() {
-            document.getElementById('apiKeyModal').classList.add('hidden');
-        }
-
-        function saveApiKey() {
-            const key = document.getElementById('geminiApiKeyInput').value.trim();
-            if (key) {
-                localStorage.setItem('briefix_gemini_api_key', key);
-                showToast("Gemini API key saved!");
-            } else {
-                localStorage.removeItem('briefix_gemini_api_key');
-                showToast("Cleared custom API key. Using smart offline engine.");
-            }
-            closeApiKeyModal();
         }
 
         function escapeHtml(string) {
