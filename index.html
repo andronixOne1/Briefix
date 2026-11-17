@@ -156,13 +156,25 @@
                 
                 <!-- Campaign Title -->
                 <div>
-                    <label class="block text-xs font-semibold text-white mb-1">Campaign Title *</label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-semibold text-white">Campaign Title *</label>
+                        <button type="button" onclick="copyInputText('campaignTitleInput', 'Campaign Title')" class="text-[10px] text-slate-400 hover:text-neon-cyan flex items-center space-x-1 transition-colors" title="Copy title text">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Copy Title</span>
+                        </button>
+                    </div>
                     <input type="text" id="campaignTitleInput" class="w-full rounded-xl glass-input px-3 py-2 text-xs text-white focus:outline-none" placeholder="e.g. Weekend Reload 50% up to €200">
                 </div>
 
                 <!-- Big Description Field (Replaced CTA and Subcopy) -->
                 <div>
-                    <label class="block text-xs font-semibold text-white mb-1">Campaign Description & Notes</label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-semibold text-white">Campaign Description & Notes</label>
+                        <button type="button" onclick="copyInputText('campaignDescriptionInput', 'Campaign Description')" class="text-[10px] text-slate-400 hover:text-neon-cyan flex items-center space-x-1 transition-colors" title="Copy description text">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Copy Description</span>
+                        </button>
+                    </div>
                     <textarea id="campaignDescriptionInput" rows="3" class="w-full rounded-xl glass-input p-2.5 text-xs text-slate-200 focus:outline-none resize-y" placeholder="Describe the campaign promotion details, bonus mechanics, legal restrictions, target audience, design mood..."></textarea>
                 </div>
 
@@ -240,7 +252,13 @@
                 <div class="h-6 w-px bg-slate-800"></div>
                 <div>
                     <span class="text-[10px] uppercase tracking-wider text-neon-cyan font-bold block">Step 3 of 3 • Review & Task Generation</span>
-                    <h2 id="previewCampaignTitle" class="text-lg font-bold text-white">Campaign Preview</h2>
+                    <div class="flex items-center space-x-2 mt-0.5">
+                        <h2 id="previewCampaignTitle" class="text-lg font-bold text-white">Campaign Preview</h2>
+                        <button type="button" onclick="copyCampaignTitle()" class="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white text-[11px] font-medium transition-all flex items-center space-x-1 shadow-sm active:scale-95" title="Copy project title">
+                            <i class="fa-regular fa-copy text-[10px] text-neon-cyan"></i>
+                            <span id="copyTitleBtnText">Copy Title</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -260,7 +278,13 @@
                 <!-- Campaign Description Card -->
                 <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                        <h3 class="text-xs uppercase tracking-wider text-neon-cyan font-bold">Campaign Description</h3>
+                        <div class="flex items-center space-x-2">
+                            <h3 class="text-xs uppercase tracking-wider text-neon-cyan font-bold">Campaign Description</h3>
+                            <button type="button" onclick="copyCampaignDescription()" class="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-[10px] font-medium transition-all flex items-center space-x-1 shadow-sm active:scale-95" title="Copy description text">
+                                <i class="fa-regular fa-copy text-[10px] text-neon-cyan"></i>
+                                <span id="copyDescBtnText">Copy Description</span>
+                            </button>
+                        </div>
                         <span id="previewBrandMarketBadge" class="text-[10px] px-2 py-0.5 rounded bg-slate-850 text-neon-pink font-semibold border border-slate-800"></span>
                     </div>
 
@@ -877,7 +901,78 @@
             }, 300);
         }
 
-        // Photoshop ExtendScript (.jsx) Generator (Dual-enforced Artboards ActionManager + Language Groups)
+        // ==========================================
+        // CLIPBOARD COPY UTILITIES
+        // ==========================================
+
+        function copyToClipboard(text, successMsg) {
+            if (!text) {
+                showToast("Nothing to copy!", true);
+                return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg || "Copied to clipboard!");
+                }).catch(() => fallbackCopy(text, successMsg));
+            } else {
+                fallbackCopy(text, successMsg);
+            }
+        }
+
+        function fallbackCopy(text, successMsg) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            showToast(successMsg || "Copied to clipboard!");
+        }
+
+        function copyCampaignTitle() {
+            const title = (compiledCampaign && compiledCampaign.campaignTitle) 
+                ? compiledCampaign.campaignTitle 
+                : document.getElementById('campaignTitleInput').value.trim();
+            if (!title) {
+                showToast("No title to copy!", true);
+                return;
+            }
+            copyToClipboard(title, "Campaign Title copied!");
+            const btn = document.getElementById('copyTitleBtnText');
+            if (btn) {
+                btn.innerText = "Copied!";
+                setTimeout(() => { btn.innerText = "Copy Title"; }, 1500);
+            }
+        }
+
+        function copyCampaignDescription() {
+            const desc = (compiledCampaign && compiledCampaign.description) 
+                ? compiledCampaign.description 
+                : document.getElementById('campaignDescriptionInput').value.trim();
+            if (!desc) {
+                showToast("No description to copy!", true);
+                return;
+            }
+            copyToClipboard(desc, "Campaign Description copied!");
+            const btn = document.getElementById('copyDescBtnText');
+            if (btn) {
+                btn.innerText = "Copied!";
+                setTimeout(() => { btn.innerText = "Copy Description"; }, 1500);
+            }
+        }
+
+        function copyInputText(elementId, labelName) {
+            const el = document.getElementById(elementId);
+            if (!el || !el.value.trim()) {
+                showToast(`Please enter ${labelName} first!`, true);
+                return;
+            }
+            copyToClipboard(el.value.trim(), `${labelName} copied!`);
+        }
+
+        // Photoshop ExtendScript (.jsx) Generator (Separate PSB files with Language Groups ONLY)
         function getPhotoshopScriptContent() {
             if (!compiledCampaign) return "";
             const fmts = JSON.stringify(compiledCampaign.formats);
@@ -892,7 +987,7 @@
  * Briefix Photoshop Automation Script
  * Campaign: ${title}
  * Brand: ${brand}
- * Generated for Adobe Photoshop ExtendScript
+ * Generated for Adobe Photoshop ExtendScript (Separate .PSB Files)
  */
 
 #target photoshop
@@ -909,117 +1004,14 @@ app.bringToFront();
         return;
     }
 
-    // 1. Prompt dialog to choose Artboards or Separate PSB files
-    var dlg = new Window("dialog", "Briefix - Setup Photoshop Campaign");
-    dlg.orientation = "column";
-    dlg.alignChildren = "fill";
-    dlg.spacing = 15;
-    dlg.margins = 20;
-
-    var header = dlg.add("statictext", undefined, "Campaign: " + campaignName);
-    header.graphics.font = ScriptUI.newFont("dialog", "BOLD", 13);
-
-    var modePanel = dlg.add("panel", undefined, "Choose Document Layout Mode");
-    modePanel.orientation = "column";
-    modePanel.alignChildren = "left";
-    modePanel.margins = 15;
-    modePanel.spacing = 10;
-
-    var rbArtboards = modePanel.add("radiobutton", undefined, "Option 1: Single Master Document with Artboards (All Sizes)");
-    var rbSeparate = modePanel.add("radiobutton", undefined, "Option 2: Separate .PSB Files for each dimension");
-    rbArtboards.value = true;
-
-    var countText = dlg.add("statictext", undefined, "Total dimensions to create: " + formats.length);
-
-    var btnGroup = dlg.add("group");
-    btnGroup.alignment = "right";
-    var btnCancel = btnGroup.add("button", undefined, "Cancel", {name: "cancel"});
-    var btnOk = btnGroup.add("button", undefined, "Next: Choose Folder", {name: "ok"});
-
-    if (dlg.show() !== 1) {
-        return; // Cancelled
-    }
-
-    var useArtboards = rbArtboards.value;
-
-    // 2. Prompt user to choose destination project folder
-    var projectFolder = Folder.selectDialog("Select project destination folder for " + campaignName + ":");
+    // Prompt user to choose destination project folder directly
+    var projectFolder = Folder.selectDialog("Briefix: Select destination folder for " + campaignName + " (" + formats.length + " PSB files):");
     if (projectFolder === null) {
         alert("Folder selection cancelled. Process aborted.");
         return;
     }
 
-    // Execute generation
-    if (useArtboards) {
-        createMasterArtboardDoc(campaignName, formats, languages, projectFolder);
-    } else {
-        createSeparatePsbDocs(campaignName, formats, languages, projectFolder);
-    }
-
-    // ActionManager function to create and enforce genuine Photoshop Artboard dimensions
-    function makeArtboard(name, left, top, width, height) {
-        var s2t = function(s) { return stringIDToTypeID(s); };
-        var c2t = function(c) { return charIDToTypeID(c); };
-
-        var w = Number(width);
-        var h = Number(height);
-        var x = Number(left);
-        var y = Number(top);
-
-        // 1. Primary Artboard creation descriptor
-        var desc = new ActionDescriptor();
-        var ref = new ActionReference();
-        ref.putClass(s2t("artboardSection"));
-        desc.putReference(c2t("null"), ref);
-
-        var artboardDesc = new ActionDescriptor();
-        var rectDesc = new ActionDescriptor();
-        rectDesc.putDouble(s2t("top"), y);
-        rectDesc.putDouble(s2t("left"), x);
-        rectDesc.putDouble(s2t("bottom"), y + h);
-        rectDesc.putDouble(s2t("right"), x + w);
-        artboardDesc.putObject(s2t("artboardRect"), s2t("classFloatRect"), rectDesc);
-
-        desc.putObject(s2t("using"), s2t("artboardSection"), artboardDesc);
-
-        try {
-            executeAction(s2t("make"), desc, DialogModes.NO);
-        } catch(e) {
-            try {
-                var d2 = new ActionDescriptor();
-                var r2 = new ActionReference();
-                r2.putClass(s2t("artboardSection"));
-                d2.putReference(c2t("null"), r2);
-                d2.putObject(s2t("artboardRect"), s2t("classFloatRect"), rectDesc);
-                executeAction(c2t("Mk  "), d2, DialogModes.NO);
-            } catch(e2) {}
-        }
-
-        // 2. Explicitly enforce the exact artboard dimensions via ActionManager "set"
-        try {
-            var setDesc = new ActionDescriptor();
-            var setRef = new ActionReference();
-            setRef.putEnumerated(s2t("layer"), s2t("ordinal"), s2t("targetEnum"));
-            setDesc.putReference(s2t("null"), setRef);
-
-            var setRect = new ActionDescriptor();
-            setRect.putDouble(s2t("top"), y);
-            setRect.putDouble(s2t("left"), x);
-            setRect.putDouble(s2t("bottom"), y + h);
-            setRect.putDouble(s2t("right"), x + w);
-
-            var setAbDesc = new ActionDescriptor();
-            setAbDesc.putObject(s2t("artboardRect"), s2t("classFloatRect"), setRect);
-            setDesc.putObject(s2t("to"), s2t("artboard"), setAbDesc);
-
-            executeAction(s2t("set"), setDesc, DialogModes.NO);
-        } catch(errSet) {}
-
-        // 3. Ensure exact name on active artboard layer
-        try {
-            doc.activeLayer.name = name;
-        } catch(e) {}
-    }
+    createSeparatePsbDocs(campaignName, formats, languages, projectFolder);
 
     // Function to add language groups with centered Headline and Sub-heading
     function createLanguageLayers(targetContainer, x, y, width, height, langs, campTitle) {
@@ -1091,85 +1083,6 @@ app.bringToFront();
                     langSet.visible = false;
                 } catch(err) {}
             }
-        }
-    }
-
-    function createMasterArtboardDoc(name, fmts, langs, folder) {
-        var origRulerUnits = app.preferences.rulerUnits;
-        var origTypeUnits = app.preferences.typeUnits;
-        app.preferences.rulerUnits = Units.PIXELS;
-        app.preferences.typeUnits = TypeUnits.PIXELS;
-
-        try {
-            var base = fmts[0];
-            // Create base document
-            var doc = app.documents.add(
-                UnitValue(base.width, "px"),
-                UnitValue(base.height, "px"),
-                72,
-                name + " - Master",
-                NewDocumentMode.RGB,
-                DocumentFill.TRANSPARENT
-            );
-
-            var x = 0;
-            var y = 0;
-            var rowH = 0;
-            var spacing = 160;
-            var maxRowW = 10000;
-
-            for (var i = 0; i < fmts.length; i++) {
-                var f = fmts[i];
-                var w = Number(f.width) || 1080;
-                var h = Number(f.height) || 1080;
-
-                if (x + w > maxRowW && x > 0) {
-                    x = 0;
-                    y += rowH + spacing;
-                    rowH = 0;
-                }
-
-                // Create genuine Photoshop artboard
-                makeArtboard(f.formatName + " (" + w + "x" + h + ")", x, y, w, h);
-
-                var curArtboard = doc.activeLayer;
-
-                // Create language groups with centered Headline & Sub-heading
-                createLanguageLayers(curArtboard, x, y, w, h, langs, name);
-
-                x += w + spacing;
-                if (h > rowH) rowH = h;
-            }
-
-            // Clean up initial default layer if still present
-            try {
-                for (var k = doc.layers.length - 1; k >= 0; k--) {
-                    if (doc.layers[k].typename === "ArtLayer" && (doc.layers[k].name === "Layer 1" || doc.layers[k].name === "Background")) {
-                        doc.layers[k].remove();
-                        break;
-                    }
-                }
-            } catch(err) {}
-
-            // Reveal all artboards on canvas
-            try {
-                var idRvlA = charIDToTypeID("RvlA");
-                executeAction(idRvlA, new ActionDescriptor(), DialogModes.NO);
-            } catch(err) {
-                try { doc.revealAll(); } catch(e) {}
-            }
-
-            var fileName = name.replace(/[^a-zA-Z0-9_-]/g, "_") + "_Master.psb";
-            var saveFile = new File(folder + "/" + fileName);
-            var psbOpts = new PhotoshopSaveOptions();
-            psbOpts.embedColorProfile = true;
-            psbOpts.layers = true;
-            doc.saveAs(saveFile, psbOpts, true, Extension.LOWERCASE);
-
-            alert("✅ Master document successfully created with " + fmts.length + " Artboards & Language Groups!\\nSaved: " + saveFile.fsName);
-        } finally {
-            app.preferences.rulerUnits = origRulerUnits;
-            app.preferences.typeUnits = origTypeUnits;
         }
     }
 
