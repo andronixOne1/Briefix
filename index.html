@@ -287,37 +287,16 @@
 
             </div>
 
-            <!-- RIGHT COLUMN: Checked Dimensions & Jira Handover Task Card (6 Cols) -->
+            <!-- RIGHT COLUMN: Checked Dimensions (6 Cols) -->
             <div class="lg:col-span-6 space-y-4">
                 
-                <!-- Jira Handover Card with Single Download Button -->
-                <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-850">
-                    <div class="flex items-center space-x-2 text-neon-cyan">
-                        <i class="fa-solid fa-file-zipper text-base"></i>
-                        <h3 class="text-xs uppercase tracking-wider font-bold">Automated Design Task Package for Jira</h3>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Clicking <strong>Generate Task</strong> downloads both production scripts together so stakeholders can directly attach them to the Jira task for designers:
-                    </p>
-                    <ul class="text-xs text-slate-400 space-y-1.5 pl-4 list-disc">
-                        <li><strong>Photoshop (.jsx):</strong> Prompts designer to choose either real <em>Artboards</em> or <em>Separate .PSB files</em> for all checked dimensions, and asks for destination folder.</li>
-                        <li><strong>Figma (.txt):</strong> A clean script in a <code class="text-neon-cyan">.txt</code> file that creates frames for all checked sizes on the active Figma page.</li>
-                    </ul>
-
-                    <div class="pt-2">
-                        <button onclick="generateTaskScripts()" class="w-full py-3 bg-gradient-to-r from-neon-cyan to-neon-pink text-slate-950 font-bold text-xs rounded-xl shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-download text-sm"></i>
-                            <span>Download Both Scripts for Jira</span>
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Checked Dimensions Summary Card -->
                 <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
                         <h3 class="text-xs uppercase tracking-wider text-neon-pink font-bold">Checked Deliverables (<span id="previewFormatsCount">0</span>)</h3>
+                        <span class="text-[10px] text-slate-400">Production Formats</span>
                     </div>
-                    <div id="previewFormatsList" class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                    <div id="previewFormatsList" class="space-y-2 max-h-[520px] overflow-y-auto pr-1">
                         <!-- Populated dynamically -->
                     </div>
                 </div>
@@ -898,12 +877,16 @@
             }, 300);
         }
 
-        // Photoshop ExtendScript (.jsx) Generator (Fixed real Artboards ActionManager + Separate PSB)
+        // Photoshop ExtendScript (.jsx) Generator (Dual-enforced Artboards ActionManager + Language Groups)
         function getPhotoshopScriptContent() {
             if (!compiledCampaign) return "";
             const fmts = JSON.stringify(compiledCampaign.formats);
             const title = compiledCampaign.campaignTitle.replace(/"/g, '\\"');
             const brand = compiledCampaign.brandName.replace(/"/g, '\\"');
+            const validLangs = compiledCampaign.languages && compiledCampaign.languages.length > 0 
+                ? compiledCampaign.languages 
+                : [{ name: 'EN', headline: compiledCampaign.campaignTitle, subheading: '' }];
+            const langs = JSON.stringify(validLangs);
 
             return `/**
  * Briefix Photoshop Automation Script
@@ -917,6 +900,7 @@ app.bringToFront();
 
 (function() {
     var formats = ${fmts};
+    var languages = ${langs};
     var campaignName = "${title}";
     var brandName = "${brand}";
 
@@ -967,33 +951,150 @@ app.bringToFront();
 
     // Execute generation
     if (useArtboards) {
-        createMasterArtboardDoc(campaignName, formats, projectFolder);
+        createMasterArtboardDoc(campaignName, formats, languages, projectFolder);
     } else {
-        createSeparatePsbDocs(campaignName, formats, projectFolder);
+        createSeparatePsbDocs(campaignName, formats, languages, projectFolder);
     }
 
-    // ActionManager function to create genuine Photoshop Artboards
+    // ActionManager function to create and enforce genuine Photoshop Artboard dimensions
     function makeArtboard(name, left, top, width, height) {
+        var s2t = function(s) { return stringIDToTypeID(s); };
+        var c2t = function(c) { return charIDToTypeID(c); };
+
+        var w = Number(width);
+        var h = Number(height);
+        var x = Number(left);
+        var y = Number(top);
+
+        // 1. Primary Artboard creation descriptor
         var desc = new ActionDescriptor();
         var ref = new ActionReference();
-        ref.putClass(stringIDToTypeID("artboardSection"));
-        desc.putReference(charIDToTypeID("null"), ref);
+        ref.putClass(s2t("artboardSection"));
+        desc.putReference(c2t("null"), ref);
 
         var artboardDesc = new ActionDescriptor();
-        artboardDesc.putString(charIDToTypeID("Nm  "), name);
-
         var rectDesc = new ActionDescriptor();
-        rectDesc.putDouble(charIDToTypeID("Top "), Number(top));
-        rectDesc.putDouble(charIDToTypeID("Left"), Number(left));
-        rectDesc.putDouble(charIDToTypeID("Btom"), Number(top) + Number(height));
-        rectDesc.putDouble(charIDToTypeID("Rght"), Number(left) + Number(width));
-        artboardDesc.putObject(stringIDToTypeID("artboardRect"), stringIDToTypeID("classFloatRect"), rectDesc);
+        rectDesc.putDouble(s2t("top"), y);
+        rectDesc.putDouble(s2t("left"), x);
+        rectDesc.putDouble(s2t("bottom"), y + h);
+        rectDesc.putDouble(s2t("right"), x + w);
+        artboardDesc.putObject(s2t("artboardRect"), s2t("classFloatRect"), rectDesc);
 
-        desc.putObject(charIDToTypeID("Usng"), stringIDToTypeID("artboardSection"), artboardDesc);
-        executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO);
+        desc.putObject(s2t("using"), s2t("artboardSection"), artboardDesc);
+
+        try {
+            executeAction(s2t("make"), desc, DialogModes.NO);
+        } catch(e) {
+            try {
+                var d2 = new ActionDescriptor();
+                var r2 = new ActionReference();
+                r2.putClass(s2t("artboardSection"));
+                d2.putReference(c2t("null"), r2);
+                d2.putObject(s2t("artboardRect"), s2t("classFloatRect"), rectDesc);
+                executeAction(c2t("Mk  "), d2, DialogModes.NO);
+            } catch(e2) {}
+        }
+
+        // 2. Explicitly enforce the exact artboard dimensions via ActionManager "set"
+        try {
+            var setDesc = new ActionDescriptor();
+            var setRef = new ActionReference();
+            setRef.putEnumerated(s2t("layer"), s2t("ordinal"), s2t("targetEnum"));
+            setDesc.putReference(s2t("null"), setRef);
+
+            var setRect = new ActionDescriptor();
+            setRect.putDouble(s2t("top"), y);
+            setRect.putDouble(s2t("left"), x);
+            setRect.putDouble(s2t("bottom"), y + h);
+            setRect.putDouble(s2t("right"), x + w);
+
+            var setAbDesc = new ActionDescriptor();
+            setAbDesc.putObject(s2t("artboardRect"), s2t("classFloatRect"), setRect);
+            setDesc.putObject(s2t("to"), s2t("artboard"), setAbDesc);
+
+            executeAction(s2t("set"), setDesc, DialogModes.NO);
+        } catch(errSet) {}
+
+        // 3. Ensure exact name on active artboard layer
+        try {
+            doc.activeLayer.name = name;
+        } catch(e) {}
     }
 
-    function createMasterArtboardDoc(name, fmts, folder) {
+    // Function to add language groups with centered Headline and Sub-heading
+    function createLanguageLayers(targetContainer, x, y, width, height, langs, campTitle) {
+        var w = Number(width);
+        var h = Number(height);
+        var centerX = Number(x) + (w / 2);
+        var centerY = Number(y) + (h / 2);
+
+        var headFontSize = Math.max(14, Math.min(60, Math.round(Math.min(w, h) * 0.05)));
+        var subFontSize = Math.max(10, Math.min(28, Math.round(headFontSize * 0.6)));
+
+        for (var l = 0; l < langs.length; l++) {
+            var lang = langs[l];
+            var langSet = targetContainer.layerSets.add();
+            langSet.name = "Language - " + (lang.name || "Default");
+
+            var hText = lang.headline || (lang.subheading ? "" : campTitle);
+            var sText = lang.subheading || "";
+
+            var headY = centerY;
+            var subY = centerY;
+
+            if (hText && sText) {
+                headY = centerY - Math.round(headFontSize * 0.4);
+                subY = centerY + Math.round(subFontSize * 1.3);
+            } else if (hText) {
+                headY = centerY + Math.round(headFontSize * 0.35);
+            } else if (sText) {
+                subY = centerY + Math.round(subFontSize * 0.35);
+            }
+
+            // Sub-heading layer
+            if (sText) {
+                try {
+                    var subLayer = langSet.artLayers.add();
+                    subLayer.kind = LayerKind.TEXT;
+                    subLayer.name = "Sub-heading (" + (lang.name || "Default") + ")";
+                    var sItem = subLayer.textItem;
+                    sItem.contents = sText;
+                    sItem.size = subFontSize;
+                    sItem.justification = Justification.CENTER;
+                    sItem.position = [centerX, subY];
+                    var cSub = new SolidColor();
+                    cSub.rgb.red = 210; cSub.rgb.green = 220; cSub.rgb.blue = 230;
+                    sItem.color = cSub;
+                } catch(err) {}
+            }
+
+            // Headline layer
+            if (hText) {
+                try {
+                    var headLayer = langSet.artLayers.add();
+                    headLayer.kind = LayerKind.TEXT;
+                    headLayer.name = "Headline (" + (lang.name || "Default") + ")";
+                    var hItem = headLayer.textItem;
+                    hItem.contents = hText;
+                    hItem.size = headFontSize;
+                    hItem.justification = Justification.CENTER;
+                    hItem.position = [centerX, headY];
+                    var cHead = new SolidColor();
+                    cHead.rgb.red = 255; cHead.rgb.green = 255; cHead.rgb.blue = 255;
+                    hItem.color = cHead;
+                } catch(err) {}
+            }
+
+            // Hide subsequent languages to avoid visual clutter
+            if (l > 0) {
+                try {
+                    langSet.visible = false;
+                } catch(err) {}
+            }
+        }
+    }
+
+    function createMasterArtboardDoc(name, fmts, langs, folder) {
         var origRulerUnits = app.preferences.rulerUnits;
         var origTypeUnits = app.preferences.typeUnits;
         app.preferences.rulerUnits = Units.PIXELS;
@@ -1031,6 +1132,11 @@ app.bringToFront();
                 // Create genuine Photoshop artboard
                 makeArtboard(f.formatName + " (" + w + "x" + h + ")", x, y, w, h);
 
+                var curArtboard = doc.activeLayer;
+
+                // Create language groups with centered Headline & Sub-heading
+                createLanguageLayers(curArtboard, x, y, w, h, langs, name);
+
                 x += w + spacing;
                 if (h > rowH) rowH = h;
             }
@@ -1060,14 +1166,14 @@ app.bringToFront();
             psbOpts.layers = true;
             doc.saveAs(saveFile, psbOpts, true, Extension.LOWERCASE);
 
-            alert("✅ Master document successfully created with " + fmts.length + " Artboards!\\nSaved: " + saveFile.fsName);
+            alert("✅ Master document successfully created with " + fmts.length + " Artboards & Language Groups!\\nSaved: " + saveFile.fsName);
         } finally {
             app.preferences.rulerUnits = origRulerUnits;
             app.preferences.typeUnits = origTypeUnits;
         }
     }
 
-    function createSeparatePsbDocs(name, fmts, folder) {
+    function createSeparatePsbDocs(name, fmts, langs, folder) {
         var origRulerUnits = app.preferences.rulerUnits;
         var origTypeUnits = app.preferences.typeUnits;
         app.preferences.rulerUnits = Units.PIXELS;
@@ -1093,8 +1199,8 @@ app.bringToFront();
                 var art = doc.layerSets.add();
                 art.name = "Key Art";
 
-                var copy = doc.layerSets.add();
-                copy.name = "Copy & CTA";
+                // Create language groups with centered Headline & Sub-heading
+                createLanguageLayers(doc, 0, 0, f.width, f.height, langs, name);
 
                 var file = new File(folder + "/" + docName + ".psb");
                 var psbOpts = new PhotoshopSaveOptions();
@@ -1105,7 +1211,7 @@ app.bringToFront();
                 created++;
             }
 
-            alert("✅ Generated " + created + " separate .PSB files in:\\n" + folder.fsName);
+            alert("✅ Generated " + created + " separate .PSB files with Language Groups in:\\n" + folder.fsName);
         } finally {
             app.preferences.rulerUnits = origRulerUnits;
             app.preferences.typeUnits = origTypeUnits;
@@ -1115,12 +1221,16 @@ app.bringToFront();
 `;
         }
 
-        // Figma Script (.txt file for Jira) - Synchronous reliable frame generation
+        // Figma Script (.txt file for Jira) - Synchronous reliable frame generation with Language Groups
         function getFigmaScriptContent() {
             if (!compiledCampaign) return "";
             const fmts = JSON.stringify(compiledCampaign.formats, null, 2);
             const title = compiledCampaign.campaignTitle.replace(/"/g, '\\"');
             const brand = compiledCampaign.brandName.replace(/"/g, '\\"');
+            const validLangs = compiledCampaign.languages && compiledCampaign.languages.length > 0 
+                ? compiledCampaign.languages 
+                : [{ name: 'EN', headline: compiledCampaign.campaignTitle, subheading: '' }];
+            const langs = JSON.stringify(validLangs, null, 2);
 
             return `// =====================================================================
 // Briefix Figma Setup Script (For Jira Handover)
@@ -1136,7 +1246,7 @@ app.bringToFront();
 // 3. Paste the entire code below into the Console and press Enter!
 // =====================================================================
 
-(function() {
+(async function() {
     if (typeof figma === 'undefined') {
         alert("Please run this script inside Figma (Developer Console or Scripter Plugin).");
         return;
@@ -1145,9 +1255,18 @@ app.bringToFront();
     const campaignName = "${title}";
     const brand = "${brand}";
     const formats = ${fmts};
+    const languages = ${langs};
 
     // Rename current page to campaign name
     figma.currentPage.name = brand + " - " + campaignName;
+
+    // Load standard Inter fonts
+    try {
+        await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+        await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+    } catch(err) {
+        console.warn("Could not load Inter font:", err);
+    }
 
     let x = 0;
     let y = 0;
@@ -1175,10 +1294,89 @@ app.bringToFront();
         frame.y = y;
         frame.fills = [{ type: 'SOLID', color: { r: 0.07, g: 0.09, b: 0.14 } }];
         frame.clipsContent = true;
-
         figma.currentPage.appendChild(frame);
-        frames.push(frame);
 
+        // Language Groups with centered Headline & Sub-heading
+        const maxTextW = Math.round(w * 0.85);
+        const headFontSize = Math.max(16, Math.min(64, Math.round(Math.min(w, h) * 0.05)));
+        const subFontSize = Math.max(11, Math.min(30, Math.round(headFontSize * 0.6)));
+        const textGap = Math.round(headFontSize * 0.35);
+
+        for (let l = 0; l < languages.length; l++) {
+            const lang = languages[l];
+            const langNodes = [];
+
+            const headlineText = lang.headline || (lang.subheading ? "" : campaignName);
+            const subheadText = lang.subheading || "";
+
+            let tHead = null;
+            let tSub = null;
+
+            if (headlineText) {
+                tHead = figma.createText();
+                tHead.fontName = { family: "Inter", style: "Bold" };
+                tHead.characters = headlineText;
+                tHead.fontSize = headFontSize;
+                tHead.textAlignHorizontal = "CENTER";
+                tHead.textAlignVertical = "CENTER";
+                tHead.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+                tHead.resize(maxTextW, tHead.height);
+                tHead.textAutoResize = "HEIGHT";
+                frame.appendChild(tHead);
+                langNodes.push(tHead);
+            }
+
+            if (subheadText) {
+                tSub = figma.createText();
+                tSub.fontName = { family: "Inter", style: "Regular" };
+                tSub.characters = subheadText;
+                tSub.fontSize = subFontSize;
+                tSub.textAlignHorizontal = "CENTER";
+                tSub.textAlignVertical = "CENTER";
+                tSub.fills = [{ type: 'SOLID', color: { r: 0.82, g: 0.86, b: 0.92 } }];
+                tSub.resize(maxTextW, tSub.height);
+                tSub.textAutoResize = "HEIGHT";
+                frame.appendChild(tSub);
+                langNodes.push(tSub);
+            }
+
+            // Calculate vertical center positioning
+            let totalH = 0;
+            if (tHead && tSub) {
+                totalH = tHead.height + textGap + tSub.height;
+            } else if (tHead) {
+                totalH = tHead.height;
+            } else if (tSub) {
+                totalH = tSub.height;
+            }
+
+            const startY = Math.round((h - totalH) / 2);
+            const textX = Math.round((w - maxTextW) / 2);
+
+            if (tHead && tSub) {
+                tHead.x = textX;
+                tHead.y = startY;
+                tSub.x = textX;
+                tSub.y = startY + tHead.height + textGap;
+            } else if (tHead) {
+                tHead.x = textX;
+                tHead.y = startY;
+            } else if (tSub) {
+                tSub.x = textX;
+                tSub.y = startY;
+            }
+
+            if (langNodes.length > 0) {
+                const langGroup = figma.group(langNodes, frame);
+                langGroup.name = "Language - " + (lang.name || "Default");
+                // If not first language, hide to avoid visual clash
+                if (l > 0) {
+                    langGroup.visible = false;
+                }
+            }
+        }
+
+        frames.push(frame);
         x += w + spacing;
         if (h > rowHeight) rowHeight = h;
     }
@@ -1186,9 +1384,9 @@ app.bringToFront();
     if (frames.length > 0) {
         figma.viewport.scrollAndZoomIntoView(frames);
         if (figma.notify) {
-            figma.notify("✅ Briefix: Successfully created " + frames.length + " frames for " + campaignName);
+            figma.notify("✅ Briefix: Successfully created " + frames.length + " frames with Language Groups for " + campaignName);
         }
-        console.log("✅ Successfully created " + frames.length + " frames in Figma!");
+        console.log("✅ Successfully created " + frames.length + " frames with Language Groups in Figma!");
     }
 })();
 `;
