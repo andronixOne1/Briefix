@@ -179,18 +179,28 @@
                 </div>
 
                 <!-- Languages Section Header (Default: English only, remembers per brand) -->
-                <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
                     <div>
                         <span class="text-xs font-semibold text-white flex items-center space-x-1.5">
                             <i class="fa-solid fa-language text-neon-cyan"></i>
                             <span>Languages & Regional Copy</span>
                         </span>
-                        <span class="text-[10px] text-slate-400 block">Saved separately for this brand. Headlines and sub-headings are optional.</span>
+                        <span class="text-[10px] text-slate-400 block">Saved separately for this brand. Auto-translate natively with in-browser AI.</span>
                     </div>
-                    <button type="button" onclick="openAddLanguageModal()" class="px-2.5 py-1 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all">
-                        <i class="fa-solid fa-plus text-[10px]"></i>
-                        <span>Add Language</span>
-                    </button>
+                    <div class="flex items-center space-x-1.5 flex-wrap gap-y-1">
+                        <button type="button" onclick="openTargetLanguagesModal()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-lg text-[11px] font-semibold flex items-center space-x-1 transition-all" title="Choose from preset target languages">
+                            <i class="fa-solid fa-list-check text-neon-cyan text-[10px]"></i>
+                            <span>Choose Languages</span>
+                        </button>
+                        <button type="button" onclick="startAutoTranslate()" class="px-2.5 py-1 bg-gradient-to-r from-neon-cyan/20 to-neon-purple/20 hover:from-neon-cyan/30 hover:to-neon-purple/30 border border-neon-cyan/40 text-neon-cyan rounded-lg text-[11px] font-bold flex items-center space-x-1 shadow-sm transition-all" title="Auto-translate all languages natively in your browser using Meta NLLB-200">
+                            <i class="fa-solid fa-wand-magic-sparkles text-[10px] text-neon-cyan"></i>
+                            <span>Auto-Translate</span>
+                        </button>
+                        <button type="button" onclick="openAddLanguageModal()" class="px-2 py-1 bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg text-[11px] font-medium flex items-center space-x-1 transition-all" title="Add a custom language name">
+                            <i class="fa-solid fa-plus text-[9px]"></i>
+                            <span>Custom</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Scrollable Language Cards Box (Tightly constrained for single-screen height) -->
@@ -440,6 +450,91 @@
         </div>
     </div>
 
+    <!-- Target Languages Modal (Choose from preset languages for this brand) -->
+    <div id="targetLanguagesModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel rounded-2xl max-w-xl w-full p-5 border border-slate-800 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-earth-americas text-neon-cyan text-base"></i>
+                    <div>
+                        <h3 class="font-bold text-white text-sm">Target Languages for <span id="targetLangModalBrandName" class="text-neon-cyan">Brand</span></h3>
+                        <p class="text-[11px] text-slate-400">Select target markets. Your selection is remembered separately for this brand.</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeTargetLanguagesModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Quick Selection Actions -->
+            <div class="flex items-center justify-between text-xs px-1">
+                <span class="text-slate-400 text-[11px]"><span id="targetLangSelectedCount" class="text-neon-cyan font-bold">0</span> of 16 selected</span>
+                <div class="space-x-2 text-xs">
+                    <button type="button" onclick="toggleAllTargetLanguages(true)" class="text-neon-cyan hover:underline font-medium">Select All</button>
+                    <span class="text-slate-600">|</span>
+                    <button type="button" onclick="toggleAllTargetLanguages(false)" class="text-slate-400 hover:underline">Deselect All</button>
+                </div>
+            </div>
+
+            <!-- Checklist Grid -->
+            <div id="targetLanguagesGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[50vh] p-1">
+                <!-- Populated dynamically from PRESET_LANGUAGES -->
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-800">
+                <button type="button" onclick="closeTargetLanguagesModal()" class="px-3 py-1.5 bg-slate-850 text-slate-300 rounded-lg text-xs hover:bg-slate-800">Cancel</button>
+                <button type="button" onclick="applyTargetLanguages()" class="px-4 py-1.5 bg-neon-cyan text-slate-950 font-bold rounded-lg text-xs hover:opacity-90">Apply & Save for Brand</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-Translate Progress Modal (Meta NLLB-200 in-browser AI) -->
+    <div id="autoTranslateModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel rounded-2xl max-w-lg w-full p-6 border border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-neon-cyan/20 to-neon-purple/20 border border-neon-cyan/40 flex items-center justify-center">
+                        <i class="fa-solid fa-wand-magic-sparkles text-neon-cyan text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm">In-Browser AI Auto-Translate</h3>
+                        <p class="text-[10px] text-slate-400">Meta NLLB-200 • 100% Client-Side • No API keys</p>
+                    </div>
+                </div>
+                <button type="button" id="autoTranslateCloseBtn" onclick="closeAutoTranslateModal()" class="text-slate-500 hover:text-white hidden"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Status & Progress -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                    <span id="translateStatusText" class="font-medium text-slate-200 flex items-center space-x-1.5">
+                        <i id="translateSpinnerIcon" class="fa-solid fa-circle-notch fa-spin text-neon-cyan"></i>
+                        <span id="translateStatusLabel">Initializing AI model...</span>
+                    </span>
+                    <span id="translateProgressPercent" class="font-mono text-neon-cyan font-bold">0%</span>
+                </div>
+                <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                    <div id="translateProgressBar" class="h-full bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <p id="translateSubstatusText" class="text-[11px] text-slate-400 truncate">Preparing translation engine...</p>
+            </div>
+
+            <!-- Real-time translation activity logs -->
+            <div id="translateLogsContainer" class="bg-slate-950/70 rounded-xl p-3 border border-slate-800/80 max-h-44 overflow-y-auto space-y-1.5 text-xs font-mono">
+                <!-- Populated dynamically as each language is translated -->
+            </div>
+
+            <div class="pt-2 flex items-center justify-between border-t border-slate-800/80">
+                <span class="text-[10px] text-slate-500 flex items-center space-x-1">
+                    <i class="fa-solid fa-shield-halved text-neon-cyan"></i>
+                    <span>Runs locally in browser cache</span>
+                </span>
+                <div class="flex items-center space-x-2">
+                    <button type="button" id="translateCancelBtn" onclick="abortTranslation()" class="px-3 py-1.5 bg-slate-850 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded-lg text-xs">Cancel</button>
+                    <button type="button" id="translateDoneBtn" onclick="closeAutoTranslateModal()" class="px-4 py-1.5 bg-neon-cyan text-slate-950 font-bold rounded-lg text-xs hover:opacity-90 hidden">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 border border-neon-cyan text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
         <i class="fa-solid fa-circle-check text-neon-cyan text-lg"></i>
@@ -559,7 +654,450 @@
             goToStep(2);
         }
 
-        // STEP 2: Setup Studio with Selected Brand
+        // ==========================================
+        // PRESET TARGET LANGUAGES & NATIVE IN-BROWSER AI TRANSLATION
+        // ==========================================
+        const PRESET_LANGUAGES = [
+            { code: 'BR', label: 'Portuguese (BR)', flag: '🇧🇷', nllb: 'por_Latn', aliases: ['PT-BR', 'BRAZIL'] },
+            { code: 'PR', label: 'Portuguese (PT)', flag: '🇵🇹', nllb: 'por_Latn', aliases: ['PT', 'PORTUGAL'] },
+            { code: 'DE', label: 'German', flag: '🇩🇪', nllb: 'deu_Latn', aliases: ['GERMAN', 'DEUTSCH'] },
+            { code: 'FR', label: 'French', flag: '🇫🇷', nllb: 'fra_Latn', aliases: ['FRENCH', 'FRANCAIS'] },
+            { code: 'IT', label: 'Italian', flag: '🇮🇹', nllb: 'ita_Latn', aliases: ['ITALIAN', 'ITALIANO'] },
+            { code: 'ES', label: 'Spanish', flag: '🇪🇸', nllb: 'spa_Latn', aliases: ['SP', 'SPANISH', 'ESPANOL'] },
+            { code: 'FN', label: 'Finnish', flag: '🇫🇮', nllb: 'fin_Latn', aliases: ['FI', 'FINNISH', 'SUOMI'] },
+            { code: 'KR', label: 'Korean', flag: '🇰🇷', nllb: 'kor_Hang', aliases: ['KO', 'KOREAN'] },
+            { code: 'TH', label: 'Thai', flag: '🇹🇭', nllb: 'tha_Thai', aliases: ['THAI'] },
+            { code: 'HI', label: 'Hindi', flag: '🇮🇳', nllb: 'hin_Deva', aliases: ['HINDU', 'HINDI'] },
+            { code: 'TR', label: 'Turkish', flag: '🇹🇷', nllb: 'tur_Latn', aliases: ['TURKISH', 'TURKCE'] },
+            { code: 'SV', label: 'Swedish', flag: '🇸🇪', nllb: 'swe_Latn', aliases: ['SE', 'SWEDISH', 'SVENSKA'] },
+            { code: 'RU', label: 'Russian', flag: '🇷🇺', nllb: 'rus_Cyrl', aliases: ['RUSSIAN'] },
+            { code: 'UK', label: 'Ukrainian', flag: '🇺🇦', nllb: 'ukr_Cyrl', aliases: ['UA', 'UKRAINIAN'] },
+            { code: 'PL', label: 'Polish', flag: '🇵🇱', nllb: 'pol_Latn', aliases: ['POLISH', 'POLSKI'] },
+            { code: 'NO', label: 'Norwegian', flag: '🇳🇴', nllb: 'nob_Latn', aliases: ['NORWEGIAN', 'NORSK'] }
+        ];
+
+        function isEnglishLang(lang) {
+            if (!lang) return false;
+            const name = (lang.name || '').toUpperCase();
+            const code = (lang.code || '').toUpperCase();
+            return code === 'EN' || name.startsWith('EN') || name.includes('ENGLISH');
+        }
+
+        function getFlagForLang(lang) {
+            if (!lang) return '🌐';
+            if (isEnglishLang(lang)) return '🇬🇧';
+            const name = (lang.name || '').toUpperCase();
+            const code = (lang.code || '').toUpperCase();
+            const match = PRESET_LANGUAGES.find(p => 
+                p.code === code || 
+                name.includes(`(${p.code})`) || 
+                name.includes(p.label.toUpperCase()) || 
+                (p.aliases && p.aliases.some(a => name.includes(a) || code === a))
+            );
+            return match ? match.flag : '🌐';
+        }
+
+        function getNllbCodeForLang(lang) {
+            if (!lang) return null;
+            if (lang.nllb) return lang.nllb;
+            const name = (lang.name || '').toUpperCase();
+            const code = (lang.code || '').toUpperCase();
+            const match = PRESET_LANGUAGES.find(p => 
+                p.code === code || 
+                name.includes(`(${p.code})`) || 
+                name.includes(p.label.toUpperCase()) || 
+                (p.aliases && p.aliases.some(a => name.includes(a) || code === a))
+            );
+            return match ? match.nllb : null;
+        }
+
+        function getBrandTargetLanguages(brandId) {
+            try {
+                const stored = localStorage.getItem('briefix_target_langs_' + (brandId || 'default'));
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveBrandTargetLanguages(brandId, codes) {
+            try {
+                localStorage.setItem('briefix_target_langs_' + (brandId || 'default'), JSON.stringify(codes));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Target Languages Selection Modal
+        let tempSelectedTargetCodes = new Set();
+
+        function openTargetLanguagesModal() {
+            if (!selectedBrand) return;
+            document.getElementById('targetLangModalBrandName').innerText = selectedBrand.name;
+
+            // Load stored preference for this brand
+            tempSelectedTargetCodes = new Set(getBrandTargetLanguages(selectedBrand.id));
+
+            // Also ensure currently active languages in step 2 are checked
+            activeLanguages.forEach(l => {
+                if (!isEnglishLang(l)) {
+                    const preset = PRESET_LANGUAGES.find(p => 
+                        p.code === l.code || 
+                        (l.name && l.name.toUpperCase().includes(`(${p.code})`)) ||
+                        (p.aliases && p.aliases.some(a => (l.name || '').toUpperCase().includes(a)))
+                    );
+                    if (preset) tempSelectedTargetCodes.add(preset.code);
+                }
+            });
+
+            renderTargetLanguagesGrid();
+            document.getElementById('targetLanguagesModal').classList.remove('hidden');
+        }
+
+        function closeTargetLanguagesModal() {
+            document.getElementById('targetLanguagesModal').classList.add('hidden');
+        }
+
+        function renderTargetLanguagesGrid() {
+            const grid = document.getElementById('targetLanguagesGrid');
+            grid.innerHTML = '';
+            document.getElementById('targetLangSelectedCount').innerText = tempSelectedTargetCodes.size;
+
+            PRESET_LANGUAGES.forEach(p => {
+                const isChecked = tempSelectedTargetCodes.has(p.code);
+                const item = document.createElement('label');
+                item.className = `flex items-center space-x-2.5 p-2 rounded-xl border cursor-pointer transition-all ${
+                    isChecked ? 'bg-slate-900 border-neon-cyan/60 text-white' : 'bg-slate-950/50 border-slate-800 text-slate-300 hover:border-slate-700'
+                }`;
+                item.innerHTML = `
+                    <input type="checkbox" value="${p.code}" ${isChecked ? 'checked' : ''} onchange="toggleTargetLangCode('${p.code}', this.checked)" class="rounded border-slate-700 text-neon-cyan focus:ring-0">
+                    <span class="text-base select-none">${p.flag}</span>
+                    <div class="truncate select-none">
+                        <span class="text-xs font-semibold block leading-tight">${p.code}</span>
+                        <span class="text-[10px] text-slate-400 block truncate leading-tight">${p.label}</span>
+                    </div>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        function toggleTargetLangCode(code, checked) {
+            if (checked) {
+                tempSelectedTargetCodes.add(code);
+            } else {
+                tempSelectedTargetCodes.delete(code);
+            }
+            renderTargetLanguagesGrid();
+        }
+
+        function toggleAllTargetLanguages(selectAll) {
+            if (selectAll) {
+                tempSelectedTargetCodes = new Set(PRESET_LANGUAGES.map(p => p.code));
+            } else {
+                tempSelectedTargetCodes.clear();
+            }
+            renderTargetLanguagesGrid();
+        }
+
+        function applyTargetLanguages() {
+            if (!selectedBrand) return;
+
+            const selectedArray = Array.from(tempSelectedTargetCodes);
+            saveBrandTargetLanguages(selectedBrand.id, selectedArray);
+
+            // Ensure English is preserved as the source language
+            let englishLang = activeLanguages.find(isEnglishLang);
+            if (!englishLang) {
+                englishLang = { id: 'lang_en', code: 'EN', name: 'English (EN)', headline: '', subheading: '' };
+            }
+
+            // Map existing languages by matching code to preserve existing typed headlines/subheadings
+            const existingMap = new Map();
+            activeLanguages.forEach(l => {
+                if (!isEnglishLang(l)) {
+                    const preset = PRESET_LANGUAGES.find(p => 
+                        p.code === l.code || 
+                        (l.name && l.name.toUpperCase().includes(`(${p.code})`)) ||
+                        (p.aliases && p.aliases.some(a => (l.name || '').toUpperCase().includes(a)))
+                    );
+                    if (preset) {
+                        existingMap.set(preset.code, l);
+                    } else if (l.name) {
+                        existingMap.set(l.name, l); // Custom language
+                    }
+                }
+            });
+
+            // Build updated active languages list
+            const newActiveLanguages = [englishLang];
+
+            // Add selected presets
+            PRESET_LANGUAGES.forEach(p => {
+                if (tempSelectedTargetCodes.has(p.code)) {
+                    if (existingMap.has(p.code)) {
+                        newActiveLanguages.push(existingMap.get(p.code));
+                    } else {
+                        newActiveLanguages.push({
+                            id: 'lang_' + p.code.toLowerCase() + '_' + Date.now().toString(36),
+                            code: p.code,
+                            name: `${p.label} (${p.code})`,
+                            headline: '',
+                            subheading: '',
+                            nllb: p.nllb
+                        });
+                    }
+                }
+            });
+
+            // Keep custom non-preset languages
+            activeLanguages.forEach(l => {
+                if (!isEnglishLang(l)) {
+                    const isPreset = PRESET_LANGUAGES.some(p => 
+                        p.code === l.code || 
+                        (l.name && l.name.toUpperCase().includes(`(${p.code})`))
+                    );
+                    if (!isPreset && !newActiveLanguages.some(nl => nl.id === l.id)) {
+                        newActiveLanguages.push(l);
+                    }
+                }
+            });
+
+            activeLanguages = newActiveLanguages;
+            saveBrandLanguages();
+            renderLanguageRows();
+            closeTargetLanguagesModal();
+            showToast(`Updated languages for ${selectedBrand.name} (${selectedArray.length} target markets)`);
+        }
+
+        // ==========================================
+        // TRANSFORMERS.JS / META NLLB-200 TRANSLATION ENGINE
+        // ==========================================
+        let nllbPipeline = null;
+        let isModelLoading = false;
+        let isTranslationAborted = false;
+
+        async function getTranslatorPipeline(onProgress) {
+            if (nllbPipeline) return nllbPipeline;
+            isModelLoading = true;
+
+            try {
+                // Dynamically import Transformers.js from CDN
+                const { pipeline, env } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+                env.allowLocalModels = false;
+
+                nllbPipeline = await pipeline('translation', 'Xenova/nllb-200-distilled-600M', {
+                    progress_callback: (data) => {
+                        if (onProgress) onProgress(data);
+                    }
+                });
+                isModelLoading = false;
+                return nllbPipeline;
+            } catch (err) {
+                isModelLoading = false;
+                throw err;
+            }
+        }
+
+        function getSourceEnglishCopy() {
+            let enLang = activeLanguages.find(isEnglishLang);
+            let headline = enLang ? (enLang.headline || '').trim() : '';
+            let subheading = enLang ? (enLang.subheading || '').trim() : '';
+
+            if (!headline) {
+                const titleInput = document.getElementById('campaignTitleInput');
+                if (titleInput && titleInput.value.trim()) {
+                    headline = titleInput.value.trim();
+                }
+            }
+
+            return { headline, subheading, enLang };
+        }
+
+        function updateTranslateModalUI(statusLabel, pct, substatus, isError = false) {
+            document.getElementById('translateStatusLabel').innerText = statusLabel;
+            document.getElementById('translateProgressPercent').innerText = `${pct}%`;
+            document.getElementById('translateProgressBar').style.width = `${pct}%`;
+            document.getElementById('translateSubstatusText').innerText = substatus || '';
+
+            const spinner = document.getElementById('translateSpinnerIcon');
+            if (isError) {
+                spinner.className = 'fa-solid fa-triangle-exclamation text-rose-500';
+                document.getElementById('translateProgressBar').className = 'h-full bg-rose-500 transition-all duration-300';
+            } else if (pct >= 100) {
+                spinner.className = 'fa-solid fa-circle-check text-neon-cyan';
+            } else {
+                spinner.className = 'fa-solid fa-circle-notch fa-spin text-neon-cyan';
+                document.getElementById('translateProgressBar').className = 'h-full bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink transition-all duration-300';
+            }
+        }
+
+        function logTranslateModalItem(langName, message, isError = false) {
+            const logsContainer = document.getElementById('translateLogsContainer');
+            if (!logsContainer) return;
+            const logRow = document.createElement('div');
+            logRow.className = `flex items-start space-x-2 text-[11px] ${isError ? 'text-rose-400' : 'text-slate-300'}`;
+            logRow.innerHTML = `
+                <span class="${isError ? 'text-rose-500' : 'text-neon-cyan'} shrink-0">${isError ? '✖' : '✔'}</span>
+                <span class="font-bold shrink-0 text-white">${escapeHtml(langName)}:</span>
+                <span class="truncate">${escapeHtml(message)}</span>
+            `;
+            logsContainer.appendChild(logRow);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        function closeAutoTranslateModal() {
+            document.getElementById('autoTranslateModal').classList.add('hidden');
+        }
+
+        function abortTranslation() {
+            isTranslationAborted = true;
+            closeAutoTranslateModal();
+            showToast("Translation cancelled");
+        }
+
+        async function startAutoTranslate() {
+            const { headline, subheading, enLang } = getSourceEnglishCopy();
+
+            if (!headline && !subheading) {
+                showToast("Please enter an English Headline or Campaign Title first to translate from.", true);
+                const titleInput = document.getElementById('campaignTitleInput');
+                if (titleInput) titleInput.focus();
+                return;
+            }
+
+            const targetLangs = activeLanguages.filter(l => !isEnglishLang(l));
+            if (targetLangs.length === 0) {
+                showToast("Please choose target languages first (click 'Choose Languages').", true);
+                openTargetLanguagesModal();
+                return;
+            }
+
+            // Reset modal state
+            isTranslationAborted = false;
+            document.getElementById('translateLogsContainer').innerHTML = '';
+            document.getElementById('translateCancelBtn').classList.remove('hidden');
+            document.getElementById('translateDoneBtn').classList.add('hidden');
+            document.getElementById('autoTranslateCloseBtn').classList.add('hidden');
+            document.getElementById('autoTranslateModal').classList.remove('hidden');
+
+            updateTranslateModalUI("Initializing Meta NLLB-200 AI model...", 10, "Loading into browser cache (downloads once)...");
+
+            let translator;
+            try {
+                translator = await getTranslatorPipeline((progress) => {
+                    if (progress.status === 'progress' && progress.total) {
+                        const pct = Math.min(85, Math.round((progress.loaded / progress.total) * 100));
+                        const loadedMb = (progress.loaded / 1048576).toFixed(1);
+                        const totalMb = (progress.total / 1048576).toFixed(1);
+                        updateTranslateModalUI(
+                            `Downloading AI Model (${progress.file || 'weights'})...`,
+                            pct,
+                            `${loadedMb} MB / ${totalMb} MB (${pct}%)`
+                        );
+                    } else if (progress.status === 'ready' || progress.status === 'done') {
+                        updateTranslateModalUI("AI Model ready! Translating languages...", 90, "Running on-device translation");
+                    }
+                });
+            } catch (err) {
+                console.error("Failed to load NLLB model:", err);
+                updateTranslateModalUI("Failed to initialize AI model", 0, err.message, true);
+                document.getElementById('translateCancelBtn').classList.add('hidden');
+                document.getElementById('autoTranslateCloseBtn').classList.remove('hidden');
+                return;
+            }
+
+            let completed = 0;
+            for (let i = 0; i < targetLangs.length; i++) {
+                if (isTranslationAborted) break;
+
+                const target = targetLangs[i];
+                const nllbCode = getNllbCodeForLang(target);
+
+                const currentPct = Math.round(15 + ((i + 1) / targetLangs.length) * 85);
+                updateTranslateModalUI(`Translating ${target.name} (${i + 1}/${targetLangs.length})...`, currentPct, `Language tag: ${nllbCode || 'auto'}`);
+
+                if (!nllbCode) {
+                    logTranslateModalItem(target.name, "Language code not mapped for NLLB", true);
+                    continue;
+                }
+
+                try {
+                    if (headline) {
+                        const outHeadline = await translator(headline, {
+                            src_lang: 'eng_Latn',
+                            tgt_lang: nllbCode
+                        });
+                        target.headline = outHeadline[0]?.translation_text || headline;
+                    }
+
+                    if (subheading) {
+                        const outSubheading = await translator(subheading, {
+                            src_lang: 'eng_Latn',
+                            tgt_lang: nllbCode
+                        });
+                        target.subheading = outSubheading[0]?.translation_text || subheading;
+                    }
+
+                    completed++;
+                    logTranslateModalItem(target.name, target.headline || target.subheading || "Done");
+                    renderLanguageRows();
+                    saveBrandLanguages();
+                } catch (tErr) {
+                    console.error("Translation error for " + target.name, tErr);
+                    logTranslateModalItem(target.name, tErr.message, true);
+                }
+            }
+
+            updateTranslateModalUI("Translation Complete!", 100, `Successfully translated ${completed} languages.`);
+            document.getElementById('translateCancelBtn').classList.add('hidden');
+            document.getElementById('translateDoneBtn').classList.remove('hidden');
+            document.getElementById('autoTranslateCloseBtn').classList.remove('hidden');
+
+            showToast(`✨ Automatically translated ${completed} languages!`);
+        }
+
+        async function translateSingleLanguageRow(index) {
+            const target = activeLanguages[index];
+            if (!target || isEnglishLang(target)) return;
+
+            const { headline, subheading } = getSourceEnglishCopy();
+            if (!headline && !subheading) {
+                showToast("Please enter an English Headline or Campaign Title first.", true);
+                return;
+            }
+
+            const nllbCode = getNllbCodeForLang(target);
+            if (!nllbCode) {
+                showToast(`Language code for ${target.name} not found`, true);
+                return;
+            }
+
+            // If pipeline not ready, open modal so user sees download progress
+            if (!nllbPipeline) {
+                startAutoTranslate();
+                return;
+            }
+
+            showToast(`Translating ${target.name}...`);
+            try {
+                if (headline) {
+                    const outH = await nllbPipeline(headline, { src_lang: 'eng_Latn', tgt_lang: nllbCode });
+                    target.headline = outH[0]?.translation_text || headline;
+                }
+                if (subheading) {
+                    const outS = await nllbPipeline(subheading, { src_lang: 'eng_Latn', tgt_lang: nllbCode });
+                    target.subheading = outS[0]?.translation_text || subheading;
+                }
+                renderLanguageRows();
+                saveBrandLanguages();
+                showToast(`Translated ${target.name}!`);
+            } catch (e) {
+                console.error(e);
+                showToast(`Failed to translate ${target.name}: ${e.message}`, true);
+            }
+        }
+
+        // Setup Studio with Selected Brand
         function setupStep2WithBrand(brand) {
             updateHistoryBadge();
             document.getElementById('activeBrandNameDisplay').innerText = brand.name;
@@ -573,7 +1111,7 @@
                 logoSlot.innerHTML = '';
             }
 
-            // Load remembered languages for THIS SPECIFIC BRAND (Defaults to English only)
+            // Load remembered languages for THIS SPECIFIC BRAND
             const savedLangKey = 'briefix_brand_languages_' + brand.id;
             const storedLangs = localStorage.getItem(savedLangKey);
             if (storedLangs) {
@@ -586,11 +1124,26 @@
                 activeLanguages = [];
             }
 
+            // If no active languages yet, check if brand has saved target languages
             if (!activeLanguages || activeLanguages.length === 0) {
-                // English ONLY default as requested
+                const targetCodes = getBrandTargetLanguages(brand.id);
                 activeLanguages = [
-                    { id: 'lang_en', name: 'English (EN)', headline: '', subheading: '' }
+                    { id: 'lang_en', code: 'EN', name: 'English (EN)', headline: '', subheading: '' }
                 ];
+                if (targetCodes && targetCodes.length > 0) {
+                    PRESET_LANGUAGES.forEach(p => {
+                        if (targetCodes.includes(p.code)) {
+                            activeLanguages.push({
+                                id: 'lang_' + p.code.toLowerCase(),
+                                code: p.code,
+                                name: `${p.label} (${p.code})`,
+                                headline: '',
+                                subheading: '',
+                                nllb: p.nllb
+                            });
+                        }
+                    });
+                }
                 saveBrandLanguages();
             }
             renderLanguageRows();
@@ -613,32 +1166,44 @@
             if (activeLanguages.length === 0) {
                 container.innerHTML = `
                     <div class="p-3 text-center text-xs text-slate-500 bg-slate-900/40 rounded-lg border border-slate-800">
-                        <span>No languages added. Click "+ Add Language" to add one.</span>
+                        <span>No languages added. Click "Choose Languages" or "+ Custom".</span>
                     </div>
                 `;
                 return;
             }
 
             activeLanguages.forEach((lang, index) => {
+                const isEng = isEnglishLang(lang);
+                const flag = getFlagForLang(lang);
                 const card = document.createElement('div');
                 card.className = "bg-slate-900/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1.5 relative group hover:border-slate-700 transition-all";
                 card.innerHTML = `
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-neon-cyan flex items-center space-x-1.5">
-                            <i class="fa-solid fa-earth-americas text-[10px]"></i>
+                            <span class="text-sm select-none">${flag}</span>
                             <span>${escapeHtml(lang.name)}</span>
                         </span>
-                        <button type="button" onclick="removeLanguageRow(${index})" class="text-slate-500 hover:text-rose-400 text-xs transition-colors p-0.5" title="Remove language">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
+                        <div class="flex items-center space-x-1.5">
+                            ${!isEng ? `
+                                <button type="button" onclick="translateSingleLanguageRow(${index})" class="text-[10px] text-neon-cyan hover:text-white bg-neon-cyan/10 hover:bg-neon-cyan/25 border border-neon-cyan/30 px-2 py-0.5 rounded-md transition-all flex items-center space-x-1" title="Translate this language from English using AI">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i>
+                                    <span>Translate</span>
+                                </button>
+                                <button type="button" onclick="removeLanguageRow(${index})" class="text-slate-500 hover:text-rose-400 text-xs transition-colors p-0.5" title="Remove language">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            ` : `
+                                <span class="text-[10px] text-slate-400 font-semibold px-2 py-0.5 rounded bg-slate-800 border border-slate-700/60">Source Base</span>
+                            `}
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
-                            <input type="text" value="${escapeHtml(lang.headline || '')}" oninput="updateLanguageField(${index}, 'headline', this.value)" class="w-full glass-input px-2.5 py-1 rounded-lg text-xs text-white focus:outline-none placeholder:text-slate-600" placeholder="Headline (optional)">
+                            <input type="text" value="${escapeHtml(lang.headline || '')}" oninput="updateLanguageField(${index}, 'headline', this.value)" class="w-full glass-input px-2.5 py-1 rounded-lg text-xs text-white focus:outline-none placeholder:text-slate-600" placeholder="${isEng ? 'Headline * (e.g. 100% Welcome Bonus)' : 'Headline (optional)'}">
                         </div>
                         <div>
-                            <input type="text" value="${escapeHtml(lang.subheading || '')}" oninput="updateLanguageField(${index}, 'subheading', this.value)" class="w-full glass-input px-2.5 py-1 rounded-lg text-xs text-slate-300 focus:outline-none placeholder:text-slate-600" placeholder="Sub-heading (optional)">
+                            <input type="text" value="${escapeHtml(lang.subheading || '')}" oninput="updateLanguageField(${index}, 'subheading', this.value)" class="w-full glass-input px-2.5 py-1 rounded-lg text-xs text-slate-300 focus:outline-none placeholder:text-slate-600" placeholder="${isEng ? 'Sub-heading (e.g. Deposit €20, Play with €40)' : 'Sub-heading (optional)'}">
                         </div>
                     </div>
                 `;
@@ -659,7 +1224,7 @@
             renderLanguageRows();
         }
 
-        // Add Language Modal Handlers
+        // Custom Add Language Modal Handlers
         function openAddLanguageModal() {
             document.getElementById('newLanguageNameInput').value = '';
             document.getElementById('addLanguageModal').classList.remove('hidden');
@@ -870,7 +1435,8 @@
                     const sText = l.subheading ? escapeHtml(l.subheading) : '<span class="text-slate-500 italic">(Sub-heading empty)</span>';
                     langContainer.innerHTML += `
                         <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-1 text-xs">
-                            <div class="flex items-center justify-between text-neon-cyan font-bold text-[11px]">
+                            <div class="flex items-center space-x-1.5 text-neon-cyan font-bold text-[11px]">
+                                <span class="text-xs select-none">${getFlagForLang(l)}</span>
                                 <span>${escapeHtml(l.name)}</span>
                             </div>
                             <div class="text-white font-medium">${hText}</div>
