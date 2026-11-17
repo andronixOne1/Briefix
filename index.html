@@ -93,11 +93,11 @@
                 <i class="fa-solid fa-chevron-right text-[9px] text-slate-600"></i>
                 <button onclick="goToStep(3)" id="stepTab-3" class="px-2.5 py-1 rounded-lg font-medium flex items-center space-x-1.5 text-slate-400 hover:text-slate-200 transition-all">
                     <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">3</span>
-                    <span class="hidden sm:inline">Preview & Export</span>
+                    <span class="hidden sm:inline">Preview & Task</span>
                 </button>
             </div>
 
-            <!-- Navigation Actions (Only History, NO Brand Editor outside editor.html) -->
+            <!-- History Action (Strictly NO brand editor links outside editor.html) -->
             <div class="flex items-center space-x-2">
                 <button onclick="openHistoryModal()" class="relative p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700 text-xs" title="Campaign History">
                     <i class="fa-solid fa-clock-rotate-left"></i>
@@ -107,7 +107,7 @@
         </div>
     </header>
 
-    <!-- STEP 1 CONTAINER: Choose Your Brand (Brand names & Search ONLY, no extra info) -->
+    <!-- STEP 1 CONTAINER: Choose Your Brand (Brand names & Search ONLY) -->
     <section id="step1Section" class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center space-y-6">
         
         <!-- Search Bar Only -->
@@ -123,13 +123,13 @@
 
     </section>
 
-    <!-- STEP 2 CONTAINER: Brief & Formats Input (Compact Single-Screen UX) -->
+    <!-- STEP 2 CONTAINER: Brief & Formats Input (Single-screen UX, Description, Brand-saved Languages & Formats) -->
     <section id="step2Section" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4 hidden flex-col justify-between">
         
         <!-- Active Brand Context Bar -->
         <div class="glass-panel rounded-xl px-4 py-2.5 border border-slate-800 shadow-md flex items-center justify-between flex-shrink-0">
             <div class="flex items-center space-x-3">
-                <button onclick="goToStep(1)" class="px-2.5 py-1 text-xs font-semibold text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-800 transition-all flex items-center space-x-1" title="Back to Step 1">
+                <button onclick="goToStep(1)" class="px-2.5 py-1 text-xs font-semibold text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-800 transition-all flex items-center space-x-1" title="Back to Brand Selection">
                     <i class="fa-solid fa-arrow-left text-[10px]"></i>
                     <span>Brand</span>
                 </button>
@@ -158,26 +158,20 @@
                     <input type="text" id="campaignTitleInput" class="w-full rounded-xl glass-input px-3 py-2 text-xs text-white focus:outline-none" placeholder="e.g. Weekend Reload 50% up to €200">
                 </div>
 
-                <!-- CTA & Subcopy (Inline 2-col) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-300 mb-1">Call to Action (CTA)</label>
-                        <input type="text" id="campaignCTAInput" class="w-full rounded-xl glass-input px-2.5 py-1.5 text-xs text-neon-pink font-semibold focus:outline-none" placeholder="e.g. CLAIM BONUS NOW">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-300 mb-1">Subcopy & Bonus Terms</label>
-                        <input type="text" id="campaignTermsInput" class="w-full rounded-xl glass-input px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none" placeholder="18+ only. Wagering 35x. Terms apply.">
-                    </div>
+                <!-- Big Description Field (Replaced CTA and Subcopy) -->
+                <div>
+                    <label class="block text-xs font-semibold text-white mb-1">Campaign Description & Notes</label>
+                    <textarea id="campaignDescriptionInput" rows="3" class="w-full rounded-xl glass-input p-2.5 text-xs text-slate-200 focus:outline-none resize-y" placeholder="Describe the campaign promotion details, bonus mechanics, legal restrictions, target audience, design mood..."></textarea>
                 </div>
 
-                <!-- Languages Section Header -->
+                <!-- Languages Section Header (Default: English only, remembers per brand) -->
                 <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
                     <div>
                         <span class="text-xs font-semibold text-white flex items-center space-x-1.5">
                             <i class="fa-solid fa-language text-neon-cyan"></i>
                             <span>Languages & Regional Copy</span>
                         </span>
-                        <span class="text-[10px] text-slate-400 block">Both headline and sub-heading are optional.</span>
+                        <span class="text-[10px] text-slate-400 block">Saved separately for this brand. Headlines and sub-headings are optional.</span>
                     </div>
                     <button type="button" onclick="openAddLanguageModal()" class="px-2.5 py-1 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all">
                         <i class="fa-solid fa-plus text-[10px]"></i>
@@ -186,8 +180,8 @@
                 </div>
 
                 <!-- Scrollable Language Cards Box (Tightly constrained for single-screen height) -->
-                <div id="languageRowsContainer" class="space-y-2 overflow-y-auto max-h-[36vh] sm:max-h-[300px] pr-1">
-                    <!-- Populated dynamically -->
+                <div id="languageRowsContainer" class="space-y-2 overflow-y-auto max-h-[30vh] sm:max-h-[240px] pr-1">
+                    <!-- Populated dynamically with English default + custom per brand -->
                 </div>
             </div>
 
@@ -195,20 +189,26 @@
             <div class="lg:col-span-5 glass-panel rounded-2xl p-4 border border-slate-800 shadow-xl flex flex-col justify-between space-y-3">
                 
                 <div>
-                    <!-- Formats Header -->
+                    <!-- Formats Header with Add Format & Select All -->
                     <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-                        <span class="text-xs font-semibold text-white flex items-center space-x-1.5">
-                            <i class="fa-solid fa-ruler-combined text-neon-pink"></i>
-                            <span>Required Formats (<span id="activeBrandFormatsCount">0</span>)</span>
-                        </span>
-                        <div class="space-x-2 text-[11px]">
-                            <button type="button" onclick="toggleAllFormats(true)" class="text-neon-cyan hover:underline">Select All</button>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-semibold text-white flex items-center space-x-1">
+                                <i class="fa-solid fa-ruler-combined text-neon-pink"></i>
+                                <span>Formats (<span id="activeBrandFormatsCount">0</span>)</span>
+                            </span>
+                            <button type="button" onclick="openAddFormatModal()" class="px-2 py-0.5 bg-neon-pink/10 hover:bg-neon-pink/20 border border-neon-pink/30 text-neon-pink rounded text-[11px] font-semibold flex items-center space-x-1 transition-all" title="Add a new custom dimension for this brand">
+                                <i class="fa-solid fa-plus text-[9px]"></i>
+                                <span>Add Format</span>
+                            </button>
+                        </div>
+                        <div class="space-x-1.5 text-[11px]">
+                            <button type="button" onclick="toggleAllFormats(true)" class="text-neon-cyan hover:underline">All</button>
                             <span class="text-slate-600">|</span>
                             <button type="button" onclick="toggleAllFormats(false)" class="text-slate-400 hover:underline">Clear</button>
                         </div>
                     </div>
 
-                    <!-- Scrollable Dimensions Checklist -->
+                    <!-- Scrollable Dimensions Checklist (Add/Remove per brand) -->
                     <div id="brandDimensionsContainer" class="space-y-1.5 overflow-y-auto max-h-[46vh] sm:max-h-[360px] pr-1 pt-2">
                         <!-- Populated dynamically from Brand dimensions -->
                     </div>
@@ -225,7 +225,7 @@
 
     </section>
 
-    <!-- STEP 3 CONTAINER: Dedicated Campaign Preview & Task Generation Page -->
+    <!-- STEP 3 CONTAINER: Dedicated Campaign Preview & 1-Button Task Generation Page -->
     <section id="step3Section" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5 hidden">
         
         <!-- Header & Action Bar -->
@@ -237,45 +237,38 @@
                 </button>
                 <div class="h-6 w-px bg-slate-800"></div>
                 <div>
-                    <span class="text-[10px] uppercase tracking-wider text-neon-cyan font-bold block">Step 3 of 3 • Review & Automation</span>
+                    <span class="text-[10px] uppercase tracking-wider text-neon-cyan font-bold block">Step 3 of 3 • Review & Task Generation</span>
                     <h2 id="previewCampaignTitle" class="text-lg font-bold text-white">Campaign Preview</h2>
                 </div>
             </div>
 
-            <!-- GENERATE TASK BUTTON -->
+            <!-- SINGLE GENERATE TASK BUTTON -->
             <button onclick="generateTaskScripts()" class="px-5 py-2.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 text-xs shadow-lg neon-glow-cyan flex items-center space-x-2">
                 <i class="fa-solid fa-bolt text-sm"></i>
-                <span>Generate Task (Photoshop & Figma)</span>
+                <span>Generate Task (Photoshop .jsx & Figma .txt)</span>
             </button>
         </div>
 
         <!-- Preview Grid Layout -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
             
-            <!-- LEFT COLUMN: Copywriting & Language Variations (6 Cols) -->
+            <!-- LEFT COLUMN: Campaign Description & Language Copies (6 Cols) -->
             <div class="lg:col-span-6 space-y-4">
                 
-                <!-- Campaign Summary Card -->
+                <!-- Campaign Description Card -->
                 <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                        <h3 class="text-xs uppercase tracking-wider text-neon-cyan font-bold">Campaign Specification</h3>
+                        <h3 class="text-xs uppercase tracking-wider text-neon-cyan font-bold">Campaign Description</h3>
                         <span id="previewBrandMarketBadge" class="text-[10px] px-2 py-0.5 rounded bg-slate-850 text-neon-pink font-semibold border border-slate-800"></span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div>
-                            <span class="text-[10px] text-slate-400 block font-medium">CTA Button:</span>
-                            <span id="previewCTA" class="text-neon-pink font-bold"></span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-slate-400 block font-medium">Brand Palette:</span>
-                            <div id="previewColorDots" class="flex items-center space-x-1 mt-1"></div>
-                        </div>
+                    <div>
+                        <p id="previewDescriptionText" class="text-xs text-slate-200 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800 whitespace-pre-wrap"></p>
                     </div>
 
-                    <div>
-                        <span class="text-[10px] text-slate-400 block font-medium mb-0.5">Subcopy / Terms:</span>
-                        <p id="previewTerms" class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded-lg border border-slate-800"></p>
+                    <div class="pt-2 flex items-center justify-between border-t border-slate-800/80">
+                        <span class="text-[11px] text-slate-400">Brand Color Swatches:</span>
+                        <div id="previewColorDots" class="flex items-center space-x-1.5"></div>
                     </div>
                 </div>
 
@@ -285,42 +278,34 @@
                         <h3 class="text-xs uppercase tracking-wider text-neon-cyan font-bold">Language Copies</h3>
                         <span id="previewLangCount" class="text-[10px] text-slate-400"></span>
                     </div>
-                    <div id="previewLanguageCards" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                    <div id="previewLanguageCards" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
                         <!-- Populated dynamically -->
                     </div>
                 </div>
 
             </div>
 
-            <!-- RIGHT COLUMN: Selected Dimensions & Script Task Generator (6 Cols) -->
+            <!-- RIGHT COLUMN: Checked Dimensions & Jira Handover Task Card (6 Cols) -->
             <div class="lg:col-span-6 space-y-4">
                 
-                <!-- Script Tasks Explanation Card -->
+                <!-- Jira Handover Card with Single Download Button -->
                 <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-850">
                     <div class="flex items-center space-x-2 text-neon-cyan">
-                        <i class="fa-solid fa-code text-base"></i>
-                        <h3 class="text-xs uppercase tracking-wider font-bold">Automated Designer Task Scripts</h3>
+                        <i class="fa-solid fa-file-zipper text-base"></i>
+                        <h3 class="text-xs uppercase tracking-wider font-bold">Automated Design Task Package for Jira</h3>
                     </div>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Clicking <strong>Generate Task</strong> produces two ready-to-run automation scripts for your checked dimensions:
+                        Clicking <strong>Generate Task</strong> downloads both production scripts together so stakeholders can directly attach them to the Jira task for designers:
                     </p>
                     <ul class="text-xs text-slate-400 space-y-1.5 pl-4 list-disc">
-                        <li><strong>Photoshop Script (.jsx):</strong> Prompts to create either Artboards or separate <code class="text-neon-cyan">.psb</code> files and asks to select the project folder.</li>
-                        <li><strong>Figma Script (.js):</strong> Instantly creates all checked dimensions as framed layouts in Figma.</li>
+                        <li><strong>Photoshop (.jsx):</strong> Prompts designer to choose either real <em>Artboards</em> or <em>Separate .PSB files</em> for all checked dimensions, and asks for destination folder.</li>
+                        <li><strong>Figma (.txt):</strong> A clean script in a <code class="text-neon-cyan">.txt</code> file that creates frames for all checked sizes on the active Figma page.</li>
                     </ul>
 
-                    <div class="pt-2 flex flex-wrap gap-2">
-                        <button onclick="downloadPhotoshopScript()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5">
-                            <i class="fa-solid fa-file-code text-neon-cyan"></i>
-                            <span>Download Photoshop (.jsx)</span>
-                        </button>
-                        <button onclick="downloadFigmaScript()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition-all flex items-center space-x-1.5">
-                            <i class="fa-solid fa-file-code text-neon-pink"></i>
-                            <span>Download Figma (.js)</span>
-                        </button>
-                        <button onclick="copyFigmaScriptCode()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg border border-slate-700 transition-all flex items-center space-x-1">
-                            <i class="fa-regular fa-copy"></i>
-                            <span>Copy Figma Code</span>
+                    <div class="pt-2">
+                        <button onclick="generateTaskScripts()" class="w-full py-3 bg-gradient-to-r from-neon-cyan to-neon-pink text-slate-950 font-bold text-xs rounded-xl shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-download text-sm"></i>
+                            <span>Download Both Scripts for Jira</span>
                         </button>
                     </div>
                 </div>
@@ -355,18 +340,18 @@
             <div class="space-y-3">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Language Name or Code *</label>
-                    <input type="text" id="newLanguageNameInput" class="w-full glass-input p-2.5 rounded-lg text-xs text-white focus:outline-none" placeholder="e.g. Italian (IT), Turkish (TR)">
+                    <input type="text" id="newLanguageNameInput" class="w-full glass-input p-2.5 rounded-lg text-xs text-white focus:outline-none" placeholder="e.g. German (DE), Finnish (FI), Turkish (TR)">
                 </div>
 
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1.5">Quick Suggestions:</label>
                     <div class="flex flex-wrap gap-1.5">
-                        <button type="button" onclick="setNewLangSuggestion('English (EN)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ English (EN)</button>
                         <button type="button" onclick="setNewLangSuggestion('German (DE)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ German (DE)</button>
                         <button type="button" onclick="setNewLangSuggestion('Finnish (FI)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Finnish (FI)</button>
                         <button type="button" onclick="setNewLangSuggestion('Portuguese (PT)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Portuguese (PT)</button>
                         <button type="button" onclick="setNewLangSuggestion('Spanish (ES)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Spanish (ES)</button>
                         <button type="button" onclick="setNewLangSuggestion('French (FR)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ French (FR)</button>
+                        <button type="button" onclick="setNewLangSuggestion('Norwegian (NO)')" class="text-[11px] bg-slate-850 hover:bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">+ Norwegian (NO)</button>
                     </div>
                 </div>
             </div>
@@ -374,6 +359,47 @@
             <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-800">
                 <button type="button" onclick="closeAddLanguageModal()" class="px-3 py-1.5 bg-slate-850 text-slate-300 rounded-lg text-xs hover:bg-slate-800">Cancel</button>
                 <button type="button" onclick="confirmAddLanguage()" class="px-4 py-1.5 bg-neon-cyan text-slate-950 font-bold rounded-lg text-xs hover:opacity-90">Add to List</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Format to Brand -->
+    <div id="addFormatModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel rounded-2xl max-w-md w-full p-5 border border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+                <h3 class="font-bold text-white text-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-plus text-neon-pink"></i>
+                    <span>Add Format to Brand</span>
+                </h3>
+                <button onclick="closeAddFormatModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Format Name *</label>
+                    <input type="text" id="newFormatNameInput" class="w-full glass-input p-2 rounded-lg text-xs text-white focus:outline-none" placeholder="e.g. Facebook Ad, Affiliate Hero, Twitch Banner">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Width (px) *</label>
+                        <input type="number" id="newFormatWidthInput" class="w-full glass-input p-2 rounded-lg text-xs font-mono text-neon-cyan focus:outline-none" placeholder="1200">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Height (px) *</label>
+                        <input type="number" id="newFormatHeightInput" class="w-full glass-input p-2 rounded-lg text-xs font-mono text-neon-cyan focus:outline-none" placeholder="628">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Safe Zone / Margin Notes (optional)</label>
+                    <input type="text" id="newFormatSafeZoneInput" class="w-full glass-input p-2 rounded-lg text-xs text-slate-300 focus:outline-none" placeholder="e.g. Keep CTA in center 80%">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-800">
+                <button type="button" onclick="closeAddFormatModal()" class="px-3 py-1.5 bg-slate-850 text-slate-300 rounded-lg text-xs hover:bg-slate-800">Cancel</button>
+                <button type="button" onclick="confirmAddFormat()" class="px-4 py-1.5 bg-neon-pink text-slate-950 font-bold rounded-lg text-xs hover:opacity-90">Save Format</button>
             </div>
         </div>
     </div>
@@ -526,59 +552,35 @@
                 });
             }
 
-            // Initialize default active languages if empty
+            // Load remembered languages for THIS SPECIFIC BRAND (Defaults to English only)
+            const savedLangKey = 'briefix_brand_languages_' + brand.id;
+            const storedLangs = localStorage.getItem(savedLangKey);
+            if (storedLangs) {
+                try {
+                    activeLanguages = JSON.parse(storedLangs);
+                } catch (e) {
+                    activeLanguages = [];
+                }
+            } else {
+                activeLanguages = [];
+            }
+
             if (!activeLanguages || activeLanguages.length === 0) {
-                const brandLangs = brand.languages || ["EN", "DE", "FI"];
-                const langLabels = {
-                    EN: "English (EN)",
-                    DE: "German (DE)",
-                    FI: "Finnish (FI)",
-                    PT: "Portuguese (PT)",
-                    ES: "Spanish (ES)",
-                    NO: "Norwegian (NO)",
-                    FR: "French (FR)",
-                    IT: "Italian (IT)",
-                    SV: "Swedish (SV)"
-                };
-                activeLanguages = brandLangs.map(code => ({
-                    id: 'lang_' + Math.random().toString(36).substr(2, 9),
-                    name: langLabels[code] || code,
-                    headline: "",
-                    subheading: ""
-                }));
+                // English ONLY default as requested
+                activeLanguages = [
+                    { id: 'lang_en', name: 'English (EN)', headline: '', subheading: '' }
+                ];
+                saveBrandLanguages();
             }
             renderLanguageRows();
 
-            // Render DYNAMIC INDIVIDUAL FILE DIMENSIONS FOR THIS BRAND
-            const dimContainer = document.getElementById('brandDimensionsContainer');
-            dimContainer.innerHTML = '';
+            // Render dimensions for this brand (stored in brand.dimensions)
+            renderBrandDimensionsList();
+        }
 
-            const dimensions = brand.dimensions || [];
-            document.getElementById('activeBrandFormatsCount').innerText = dimensions.length;
-
-            if (dimensions.length === 0) {
-                dimContainer.innerHTML = `
-                    <div class="p-3 text-center text-xs text-slate-500 bg-slate-900/40 rounded-lg border border-slate-800">
-                        <span>No custom dimensions configured for this brand yet.</span>
-                    </div>
-                `;
-            } else {
-                dimensions.forEach(dim => {
-                    dimContainer.innerHTML += `
-                        <label class="flex items-center justify-between text-xs text-slate-300 bg-slate-900/60 p-2 rounded-lg border border-slate-800 cursor-pointer hover:border-slate-700 transition-colors">
-                            <div class="flex items-center space-x-2.5 overflow-hidden">
-                                <input type="checkbox" name="format" value="${escapeHtml(dim.name)} (${dim.width}x${dim.height})" data-name="${escapeHtml(dim.name)}" data-width="${dim.width}" data-height="${dim.height}" data-safezone="${escapeHtml(dim.safeZone || '')}" ${dim.defaultSelected !== false ? 'checked' : ''} class="rounded border-slate-700 text-neon-pink focus:ring-0">
-                                <div class="truncate">
-                                    <span class="font-medium text-slate-200 block text-xs truncate">${escapeHtml(dim.name)}</span>
-                                    ${dim.safeZone ? `<span class="text-[10px] text-slate-400 block truncate">${escapeHtml(dim.safeZone)}</span>` : ''}
-                                </div>
-                            </div>
-                            <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-850 text-neon-pink border border-slate-800 ml-2 flex-shrink-0">
-                                ${dim.width}×${dim.height}
-                            </span>
-                        </label>
-                    `;
-                });
+        function saveBrandLanguages() {
+            if (selectedBrand) {
+                localStorage.setItem('briefix_brand_languages_' + selectedBrand.id, JSON.stringify(activeLanguages));
             }
         }
 
@@ -590,7 +592,7 @@
             if (activeLanguages.length === 0) {
                 container.innerHTML = `
                     <div class="p-3 text-center text-xs text-slate-500 bg-slate-900/40 rounded-lg border border-slate-800">
-                        <span>No languages added yet. Click "+ Add Language" above.</span>
+                        <span>No languages added. Click "+ Add Language" to add one.</span>
                     </div>
                 `;
                 return;
@@ -626,11 +628,13 @@
         function updateLanguageField(index, field, value) {
             if (activeLanguages[index]) {
                 activeLanguages[index][field] = value;
+                saveBrandLanguages();
             }
         }
 
         function removeLanguageRow(index) {
             activeLanguages.splice(index, 1);
+            saveBrandLanguages();
             renderLanguageRows();
         }
 
@@ -662,9 +666,104 @@
                 subheading: ""
             });
 
+            saveBrandLanguages();
             closeAddLanguageModal();
             renderLanguageRows();
             showToast(`Added ${name}!`);
+        }
+
+        // ==========================================
+        // DYNAMIC BRAND DIMENSIONS (Add / Remove per brand)
+        // ==========================================
+
+        function renderBrandDimensionsList() {
+            const dimContainer = document.getElementById('brandDimensionsContainer');
+            dimContainer.innerHTML = '';
+
+            const dimensions = selectedBrand.dimensions || [];
+            document.getElementById('activeBrandFormatsCount').innerText = dimensions.length;
+
+            if (dimensions.length === 0) {
+                dimContainer.innerHTML = `
+                    <div class="p-3 text-center text-xs text-slate-500 bg-slate-900/40 rounded-lg border border-slate-800">
+                        <span>No dimensions yet for ${escapeHtml(selectedBrand.name)}. Click "+ Add Format" above.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            dimensions.forEach((dim, idx) => {
+                dimContainer.innerHTML += `
+                    <div class="flex items-center justify-between text-xs text-slate-300 bg-slate-900/60 p-2 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors group">
+                        <label class="flex items-center space-x-2.5 overflow-hidden flex-1 cursor-pointer">
+                            <input type="checkbox" name="format" value="${escapeHtml(dim.name)} (${dim.width}x${dim.height})" data-name="${escapeHtml(dim.name)}" data-width="${dim.width}" data-height="${dim.height}" data-safezone="${escapeHtml(dim.safeZone || '')}" ${dim.defaultSelected !== false ? 'checked' : ''} class="rounded border-slate-700 text-neon-pink focus:ring-0">
+                            <div class="truncate">
+                                <span class="font-medium text-slate-200 block text-xs truncate">${escapeHtml(dim.name)}</span>
+                                ${dim.safeZone ? `<span class="text-[10px] text-slate-400 block truncate">${escapeHtml(dim.safeZone)}</span>` : ''}
+                            </div>
+                        </label>
+                        <div class="flex items-center space-x-2 ml-2 flex-shrink-0">
+                            <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-850 text-neon-pink border border-slate-800">
+                                ${dim.width}×${dim.height}
+                            </span>
+                            <button type="button" onclick="removeFormatFromBrand(${idx})" class="text-slate-500 hover:text-rose-400 p-1 text-xs transition-colors" title="Remove format from ${escapeHtml(selectedBrand.name)}">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openAddFormatModal() {
+            document.getElementById('newFormatNameInput').value = '';
+            document.getElementById('newFormatWidthInput').value = '';
+            document.getElementById('newFormatHeightInput').value = '';
+            document.getElementById('newFormatSafeZoneInput').value = '';
+            document.getElementById('addFormatModal').classList.remove('hidden');
+        }
+
+        function closeAddFormatModal() {
+            document.getElementById('addFormatModal').classList.add('hidden');
+        }
+
+        function confirmAddFormat() {
+            const name = document.getElementById('newFormatNameInput').value.trim();
+            const width = parseInt(document.getElementById('newFormatWidthInput').value);
+            const height = parseInt(document.getElementById('newFormatHeightInput').value);
+            const safeZone = document.getElementById('newFormatSafeZoneInput').value.trim();
+
+            if (!name || !width || !height) {
+                showToast("Please provide Format Name, Width, and Height", true);
+                return;
+            }
+
+            if (!selectedBrand.dimensions) selectedBrand.dimensions = [];
+
+            selectedBrand.dimensions.push({
+                id: 'dim_' + Date.now(),
+                name: name,
+                width: width,
+                height: height,
+                safeZone: safeZone || 'Standard safe zone',
+                defaultSelected: true
+            });
+
+            // Save brand's updated dimensions permanently in BrandStorage
+            BrandStorage.saveBrand(selectedBrand);
+            closeAddFormatModal();
+            renderBrandDimensionsList();
+            showToast(`Added ${name} to ${selectedBrand.name}!`);
+        }
+
+        function removeFormatFromBrand(idx) {
+            if (!selectedBrand || !selectedBrand.dimensions) return;
+            const removed = selectedBrand.dimensions[idx];
+            selectedBrand.dimensions.splice(idx, 1);
+            // Save updated dimensions for this brand permanently
+            BrandStorage.saveBrand(selectedBrand);
+            renderBrandDimensionsList();
+            showToast(`Removed format: ${removed?.name || ''}`);
         }
 
         function toggleAllFormats(checked) {
@@ -682,8 +781,7 @@
         function compileCampaignData() {
             const brand = selectedBrand || BrandStorage.getById(BrandStorage.getSelectedBrandId());
             const title = document.getElementById('campaignTitleInput').value.trim() || `${brand.name} Campaign`;
-            const cta = document.getElementById('campaignCTAInput').value.trim() || "CLAIM NOW";
-            const terms = document.getElementById('campaignTermsInput').value.trim() || "18+ only. Gamble responsibly. Terms and conditions apply.";
+            const description = document.getElementById('campaignDescriptionInput').value.trim() || `Promotional campaign for ${brand.name}.`;
 
             // Gather checked formats
             const formatCheckboxes = document.querySelectorAll('input[name="format"]:checked');
@@ -707,8 +805,7 @@
 
             compiledCampaign = {
                 campaignTitle: title,
-                cta: cta,
-                subcopy: terms,
+                description: description,
                 brandName: brand.name,
                 market: brand.market || 'Global',
                 languages: JSON.parse(JSON.stringify(activeLanguages)),
@@ -727,8 +824,7 @@
 
             document.getElementById('previewCampaignTitle').innerText = compiledCampaign.campaignTitle;
             document.getElementById('previewBrandMarketBadge').innerText = `${compiledCampaign.brandName} • ${compiledCampaign.market}`;
-            document.getElementById('previewCTA').innerText = compiledCampaign.cta;
-            document.getElementById('previewTerms').innerText = compiledCampaign.subcopy;
+            document.getElementById('previewDescriptionText').innerText = compiledCampaign.description;
 
             // Color dots
             const colorContainer = document.getElementById('previewColorDots');
@@ -783,19 +879,25 @@
         }
 
         // ==========================================
-        // SCRIPT GENERATORS (Photoshop & Figma)
+        // SINGLE TASK GENERATION (Downloads Both for Jira)
         // ==========================================
 
         function generateTaskScripts() {
             if (!compiledCampaign) return;
-            downloadPhotoshopScript();
+
+            // 1. Download Photoshop Script (.jsx)
+            const psContent = getPhotoshopScriptContent();
+            downloadFile(psContent, `${compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_')}_Photoshop_Setup.jsx`, 'text/plain');
+
+            // 2. Download Figma Script (.txt as requested)
             setTimeout(() => {
-                downloadFigmaScript();
-                showToast("Generated and downloaded Photoshop & Figma scripts!");
+                const figmaContent = getFigmaScriptContent();
+                downloadFile(figmaContent, `${compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_')}_Figma_Setup.txt`, 'text/plain');
+                showToast("Downloaded Photoshop (.jsx) and Figma (.txt) for Jira!");
             }, 300);
         }
 
-        // Photoshop ExtendScript (.jsx) Generator
+        // Photoshop ExtendScript (.jsx) Generator (Fixed real Artboards ActionManager + Separate PSB)
         function getPhotoshopScriptContent() {
             if (!compiledCampaign) return "";
             const fmts = JSON.stringify(compiledCampaign.formats);
@@ -838,7 +940,7 @@ app.bringToFront();
     modePanel.margins = 15;
     modePanel.spacing = 10;
 
-    var rbArtboards = modePanel.add("radiobutton", undefined, "Option 1: Single Master Document with Artboards");
+    var rbArtboards = modePanel.add("radiobutton", undefined, "Option 1: Single Master Document with Artboards (All Sizes)");
     var rbSeparate = modePanel.add("radiobutton", undefined, "Option 2: Separate .PSB Files for each dimension");
     rbArtboards.value = true;
 
@@ -869,8 +971,30 @@ app.bringToFront();
         createSeparatePsbDocs(campaignName, formats, projectFolder);
     }
 
+    // ActionManager function to create genuine Photoshop Artboards
+    function makeArtboard(name, left, top, width, height) {
+        var desc = new ActionDescriptor();
+        var ref = new ActionReference();
+        ref.putClass(stringIDToTypeID("artboardSection"));
+        desc.putReference(stringIDToTypeID("null"), ref);
+
+        var artboardDesc = new ActionDescriptor();
+        artboardDesc.putString(stringIDToTypeID("name"), name);
+
+        var rectDesc = new ActionDescriptor();
+        rectDesc.putDouble(stringIDToTypeID("top"), top);
+        rectDesc.putDouble(stringIDToTypeID("left"), left);
+        rectDesc.putDouble(stringIDToTypeID("bottom"), top + height);
+        rectDesc.putDouble(stringIDToTypeID("right"), left + width);
+        artboardDesc.putObject(stringIDToTypeID("artboardRect"), stringIDToTypeID("classFloatRect"), rectDesc);
+
+        desc.putObject(stringIDToTypeID("artboard"), stringIDToTypeID("artboardSection"), artboardDesc);
+        executeAction(stringIDToTypeID("make"), desc, DialogModes.NO);
+    }
+
     function createMasterArtboardDoc(name, fmts, folder) {
         var base = fmts[0];
+        // Create base document
         var doc = app.documents.add(
             UnitValue(base.width, "px"),
             UnitValue(base.height, "px"),
@@ -880,14 +1004,39 @@ app.bringToFront();
             DocumentFill.TRANSPARENT
         );
 
+        var x = 0;
+        var y = 0;
+        var rowH = 0;
+        var spacing = 160;
+        var maxRowW = 10000;
+
         for (var i = 0; i < fmts.length; i++) {
             var f = fmts[i];
-            var group = doc.layerSets.add();
-            group.name = f.formatName + " (" + f.width + "x" + f.height + ")";
+            var w = Number(f.width) || 1080;
+            var h = Number(f.height) || 1080;
 
-            var note = group.artLayers.add();
-            note.name = "Safe Zone: " + (f.safeZoneNotes || "Standard");
+            if (x + w > maxRowW && x > 0) {
+                x = 0;
+                y += rowH + spacing;
+                rowH = 0;
+            }
+
+            // Create genuine Photoshop artboard
+            makeArtboard(f.formatName + " (" + w + "x" + h + ")", x, y, w, h);
+
+            x += w + spacing;
+            if (h > rowH) rowH = h;
         }
+
+        // Clean up initial default layer if still present
+        try {
+            for (var k = doc.layers.length - 1; k >= 0; k--) {
+                if (doc.layers[k].typename === "ArtLayer" && (doc.layers[k].name === "Layer 1" || doc.layers[k].name === "Background")) {
+                    doc.layers[k].remove();
+                    break;
+                }
+            }
+        } catch(err) {}
 
         var fileName = name.replace(/[^a-zA-Z0-9_-]/g, "_") + "_Master.psb";
         var saveFile = new File(folder + "/" + fileName);
@@ -896,7 +1045,7 @@ app.bringToFront();
         psbOpts.layers = true;
         doc.saveAs(saveFile, psbOpts, true, Extension.LOWERCASE);
 
-        alert("✅ Master document created with " + fmts.length + " format groups!\\nSaved: " + saveFile.fsName);
+        alert("✅ Master document successfully created with " + fmts.length + " Artboards!\\nSaved: " + saveFile.fsName);
     }
 
     function createSeparatePsbDocs(name, fmts, folder) {
@@ -937,27 +1086,30 @@ app.bringToFront();
 `;
         }
 
-        function downloadPhotoshopScript() {
-            if (!compiledCampaign) return;
-            const content = getPhotoshopScriptContent();
-            downloadFile(content, `${compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_')}_Photoshop_Setup.jsx`, 'text/plain');
-        }
-
-        // Figma Script (.js) Generator
+        // Figma Script (.txt file for Jira) - Synchronous reliable frame generation
         function getFigmaScriptContent() {
             if (!compiledCampaign) return "";
-            const fmts = JSON.stringify(compiledCampaign.formats);
+            const fmts = JSON.stringify(compiledCampaign.formats, null, 2);
             const title = compiledCampaign.campaignTitle.replace(/"/g, '\\"');
             const brand = compiledCampaign.brandName.replace(/"/g, '\\"');
 
-            return `// Briefix Figma Setup Script
+            return `// =====================================================================
+// Briefix Figma Setup Script (For Jira Handover)
 // Campaign: ${title}
 // Brand: ${brand}
-// Run in Figma: Plugins > Development > Open Console or paste in Developer Console
+// =====================================================================
+// HOW DESIGNERS RUN THIS IN FIGMA:
+// 1. Open your Figma Project / File.
+// 2. Open Console:
+//    - Windows: Press Ctrl + Shift + I -> Click "Console" tab
+//    - Mac: Press Cmd + Option + I -> Click "Console" tab
+//    (Or use plugins like "Scripter" or "Run JavaScript")
+// 3. Paste the entire code below into the Console and press Enter!
+// =====================================================================
 
 (function() {
     if (typeof figma === 'undefined') {
-        alert("Run this script inside Figma (Plugin or Developer Console).");
+        alert("Please run this script inside Figma (Developer Console or Scripter Plugin).");
         return;
     }
 
@@ -965,31 +1117,34 @@ app.bringToFront();
     const brand = "${brand}";
     const formats = ${fmts};
 
+    // Rename current page to campaign name
     figma.currentPage.name = brand + " - " + campaignName;
 
-    let xOffset = 0;
-    let yOffset = 0;
-    let maxHeightInRow = 0;
+    let x = 0;
+    let y = 0;
+    let rowHeight = 0;
     const spacing = 120;
     const maxRowWidth = 8000;
-    const createdFrames = [];
+    const frames = [];
 
-    formats.forEach(function(fmt) {
-        const w = parseInt(fmt.width) || 1080;
-        const h = parseInt(fmt.height) || 1080;
+    for (let i = 0; i < formats.length; i++) {
+        const fmt = formats[i];
+        const w = Number(fmt.width) || 1080;
+        const h = Number(fmt.height) || 1080;
 
-        if (xOffset + w > maxRowWidth && xOffset > 0) {
-            xOffset = 0;
-            yOffset += maxHeightInRow + spacing + 60;
-            maxHeightInRow = 0;
+        if (x + w > maxRowWidth && x > 0) {
+            x = 0;
+            y += rowHeight + spacing + 60;
+            rowHeight = 0;
         }
 
+        // Create frame synchronously
         const frame = figma.createFrame();
         frame.name = fmt.formatName + " (" + w + "x" + h + ")";
         frame.resize(w, h);
-        frame.x = xOffset;
-        frame.y = yOffset;
-        frame.fills = [{ type: 'SOLID', color: { r: 0.05, g: 0.07, b: 0.1 } }];
+        frame.x = x;
+        frame.y = y;
+        frame.fills = [{ type: 'SOLID', color: { r: 0.07, g: 0.09, b: 0.14 } }];
         frame.clipsContent = true;
 
         if (fmt.safeZoneNotes) {
@@ -997,31 +1152,21 @@ app.bringToFront();
         }
 
         figma.currentPage.appendChild(frame);
-        createdFrames.push(frame);
+        frames.push(frame);
 
-        maxHeightInRow = Math.max(maxHeightInRow, h);
-        xOffset += w + spacing;
-    });
+        x += w + spacing;
+        if (h > rowHeight) rowHeight = h;
+    }
 
-    if (createdFrames.length > 0) {
-        figma.viewport.scrollAndZoomIntoView(createdFrames);
-        figma.notify("✅ Briefix: Created " + createdFrames.length + " frames for " + campaignName);
+    if (frames.length > 0) {
+        figma.viewport.scrollAndZoomIntoView(frames);
+        if (figma.notify) {
+            figma.notify("✅ Briefix: Successfully created " + frames.length + " frames for " + campaignName);
+        }
+        console.log("✅ Successfully created " + frames.length + " frames in Figma!");
     }
 })();
 `;
-        }
-
-        function downloadFigmaScript() {
-            if (!compiledCampaign) return;
-            const content = getFigmaScriptContent();
-            downloadFile(content, `${compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_')}_Figma_Setup.js`, 'application/javascript');
-        }
-
-        function copyFigmaScriptCode() {
-            const content = getFigmaScriptContent();
-            navigator.clipboard.writeText(content).then(() => {
-                showToast("Figma script copied! Paste into Figma console.");
-            });
         }
 
         function downloadFile(content, fileName, mimeType) {
@@ -1033,7 +1178,7 @@ app.bringToFront();
             document.body.appendChild(a);
             a.click();
             a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 500);
+            setTimeout(() => URL.revokeObjectURL(url), 600);
         }
 
         // History Management
@@ -1098,10 +1243,10 @@ app.bringToFront();
                 selectedBrand = brand;
                 
                 document.getElementById('campaignTitleInput').value = compiledCampaign.campaignTitle || '';
-                document.getElementById('campaignCTAInput').value = compiledCampaign.cta || '';
-                document.getElementById('campaignTermsInput').value = compiledCampaign.subcopy || '';
+                document.getElementById('campaignDescriptionInput').value = compiledCampaign.description || '';
                 if (compiledCampaign.languages) {
                     activeLanguages = compiledCampaign.languages;
+                    saveBrandLanguages();
                 }
 
                 closeHistoryModal();

@@ -11,28 +11,20 @@ Briefix provides a streamlined 3-step studio to eliminate back-and-forth between
 
 1. **Step 1: Choose Brand**  
    - Distraction-free, minimal brand selection with instant real-time search.
-   - Brand profiles and custom dimensions are managed exclusively inside `editor.html`.
+   - Brand profiles and custom dimensions can be configured anytime inside `editor.html` or directly added/removed per brand in Step 2.
 
 2. **Step 2: Campaign Brief & Dimensions (Screen-Fitted UX)**  
    - High-density, single-screen layout with no vertical scrolling needed.
-   - Campaign Title, CTA, and Subcopy / Terms.
-   - Target Languages with optional **Headline** and **Sub-heading** lines.
-   - Checked deliverable dimensions specific to the selected brand.
+   - Campaign Title and an expanded **Description & Notes** area.
+   - **Target Languages**: Default is **English (EN)** only. Add or remove languages as needed; all entered languages and copy are automatically **remembered per brand**.
+   - **Per-Brand Formats**: Add new custom dimensions or delete unwanted ones right on the list; all changes are **remembered per brand**.
    - Click **Next: Campaign Preview & Export** to proceed.
 
-3. **Step 3: Campaign Preview & Task Automation**  
+3. **Step 3: Campaign Preview & 1-Button Jira Task Export**  
    - Dedicated review page showing all regional copies, brand color swatches, and dimension safe zones.
-   - **Generate Task**: Produces two automation scripts for designers:
-     - 🎨 **Photoshop ExtendScript (`.jsx`)**: Prompts user to choose between **Artboards** or **Separate .PSB files** for each checked dimension, and asks to select the local project folder.
-     - ❖ **Figma Script (`.js`)**: Automatically creates all checked dimension frames in Figma organized with spacing, dark fills, and safe-zone data.
-
----
-
-## 📐 Brand & Dimension Studio (`editor.html`)
-
-- Brand creation and file dimension customization are contained exclusively in `editor.html`.
-- Add, edit, or duplicate brands with bespoke width & height asset dimensions, safe-zone guidelines, and custom color tokens.
-- Export and import brand libraries via JSON.
+   - **Single Download Button**: Generates both design automation files together for direct attachment to Jira:
+     - 🎨 **Photoshop ExtendScript (`.jsx`)**: Prompts user to choose between native **Artboards** (with ActionManager support across all sizes) or **Separate .PSB files** for each checked dimension, and asks to select the destination folder.
+     - ❖ **Figma Script (`.txt`)**: A clean synchronous script in a `.txt` file ready for designers to paste into Figma's Developer Console or Scripter plugin, instantly generating all frames.
 
 ---
 
