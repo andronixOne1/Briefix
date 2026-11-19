@@ -97,9 +97,9 @@
                 </button>
             </div>
 
-            <!-- History Action (Strictly NO brand editor links outside editor.html) -->
-            <div class="flex items-center space-x-2">
-                <button onclick="openHistoryModal()" class="relative p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700 text-xs" title="Campaign History">
+            <!-- History Action (Hidden on first page, visible only on brand pages) -->
+            <div class="flex items-center space-x-2 min-w-[36px] justify-end">
+                <button id="historyNavBtn" onclick="openHistoryModal()" class="relative p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700 text-xs hidden" title="Campaign History">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span id="historyBadge" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-neon-pink text-[10px] flex items-center justify-center text-white font-bold hidden">0</span>
                 </button>
@@ -141,10 +141,11 @@
                 </div>
             </div>
 
-            <!-- Active Status Indicator (No Color Dots) -->
-            <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-[11px] text-slate-300 font-medium">Studio Ready</span>
+            <!-- Estimated Time to Complete Live Indicator -->
+            <div class="flex items-center space-x-2 bg-slate-900/90 px-3 py-1.5 rounded-lg border border-slate-800">
+                <i class="fa-solid fa-stopwatch text-emerald-400 text-xs"></i>
+                <span class="text-[11px] text-slate-400">Est. Time to Complete:</span>
+                <span id="step2HeaderEstTimeBadge" class="text-xs font-bold font-mono text-emerald-400">0 days</span>
             </div>
         </div>
 
@@ -209,37 +210,56 @@
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: Required Asset Formats & Next CTA (5 Cols) -->
+            <!-- RIGHT COLUMN: Task Types, Required Asset Formats & Next CTA (5 Cols) -->
             <div class="lg:col-span-5 glass-panel rounded-2xl p-4 border border-slate-800 shadow-xl flex flex-col justify-between space-y-3">
                 
-                <div>
-                    <!-- Formats Header with Add Format & Select All -->
-                    <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-semibold text-white flex items-center space-x-1">
-                                <i class="fa-solid fa-ruler-combined text-neon-pink"></i>
-                                <span>Formats (<span id="activeBrandFormatsCount">0</span>)</span>
+                <div class="space-y-3">
+                    <!-- TASK TYPES & QUANTITIES -->
+                    <div>
+                        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                            <span class="text-xs font-semibold text-white flex items-center space-x-1.5">
+                                <i class="fa-solid fa-stopwatch text-emerald-400"></i>
+                                <span>Task Types & Amount</span>
                             </span>
-                            <button type="button" onclick="openAddFormatModal()" class="px-2 py-0.5 bg-neon-pink/10 hover:bg-neon-pink/20 border border-neon-pink/30 text-neon-pink rounded text-[11px] font-semibold flex items-center space-x-1 transition-all" title="Add a new custom dimension for this brand">
-                                <i class="fa-solid fa-plus text-[9px]"></i>
-                                <span>Add Format</span>
-                            </button>
+                            <div class="flex items-center space-x-2">
+                                <span id="step2EstTotalDisplay" class="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">0 days</span>
+                                <button type="button" onclick="resetTaskTypeAmounts()" class="text-[10px] text-slate-400 hover:text-white hover:underline">Clear</button>
+                            </div>
                         </div>
-                        <div class="space-x-1.5 text-[11px]">
-                            <button type="button" onclick="toggleAllFormats(true)" class="text-neon-cyan hover:underline">All</button>
-                            <span class="text-slate-600">|</span>
-                            <button type="button" onclick="toggleAllFormats(false)" class="text-slate-400 hover:underline">Clear</button>
+                        <div id="taskTypesSelectorContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-2 max-h-[175px] overflow-y-auto pr-1">
+                            <!-- Populated dynamically from TaskTypeStorage -->
                         </div>
                     </div>
 
-                    <!-- Scrollable Dimensions Checklist (Add/Remove per brand) -->
-                    <div id="brandDimensionsContainer" class="space-y-1.5 overflow-y-auto max-h-[46vh] sm:max-h-[360px] pr-1 pt-2">
-                        <!-- Populated dynamically from Brand dimensions -->
+                    <!-- Formats Header with Add Format & Select All -->
+                    <div>
+                        <div class="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-semibold text-white flex items-center space-x-1">
+                                    <i class="fa-solid fa-ruler-combined text-neon-pink"></i>
+                                    <span>Formats (<span id="activeBrandFormatsCount">0</span>)</span>
+                                </span>
+                                <button type="button" onclick="openAddFormatModal()" class="px-2 py-0.5 bg-neon-pink/10 hover:bg-neon-pink/20 border border-neon-pink/30 text-neon-pink rounded text-[11px] font-semibold flex items-center space-x-1 transition-all" title="Add a new custom dimension for this brand">
+                                    <i class="fa-solid fa-plus text-[9px]"></i>
+                                    <span>Add Format</span>
+                                </button>
+                            </div>
+                            <div class="space-x-1.5 text-[11px]">
+                                <button type="button" onclick="toggleAllFormats(true)" class="text-neon-cyan hover:underline">All</button>
+                                <span class="text-slate-600">|</span>
+                                <button type="button" onclick="toggleAllFormats(false)" class="text-slate-400 hover:underline">Clear</button>
+                            </div>
+                        </div>
+
+                        <!-- Scrollable Dimensions Checklist (Add/Remove per brand) -->
+                        <div id="brandDimensionsContainer" class="space-y-1.5 overflow-y-auto max-h-[26vh] sm:max-h-[205px] pr-1 pt-2">
+                            <!-- Populated dynamically from Brand dimensions -->
+                        </div>
                     </div>
                 </div>
 
                 <!-- NEXT BUTTON (To Campaign Preview & Export) -->
-                <button type="button" onclick="proceedToPreview()" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 transition-all shadow-lg neon-glow-cyan flex items-center justify-center space-x-2 cursor-pointer mt-2">
+                <button type="button" onclick="proceedToPreview()" class="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 transition-all shadow-lg neon-glow-cyan flex items-center justify-center space-x-2 cursor-pointer mt-1">
                     <span>Next: Campaign Preview & Export</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -272,11 +292,22 @@
                 </div>
             </div>
 
-            <!-- SINGLE GENERATE TASK BUTTON -->
-            <button onclick="generateTaskScripts()" class="px-5 py-2.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 text-xs shadow-lg neon-glow-cyan flex items-center space-x-2">
-                <i class="fa-solid fa-bolt text-sm"></i>
-                <span>Generate Task (Photoshop .jsx & Figma .txt)</span>
-            </button>
+            <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+                <!-- Estimated Time to Complete Badge -->
+                <div class="px-3.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center space-x-2">
+                    <i class="fa-solid fa-stopwatch text-emerald-400 text-xs"></i>
+                    <div class="leading-tight">
+                        <span class="block text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Est. Time to Complete</span>
+                        <span id="previewHeaderEstTime" class="text-xs font-bold font-mono text-emerald-400">0 days</span>
+                    </div>
+                </div>
+
+                <!-- SINGLE GENERATE TASK BUTTON -->
+                <button onclick="generateTaskScripts()" class="px-5 py-2.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 text-xs shadow-lg neon-glow-cyan flex items-center space-x-2">
+                    <i class="fa-solid fa-bolt text-sm"></i>
+                    <span>Generate Task (Photoshop .jsx & Figma .txt)</span>
+                </button>
+            </div>
         </div>
 
         <!-- Preview Grid Layout -->
@@ -321,16 +352,30 @@
 
             </div>
 
-            <!-- RIGHT COLUMN: Checked Dimensions (6 Cols) -->
+            <!-- RIGHT COLUMN: Task Types Estimate & Checked Dimensions (6 Cols) -->
             <div class="lg:col-span-6 space-y-4">
                 
+                <!-- Task Types & Estimated Time Card -->
+                <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <h3 class="text-xs uppercase tracking-wider text-emerald-400 font-bold flex items-center space-x-1.5">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <span>Task Scope & Estimated Delivery</span>
+                        </h3>
+                        <span id="previewTotalEstDays" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">0 days</span>
+                    </div>
+                    <div id="previewTaskTypesList" class="space-y-2">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
                 <!-- Checked Dimensions Summary Card -->
                 <div class="glass-panel rounded-2xl p-5 border border-slate-800 space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
                         <h3 class="text-xs uppercase tracking-wider text-neon-pink font-bold">Checked Deliverables (<span id="previewFormatsCount">0</span>)</h3>
                         <span class="text-[10px] text-slate-400">Production Formats</span>
                     </div>
-                    <div id="previewFormatsList" class="space-y-2 max-h-[520px] overflow-y-auto pr-1">
+                    <div id="previewFormatsList" class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
                         <!-- Populated dynamically -->
                     </div>
                 </div>
@@ -548,6 +593,7 @@
         let currentStep = 1;
         let selectedBrand = null;
         let activeLanguages = [];
+        let taskTypeAmounts = {};
         let compiledCampaign = null;
 
         // Initialize on load
@@ -571,6 +617,7 @@
             const tab1 = document.getElementById('stepTab-1');
             const tab2 = document.getElementById('stepTab-2');
             const tab3 = document.getElementById('stepTab-3');
+            const historyNavBtn = document.getElementById('historyNavBtn');
 
             // Reset tab styles
             [tab1, tab2, tab3].forEach(t => {
@@ -581,6 +628,7 @@
                 step1Sec.classList.remove('hidden');
                 step2Sec.classList.add('hidden');
                 step3Sec.classList.add('hidden');
+                if (historyNavBtn) historyNavBtn.classList.add('hidden');
                 tab1.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 renderStep1Brands();
             } else if (step === 2) {
@@ -590,6 +638,7 @@
                 step1Sec.classList.add('hidden');
                 step2Sec.classList.remove('hidden');
                 step3Sec.classList.add('hidden');
+                if (historyNavBtn) historyNavBtn.classList.remove('hidden');
                 tab2.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 setupStep2WithBrand(selectedBrand);
             } else if (step === 3) {
@@ -601,6 +650,7 @@
                 step1Sec.classList.add('hidden');
                 step2Sec.classList.add('hidden');
                 step3Sec.classList.remove('hidden');
+                if (historyNavBtn) historyNavBtn.classList.remove('hidden');
                 tab3.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 renderStep3Preview();
             }
@@ -1148,8 +1198,109 @@
             }
             renderLanguageRows();
 
+            // Render task types & estimated delivery time
+            renderTaskTypesSelector();
+
             // Render dimensions for this brand (stored in brand.dimensions)
             renderBrandDimensionsList();
+        }
+
+        // ==========================================
+        // TASK TYPES & ESTIMATED DELIVERY CALCULATION
+        // ==========================================
+        function renderTaskTypesSelector() {
+            const container = document.getElementById('taskTypesSelectorContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const types = TaskTypeStorage.getAll();
+            if (types.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-[11px] text-slate-500 py-3">No task types configured.</div>`;
+                updateEstimatedDeliveryUI();
+                return;
+            }
+
+            types.forEach(type => {
+                const amount = Math.max(0, parseInt(taskTypeAmounts[type.id]) || 0);
+                const isActive = amount > 0;
+                const unitDaysText = TaskTypeStorage.formatDays(type.days);
+
+                const card = document.createElement('div');
+                card.className = `flex items-center justify-between px-2.5 py-1.5 rounded-lg border transition-all ${
+                    isActive
+                        ? 'bg-emerald-950/30 border-emerald-500/50 text-white'
+                        : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700'
+                }`;
+                card.innerHTML = `
+                    <div class="min-w-0 pr-1.5">
+                        <span class="text-[11px] font-semibold block truncate leading-tight ${isActive ? 'text-white' : 'text-slate-200'}" title="${escapeHtml(type.name)}">${escapeHtml(type.name)}</span>
+                        <span class="text-[10px] font-mono ${isActive ? 'text-emerald-400' : 'text-slate-500'} block leading-tight">${unitDaysText} / ea</span>
+                    </div>
+                    <div class="flex items-center space-x-1 flex-shrink-0">
+                        <button type="button" onclick="adjustTaskTypeAmount('${type.id}', -1)" class="w-5 h-5 rounded bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center text-[10px] transition-colors" title="Decrease">
+                            <i class="fa-solid fa-minus text-[8px]"></i>
+                        </button>
+                        <input type="number" min="0" value="${amount}" onchange="setTaskTypeAmount('${type.id}', this.value)" class="w-8 text-center bg-slate-950/80 border border-slate-700/80 rounded py-0.5 text-[11px] font-mono font-bold ${isActive ? 'text-emerald-400' : 'text-slate-400'} focus:outline-none focus:border-neon-cyan">
+                        <button type="button" onclick="adjustTaskTypeAmount('${type.id}', 1)" class="w-5 h-5 rounded bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center text-[10px] transition-colors" title="Increase">
+                            <i class="fa-solid fa-plus text-[8px]"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            updateEstimatedDeliveryUI();
+        }
+
+        function adjustTaskTypeAmount(typeId, delta) {
+            const current = Math.max(0, parseInt(taskTypeAmounts[typeId]) || 0);
+            const next = Math.max(0, current + delta);
+            taskTypeAmounts[typeId] = next;
+            renderTaskTypesSelector();
+        }
+
+        function setTaskTypeAmount(typeId, val) {
+            const parsed = Math.max(0, parseInt(val) || 0);
+            taskTypeAmounts[typeId] = parsed;
+            renderTaskTypesSelector();
+        }
+
+        function resetTaskTypeAmounts() {
+            taskTypeAmounts = {};
+            renderTaskTypesSelector();
+        }
+
+        function calculateEstimatedDelivery() {
+            const types = TaskTypeStorage.getAll();
+            const items = [];
+            let totalDays = 0;
+
+            types.forEach(type => {
+                const amount = Math.max(0, parseInt(taskTypeAmounts[type.id]) || 0);
+                if (amount > 0) {
+                    const unitDays = parseFloat(type.days) || 0;
+                    const subtotalDays = Math.round(amount * unitDays * 100) / 100;
+                    totalDays = Math.round((totalDays + subtotalDays) * 100) / 100;
+                    items.push({
+                        id: type.id,
+                        name: type.name,
+                        days: unitDays,
+                        amount: amount,
+                        subtotalDays: subtotalDays
+                    });
+                }
+            });
+
+            return { items, totalDays };
+        }
+
+        function updateEstimatedDeliveryUI() {
+            const { totalDays } = calculateEstimatedDelivery();
+            const formatted = TaskTypeStorage.formatDays(totalDays);
+            const headerBadge = document.getElementById('step2HeaderEstTimeBadge');
+            const totalBadge = document.getElementById('step2EstTotalDisplay');
+            if (headerBadge) headerBadge.innerText = formatted;
+            if (totalBadge) totalBadge.innerText = formatted;
         }
 
         function saveBrandLanguages() {
@@ -1383,6 +1534,8 @@
                 return false;
             }
 
+            const deliveryEstimate = calculateEstimatedDelivery();
+
             compiledCampaign = {
                 id: 'camp_' + Date.now(),
                 createdAt: new Date().toISOString(),
@@ -1393,7 +1546,9 @@
                 brandLogo: brand.logo || null,
                 market: brand.market || 'Global',
                 languages: JSON.parse(JSON.stringify(activeLanguages)),
-                formats: selectedFormats
+                formats: selectedFormats,
+                taskTypes: deliveryEstimate.items,
+                estimatedDays: deliveryEstimate.totalDays
             };
 
             // Save to Brand-Specific History
@@ -1408,6 +1563,33 @@
             document.getElementById('previewCampaignTitle').innerText = compiledCampaign.campaignTitle;
             document.getElementById('previewBrandMarketBadge').innerText = `${compiledCampaign.brandName} • ${compiledCampaign.market}`;
             document.getElementById('previewDescriptionText').innerText = compiledCampaign.description;
+
+            // Task Types & Estimated Time to Complete
+            const estDays = compiledCampaign.estimatedDays || 0;
+            const estText = TaskTypeStorage.formatDays(estDays);
+            const headerEstEl = document.getElementById('previewHeaderEstTime');
+            const totalEstEl = document.getElementById('previewTotalEstDays');
+            if (headerEstEl) headerEstEl.innerText = estText;
+            if (totalEstEl) totalEstEl.innerText = estText;
+
+            const typesListEl = document.getElementById('previewTaskTypesList');
+            if (typesListEl) {
+                const taskTypes = compiledCampaign.taskTypes || [];
+                if (taskTypes.length === 0) {
+                    typesListEl.innerHTML = `<p class="text-xs text-slate-500 italic">No task types selected.</p>`;
+                } else {
+                    typesListEl.innerHTML = taskTypes.map(t => `
+                        <div class="bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-mono font-bold border border-emerald-500/30">${t.amount}×</span>
+                                <span class="font-semibold text-white">${escapeHtml(t.name)}</span>
+                                <span class="text-[10px] text-slate-500">(${TaskTypeStorage.formatDays(t.days)} each)</span>
+                            </div>
+                            <span class="font-mono font-bold text-emerald-400">${TaskTypeStorage.formatDays(t.subtotalDays)}</span>
+                        </div>
+                    `).join('');
+                }
+            }
 
             // Brand Logo in Preview
             const logoContainer = document.getElementById('previewBrandLogoDisplay');
@@ -2021,13 +2203,18 @@ app.bringToFront();
                 const title = item.title || item.data?.campaignTitle || 'Untitled Campaign';
                 const formatsCount = item.formatCount || (item.data?.formats?.length || 0);
                 const langsCount = item.langCount || (item.data?.languages?.length || 0);
+                const estDays = item.data?.estimatedDays || 0;
+                const estBadge = estDays > 0
+                    ? `<span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono font-bold"><i class="fa-solid fa-stopwatch mr-1 text-[9px]"></i>${TaskTypeStorage.formatDays(estDays)}</span>`
+                    : '';
 
                 const card = document.createElement('div');
                 card.className = "glass-panel p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 transition-all flex items-center justify-between space-x-3";
                 card.innerHTML = `
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-center space-x-2 text-[10px]">
+                        <div class="flex items-center flex-wrap gap-1.5 text-[10px]">
                             <span class="px-2 py-0.5 rounded bg-slate-800 text-neon-cyan font-bold">${brandName}</span>
+                            ${estBadge}
                             <span class="text-slate-400 font-medium">${formatsCount} format${formatsCount === 1 ? '' : 's'}</span>
                             <span class="text-slate-500">•</span>
                             <span class="text-slate-400 font-medium">${langsCount} lang${langsCount === 1 ? '' : 's'}</span>
@@ -2110,15 +2297,25 @@ app.bringToFront();
                 renderLanguageRows();
             }
 
+            // Restore task type amounts
+            taskTypeAmounts = {};
+            if (compiledCampaign.taskTypes && Array.isArray(compiledCampaign.taskTypes)) {
+                compiledCampaign.taskTypes.forEach(t => {
+                    if (t.id && t.amount > 0) {
+                        taskTypeAmounts[t.id] = t.amount;
+                    }
+                });
+            }
+            renderTaskTypesSelector();
+
             // Restore formats selection if step 2 formats exist
             if (compiledCampaign.formats && Array.isArray(compiledCampaign.formats)) {
-                const targetNames = new Set(compiledCampaign.formats.map(f => f.name));
-                const checkboxes = document.querySelectorAll('#formatPillsContainer input[type="checkbox"]');
+                const targetNames = new Set(compiledCampaign.formats.map(f => f.formatName || f.name));
+                const checkboxes = document.querySelectorAll('input[name="format"]');
                 checkboxes.forEach(cb => {
-                    const fmtName = cb.getAttribute('data-format-name');
+                    const fmtName = cb.dataset.name || cb.value;
                     cb.checked = targetNames.has(fmtName);
                 });
-                updateSelectedFormatsCount();
             }
 
             closeHistoryModal();

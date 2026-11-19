@@ -188,6 +188,89 @@ const BrandStorage = {
     }
 };
 
+// ==========================================
+// DEFAULT TASK TYPES & DELIVERY TIME STORAGE
+// ==========================================
+
+const DEFAULT_TASK_TYPES = [
+    { id: "type_banner", name: "Banner", days: 1 },
+    { id: "type_webpage", name: "Web Page", days: 3 },
+    { id: "type_2d_motion", name: "2D Motion", days: 2 },
+    { id: "type_3d_motion", name: "3D Motion", days: 4 },
+    { id: "type_thumbnail", name: "Thumbnail", days: 0.5 },
+    { id: "type_anim_thumbnail", name: "Animated Thumbnail", days: 1.5 }
+];
+
+const TASK_TYPES_STORAGE_KEY = 'briefix_task_types_v1';
+
+const TaskTypeStorage = {
+    getAll() {
+        const stored = localStorage.getItem(TASK_TYPES_STORAGE_KEY);
+        if (!stored) {
+            this.saveAll(DEFAULT_TASK_TYPES);
+            return JSON.parse(JSON.stringify(DEFAULT_TASK_TYPES));
+        }
+        try {
+            const parsed = JSON.parse(stored);
+            if (!Array.isArray(parsed)) {
+                this.saveAll(DEFAULT_TASK_TYPES);
+                return JSON.parse(JSON.stringify(DEFAULT_TASK_TYPES));
+            }
+            return parsed;
+        } catch (e) {
+            console.error("Failed to parse task types, resetting to default:", e);
+            this.saveAll(DEFAULT_TASK_TYPES);
+            return JSON.parse(JSON.stringify(DEFAULT_TASK_TYPES));
+        }
+    },
+
+    saveAll(types) {
+        localStorage.setItem(TASK_TYPES_STORAGE_KEY, JSON.stringify(types));
+    },
+
+    addType(name, days) {
+        const types = this.getAll();
+        const newType = {
+            id: 'type_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+            name: name.trim(),
+            days: Math.max(0, parseFloat(days) || 0)
+        };
+        types.push(newType);
+        this.saveAll(types);
+        return newType;
+    },
+
+    updateType(id, name, days) {
+        const types = this.getAll();
+        const idx = types.findIndex(t => t.id === id);
+        if (idx >= 0) {
+            types[idx].name = name.trim() || types[idx].name;
+            types[idx].days = Math.max(0, parseFloat(days) || 0);
+            this.saveAll(types);
+        }
+        return types;
+    },
+
+    deleteType(id) {
+        const types = this.getAll().filter(t => t.id !== id);
+        this.saveAll(types);
+        return types;
+    },
+
+    resetToDefaults() {
+        const defaults = JSON.parse(JSON.stringify(DEFAULT_TASK_TYPES));
+        this.saveAll(defaults);
+        return defaults;
+    },
+
+    formatDays(days) {
+        const rounded = Math.round((parseFloat(days) || 0) * 100) / 100;
+        return rounded === 1 ? '1 day' : `${rounded} days`;
+    }
+};
+
 // Export to global window scope for ease of use in static HTML
 window.BrandStorage = BrandStorage;
 window.DEFAULT_BRANDS = DEFAULT_BRANDS;
+window.TaskTypeStorage = TaskTypeStorage;
+window.DEFAULT_TASK_TYPES = DEFAULT_TASK_TYPES;
