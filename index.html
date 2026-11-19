@@ -97,8 +97,12 @@
                 </button>
             </div>
 
-            <!-- History Action (Hidden on first page, visible only on brand pages) -->
+            <!-- Brand Page Actions: Jira Auth + History (Hidden on Step 1) -->
             <div class="flex items-center space-x-2 min-w-[36px] justify-end">
+                <button id="jiraAuthBtn" onclick="handleJiraAuthClick()" class="px-2.5 py-1.5 text-slate-300 hover:text-white transition-all bg-slate-850 hover:bg-slate-800 rounded-lg border border-slate-800 hover:border-blue-500/40 text-xs font-medium flex items-center space-x-1.5 hidden" title="Sign in with your Jira account">
+                    <i class="fa-brands fa-jira text-blue-400 text-xs"></i>
+                    <span id="jiraAuthBtnLabel" class="hidden md:inline">Sign in with Jira</span>
+                </button>
                 <button id="historyNavBtn" onclick="openHistoryModal()" class="relative p-2 text-slate-400 hover:text-white transition-colors bg-slate-850 rounded-lg border border-slate-800 hover:border-slate-700 text-xs hidden" title="Campaign History">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span id="historyBadge" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-neon-pink text-[10px] flex items-center justify-center text-white font-bold hidden">0</span>
@@ -302,11 +306,38 @@
                     </div>
                 </div>
 
-                <!-- SINGLE GENERATE TASK BUTTON -->
-                <button onclick="generateTaskScripts()" class="px-5 py-2.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 text-xs shadow-lg neon-glow-cyan flex items-center space-x-2">
-                    <i class="fa-solid fa-bolt text-sm"></i>
-                    <span>Generate Task (Photoshop .jsx & Figma .txt)</span>
+                <!-- SEND TO JIRA BUTTON (Creates ticket + attaches .jsx & .txt under user's Jira account) -->
+                <button id="sendToJiraBtn" onclick="sendTaskToJira()" class="px-4 py-2.5 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 text-white text-xs shadow-lg shadow-blue-900/40 border border-blue-400/30 transition-all flex items-center space-x-2">
+                    <i id="sendToJiraIcon" class="fa-brands fa-jira text-sm"></i>
+                    <span id="sendToJiraText">Send to Jira</span>
                 </button>
+
+                <!-- DOWNLOAD SCRIPTS BUTTON -->
+                <button onclick="generateTaskScripts()" class="px-4 py-2.5 rounded-xl font-bold bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink text-slate-950 hover:opacity-95 text-xs shadow-lg neon-glow-cyan flex items-center space-x-2">
+                    <i class="fa-solid fa-bolt text-sm"></i>
+                    <span>Download Scripts (.jsx & .txt)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Jira Ticket Created Confirmation Banner -->
+        <div id="jiraSuccessBanner" class="glass-panel rounded-2xl px-5 py-3.5 border border-emerald-500/40 bg-emerald-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hidden">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                    <i class="fa-solid fa-circle-check text-base"></i>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-white" id="jiraSuccessTitle">Jira Task Created!</h4>
+                    <p class="text-[11px] text-slate-300" id="jiraSuccessSubtext">Task posted with Photoshop .jsx & Figma .txt attached.</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <a id="jiraTicketLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center space-x-1.5 transition-all">
+                    <i class="fa-brands fa-jira"></i>
+                    <span id="jiraTicketKeyLabel">Open in Jira</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+                <button type="button" onclick="document.getElementById('jiraSuccessBanner').classList.add('hidden')" class="p-1.5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
 
@@ -580,6 +611,43 @@
         </div>
     </div>
 
+    <!-- Modal: Quick Jira Board / Project Key Prompt (if brand has none set yet) -->
+    <div id="jiraProjectPromptModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel rounded-2xl max-w-md w-full p-5 border border-slate-800 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-2.5 border-b border-slate-800">
+                <h3 class="font-bold text-white text-sm flex items-center space-x-2">
+                    <i class="fa-brands fa-jira text-blue-400"></i>
+                    <span>Jira Board for <span id="jiraPromptBrandName" class="text-neon-cyan">Brand</span></span>
+                </h3>
+                <button type="button" onclick="closeJiraProjectPromptModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-slate-400">Enter the Jira Project Key for this brand's board. It will be remembered for future tasks.</p>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Jira Project Key *</label>
+                    <input type="text" id="jiraPromptProjectKeyInput" class="w-full glass-input p-2.5 rounded-lg text-xs font-mono uppercase text-blue-300 focus:outline-none" placeholder="e.g. DESIGN or MYSTAKE">
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-300 mb-1">Issue Type</label>
+                        <input type="text" id="jiraPromptIssueTypeInput" value="Task" class="w-full glass-input p-2 rounded-lg text-xs text-white focus:outline-none" placeholder="Task">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-300 mb-1">Board Label (optional)</label>
+                        <input type="text" id="jiraPromptBoardLabelInput" class="w-full glass-input p-2 rounded-lg text-xs text-slate-200 focus:outline-none" placeholder="e.g. MyStake">
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-800">
+                <button type="button" onclick="closeJiraProjectPromptModal()" class="px-3 py-1.5 bg-slate-850 text-slate-300 rounded-lg text-xs hover:bg-slate-800">Cancel</button>
+                <button type="button" onclick="confirmJiraProjectPromptAndSend()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs flex items-center space-x-1.5">
+                    <i class="fa-brands fa-jira"></i>
+                    <span>Save & Send to Jira</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 border border-neon-cyan text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
         <i class="fa-solid fa-circle-check text-neon-cyan text-lg"></i>
@@ -602,6 +670,7 @@
             const savedId = BrandStorage.getSelectedBrandId();
             selectedBrand = BrandStorage.getById(savedId) || allBrands[0];
 
+            initJiraAuth();
             updateHistoryBadge();
             renderStep1Brands();
             goToStep(1);
@@ -618,6 +687,7 @@
             const tab2 = document.getElementById('stepTab-2');
             const tab3 = document.getElementById('stepTab-3');
             const historyNavBtn = document.getElementById('historyNavBtn');
+            const jiraAuthBtn = document.getElementById('jiraAuthBtn');
 
             // Reset tab styles
             [tab1, tab2, tab3].forEach(t => {
@@ -629,6 +699,7 @@
                 step2Sec.classList.add('hidden');
                 step3Sec.classList.add('hidden');
                 if (historyNavBtn) historyNavBtn.classList.add('hidden');
+                if (jiraAuthBtn) jiraAuthBtn.classList.add('hidden');
                 tab1.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 renderStep1Brands();
             } else if (step === 2) {
@@ -639,6 +710,7 @@
                 step2Sec.classList.remove('hidden');
                 step3Sec.classList.add('hidden');
                 if (historyNavBtn) historyNavBtn.classList.remove('hidden');
+                if (jiraAuthBtn) jiraAuthBtn.classList.remove('hidden');
                 tab2.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 setupStep2WithBrand(selectedBrand);
             } else if (step === 3) {
@@ -651,6 +723,9 @@
                 step2Sec.classList.add('hidden');
                 step3Sec.classList.remove('hidden');
                 if (historyNavBtn) historyNavBtn.classList.remove('hidden');
+                if (jiraAuthBtn) jiraAuthBtn.classList.remove('hidden');
+                const banner = document.getElementById('jiraSuccessBanner');
+                if (banner) banner.classList.add('hidden');
                 tab3.className = "px-2.5 py-1 rounded-lg font-semibold flex items-center space-x-1.5 bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/40 transition-all";
                 renderStep3Preview();
             }
@@ -1665,6 +1740,294 @@
                 downloadFile(figmaContent, `${compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_')}_Figma_Setup.txt`, 'text/plain');
                 showToast("Downloaded Photoshop (.jsx) and Figma (.txt) for Jira!");
             }, 300);
+        }
+
+        // ==========================================
+        // JIRA CLOUD OAUTH 2.0 & DIRECT TASK SUBMISSION
+        // ==========================================
+        const JIRA_SESSION_KEY = 'briefix_jira_session_v1';
+        let pendingSendToJiraAfterLogin = false;
+
+        function getJiraSession() {
+            try {
+                const raw = localStorage.getItem(JIRA_SESSION_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function saveJiraSession(session) {
+            try {
+                localStorage.setItem(JIRA_SESSION_KEY, JSON.stringify(session));
+            } catch (e) {
+                console.error("Failed to save Jira session:", e);
+            }
+            updateJiraAuthUI();
+        }
+
+        function clearJiraSession() {
+            localStorage.removeItem(JIRA_SESSION_KEY);
+            updateJiraAuthUI();
+        }
+
+        function initJiraAuth() {
+            // Check hash fallback if redirected in same tab
+            if (window.location.hash && window.location.hash.includes('jira_auth=')) {
+                try {
+                    const encoded = window.location.hash.split('jira_auth=')[1].split('&')[0];
+                    const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(encoded))));
+                    const payload = JSON.parse(jsonStr);
+                    if (payload && payload.accessToken) {
+                        saveJiraSession(payload);
+                        showToast(`Signed in to Jira as ${payload.user?.displayName || 'User'}!`);
+                    }
+                } catch (e) {
+                    console.error("Failed to parse Jira auth hash:", e);
+                }
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+
+            // Listen for OAuth popup postMessage from Cloudflare Worker
+            window.addEventListener('message', (event) => {
+                const data = event.data;
+                if (data && data.type === 'BRIEFIX_JIRA_AUTH' && data.accessToken) {
+                    saveJiraSession(data);
+                    showToast(`Signed in to Jira as ${data.user?.displayName || 'User'}!`);
+                    if (pendingSendToJiraAfterLogin) {
+                        pendingSendToJiraAfterLogin = false;
+                        setTimeout(() => sendTaskToJira(), 250);
+                    }
+                }
+            });
+
+            updateJiraAuthUI();
+        }
+
+        function updateJiraAuthUI() {
+            const btn = document.getElementById('jiraAuthBtn');
+            const label = document.getElementById('jiraAuthBtnLabel');
+            if (!btn || !label) return;
+
+            const session = getJiraSession();
+            if (session && session.accessToken) {
+                const name = session.user?.displayName || 'Jira User';
+                label.innerText = name;
+                btn.title = `Signed in to Jira as ${name} (${session.siteName || 'Jira Cloud'}). Click to sign out.`;
+                btn.className = "px-2.5 py-1.5 text-blue-300 hover:text-white transition-all bg-blue-950/50 hover:bg-blue-900/50 rounded-lg border border-blue-500/40 text-xs font-semibold flex items-center space-x-1.5" + (currentStep === 1 ? " hidden" : "");
+            } else {
+                label.innerText = 'Sign in with Jira';
+                btn.title = 'Sign in with your Jira account to send tasks directly';
+                btn.className = "px-2.5 py-1.5 text-slate-300 hover:text-white transition-all bg-slate-850 hover:bg-slate-800 rounded-lg border border-slate-800 hover:border-blue-500/40 text-xs font-medium flex items-center space-x-1.5" + (currentStep === 1 ? " hidden" : "");
+            }
+        }
+
+        function handleJiraAuthClick() {
+            const session = getJiraSession();
+            if (session && session.accessToken) {
+                const name = session.user?.displayName || 'your Jira account';
+                if (confirm(`Signed in to Jira as ${name}.\n\nDo you want to sign out / switch Jira account?`)) {
+                    clearJiraSession();
+                    showToast("Signed out of Jira.");
+                }
+            } else {
+                openJiraLoginPopup(false);
+            }
+        }
+
+        function openJiraLoginPopup(autoSendAfter = false) {
+            pendingSendToJiraAfterLogin = autoSendAfter;
+            const returnTo = window.location.origin + window.location.pathname;
+            const loginUrl = `${JIRA_WORKER_URL}/auth/login?return_to=${encodeURIComponent(returnTo)}`;
+            const w = 540, h = 680;
+            const left = Math.round(window.screenX + (window.outerWidth - w) / 2);
+            const top = Math.round(window.screenY + (window.outerHeight - h) / 2);
+            const popup = window.open(loginUrl, 'BriefixJiraAuth', `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+            if (!popup) {
+                // Popup blocked: fallback to same-tab redirect
+                window.location.href = loginUrl;
+            }
+        }
+
+        async function ensureValidJiraToken() {
+            const session = getJiraSession();
+            if (!session || !session.accessToken) return null;
+
+            // Refresh if expired or expiring within 2 minutes
+            if (session.expiresAt && Date.now() >= session.expiresAt - 120000) {
+                if (!session.refreshToken) {
+                    clearJiraSession();
+                    return null;
+                }
+                try {
+                    const res = await fetch(`${JIRA_WORKER_URL}/auth/refresh`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ refreshToken: session.refreshToken })
+                    });
+                    if (!res.ok) {
+                        clearJiraSession();
+                        return null;
+                    }
+                    const refreshed = await res.json();
+                    session.accessToken = refreshed.accessToken;
+                    session.refreshToken = refreshed.refreshToken || session.refreshToken;
+                    session.expiresAt = refreshed.expiresAt;
+                    saveJiraSession(session);
+                } catch (e) {
+                    console.error("Jira token refresh error:", e);
+                    return null;
+                }
+            }
+            return session;
+        }
+
+        function openJiraProjectPromptModal() {
+            const brand = selectedBrand || BrandStorage.getById(compiledCampaign?.brandId);
+            document.getElementById('jiraPromptBrandName').innerText = brand ? brand.name : 'Brand';
+            document.getElementById('jiraPromptProjectKeyInput').value = brand?.jira?.projectKey || '';
+            document.getElementById('jiraPromptIssueTypeInput').value = brand?.jira?.issueType || 'Task';
+            document.getElementById('jiraPromptBoardLabelInput').value = brand?.jira?.boardLabel || '';
+            document.getElementById('jiraProjectPromptModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('jiraPromptProjectKeyInput').focus(), 50);
+        }
+
+        function closeJiraProjectPromptModal() {
+            document.getElementById('jiraProjectPromptModal').classList.add('hidden');
+        }
+
+        function confirmJiraProjectPromptAndSend() {
+            const projectKey = document.getElementById('jiraPromptProjectKeyInput').value.trim().toUpperCase();
+            const issueType = document.getElementById('jiraPromptIssueTypeInput').value.trim() || 'Task';
+            const boardLabel = document.getElementById('jiraPromptBoardLabelInput').value.trim();
+
+            if (!projectKey) {
+                showToast("Please enter a Jira Project Key (e.g. DESIGN)", true);
+                return;
+            }
+
+            // Persist Jira routing on this brand
+            const brand = selectedBrand || BrandStorage.getById(compiledCampaign?.brandId);
+            if (brand) {
+                brand.jira = {
+                    ...(brand.jira || {}),
+                    projectKey,
+                    issueType,
+                    boardLabel
+                };
+                BrandStorage.saveBrand(brand);
+                selectedBrand = brand;
+            }
+
+            closeJiraProjectPromptModal();
+            sendTaskToJira();
+        }
+
+        async function sendTaskToJira() {
+            if (!compiledCampaign) {
+                showToast("No campaign compiled yet.", true);
+                return;
+            }
+
+            // 1. Ensure user is signed in with their Jira account
+            const session = await ensureValidJiraToken();
+            if (!session) {
+                showToast("Sign in with your Jira account to create the task...");
+                openJiraLoginPopup(true);
+                return;
+            }
+
+            // 2. Get per-brand Jira Project Key / Board Routing
+            const brand = BrandStorage.getById(compiledCampaign.brandId) || selectedBrand;
+            const jiraConfig = brand?.jira || {};
+            if (!jiraConfig.projectKey) {
+                openJiraProjectPromptModal();
+                return;
+            }
+
+            // 3. Prepare UI loading state
+            const btn = document.getElementById('sendToJiraBtn');
+            const icon = document.getElementById('sendToJiraIcon');
+            const text = document.getElementById('sendToJiraText');
+            const banner = document.getElementById('jiraSuccessBanner');
+            if (banner) banner.classList.add('hidden');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-wait');
+            icon.className = 'fa-solid fa-circle-notch fa-spin text-sm';
+            text.innerText = 'Sending to Jira...';
+
+            try {
+                const safeTitle = compiledCampaign.campaignTitle.replace(/[^a-zA-Z0-9_-]/g, '_');
+                const psContent = getPhotoshopScriptContent();
+                const figmaContent = getFigmaScriptContent();
+
+                const payload = {
+                    accessToken: session.accessToken,
+                    cloudId: session.cloudId,
+                    siteUrl: session.siteUrl,
+                    projectKey: jiraConfig.projectKey,
+                    issueType: jiraConfig.issueType || 'Task',
+                    boardLabel: jiraConfig.boardLabel || '',
+                    boardId: jiraConfig.boardId || '',
+                    summary: `[${compiledCampaign.brandName}] ${compiledCampaign.campaignTitle}`,
+                    description: compiledCampaign.description,
+                    brandName: compiledCampaign.brandName,
+                    market: compiledCampaign.market,
+                    estimatedDays: compiledCampaign.estimatedDays || 0,
+                    estimatedTimeText: TaskTypeStorage.formatDays(compiledCampaign.estimatedDays || 0),
+                    taskTypes: compiledCampaign.taskTypes || [],
+                    languages: compiledCampaign.languages || [],
+                    formats: compiledCampaign.formats || [],
+                    attachments: [
+                        { filename: `${safeTitle}_Photoshop_Setup.jsx`, content: psContent },
+                        { filename: `${safeTitle}_Figma_Setup.txt`, content: figmaContent }
+                    ]
+                };
+
+                const res = await fetch(`${JIRA_WORKER_URL}/jira/create-task`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await res.json();
+
+                if (res.status === 401) {
+                    clearJiraSession();
+                    showToast("Jira session expired. Please sign in again.", true);
+                    openJiraLoginPopup(true);
+                    return;
+                }
+
+                if (!res.ok || !result.success) {
+                    const detailMsg = result.details?.errors
+                        ? Object.values(result.details.errors).join(', ')
+                        : (result.details?.errorMessages?.join(', ') || result.error || 'Unknown Jira error');
+                    showToast(`Jira Error: ${detailMsg}`, true);
+                    console.error("Jira create-task error:", result);
+                    return;
+                }
+
+                // Success! Show clickable ticket banner
+                const attachCount = (result.attachmentsUploaded || []).length;
+                document.getElementById('jiraSuccessTitle').innerText = `Jira Task ${result.key} Created!`;
+                document.getElementById('jiraSuccessSubtext').innerText =
+                    `Created by ${session.user?.displayName || 'you'} in ${jiraConfig.projectKey} • ${attachCount} script file${attachCount === 1 ? '' : 's'} attached${result.sprintAdded ? ' • Added to Active Sprint' : ''}.`;
+                document.getElementById('jiraTicketKeyLabel').innerText = `Open ${result.key} in Jira`;
+                document.getElementById('jiraTicketLink').href = result.url || '#';
+                if (banner) banner.classList.remove('hidden');
+
+                showToast(`✅ Created ${result.key} in Jira with ${attachCount} attachments!`);
+            } catch (err) {
+                console.error("Send to Jira failed:", err);
+                showToast(`Connection failed: ${err.message}`, true);
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-wait');
+                icon.className = 'fa-brands fa-jira text-sm';
+                text.innerText = 'Send to Jira';
+            }
         }
 
         // ==========================================

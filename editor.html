@@ -302,6 +302,35 @@
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Design Guidelines & Compliance Notes</label>
                         <textarea id="inputBrandGuidelines" rows="3" class="w-full rounded-xl glass-input p-3 text-xs text-slate-200 focus:outline-none resize-y" placeholder="Describe safe zone rules, font styling, 18+ footer rules, license requirements..."></textarea>
                     </div>
+
+                    <!-- JIRA BOARD ROUTING (Per Brand) -->
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-blue-500/25 space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-brands fa-jira text-blue-400 text-sm"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Jira Board Routing (Per Brand)</h4>
+                                <p class="text-[11px] text-slate-400">Tasks created for this brand will be sent directly to this Jira project/board.</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-300 mb-1">Jira Project Key *</label>
+                                <input type="text" id="inputJiraProjectKey" class="w-full rounded-lg glass-input px-2.5 py-2 text-xs font-mono uppercase text-blue-300 focus:outline-none" placeholder="e.g. DESIGN">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-300 mb-1">Issue Type</label>
+                                <input type="text" id="inputJiraIssueType" class="w-full rounded-lg glass-input px-2.5 py-2 text-xs text-white focus:outline-none" placeholder="Task">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-300 mb-1">Board Label (optional)</label>
+                                <input type="text" id="inputJiraBoardLabel" class="w-full rounded-lg glass-input px-2.5 py-2 text-xs text-slate-200 focus:outline-none" placeholder="e.g. MyStake">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-300 mb-1">Scrum Board ID (optional)</label>
+                                <input type="text" id="inputJiraBoardId" class="w-full rounded-lg glass-input px-2.5 py-2 text-xs font-mono text-slate-200 focus:outline-none" placeholder="e.g. 12">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- TAB 2: File Dimensions & Formats -->
@@ -786,6 +815,12 @@
             document.getElementById('inputBrandTone').value = brand.tone || '';
             document.getElementById('inputBrandGuidelines').value = brand.guidelines || '';
 
+            const jira = brand.jira || {};
+            document.getElementById('inputJiraProjectKey').value = jira.projectKey || '';
+            document.getElementById('inputJiraIssueType').value = jira.issueType || 'Task';
+            document.getElementById('inputJiraBoardLabel').value = jira.boardLabel || '';
+            document.getElementById('inputJiraBoardId').value = jira.boardId || '';
+
             updateLogoPreviewUI(brand.logo || null);
             renderDimensionsRows();
         }
@@ -907,6 +942,12 @@
             editingBrand.market = document.getElementById('inputBrandMarket').value.trim();
             editingBrand.tone = document.getElementById('inputBrandTone').value.trim();
             editingBrand.guidelines = document.getElementById('inputBrandGuidelines').value.trim();
+            editingBrand.jira = {
+                projectKey: document.getElementById('inputJiraProjectKey').value.trim().toUpperCase(),
+                issueType: document.getElementById('inputJiraIssueType').value.trim() || 'Task',
+                boardLabel: document.getElementById('inputJiraBoardLabel').value.trim(),
+                boardId: document.getElementById('inputJiraBoardId').value.trim()
+            };
 
             if (!editingBrand.dimensions || editingBrand.dimensions.length === 0) {
                 editingBrand.dimensions = [

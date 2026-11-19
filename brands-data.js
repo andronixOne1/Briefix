@@ -269,8 +269,12 @@ const TaskTypeStorage = {
     }
 };
 
+// Jira Bridge Worker URL
+const JIRA_WORKER_URL = 'https://briefix-jira.andronix1.workers.dev';
+
 // Export to global window scope for ease of use in static HTML
 window.BrandStorage = BrandStorage;
 window.DEFAULT_BRANDS = DEFAULT_BRANDS;
 window.TaskTypeStorage = TaskTypeStorage;
 window.DEFAULT_TASK_TYPES = DEFAULT_TASK_TYPES;
+window.JIRA_WORKER_URL = JIRA_WORKER_URL;
